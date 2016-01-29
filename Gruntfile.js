@@ -116,7 +116,7 @@ module.exports = function (grunt) {
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
-      },
+      }
     },
 
     // Make sure code styles are up to par and there are no obvious mistakes
@@ -238,7 +238,7 @@ module.exports = function (grunt) {
       },
       client: {
         src: '<%= yeoman.client %>/index.html',
-        ignorePath: '<%= yeoman.client %>/',
+        ignorePath: '<%= yeoman.client %>/'
       },
       test: {
         src: './karma.conf.js',
@@ -541,9 +541,7 @@ module.exports = function (grunt) {
     babel: {
       options: {
         sourceMap: true,
-        optional: [
-          'es7.classProperties'
-        ]
+        presets: ['es2015']
       },
       client: {
         files: [{
@@ -554,9 +552,6 @@ module.exports = function (grunt) {
         }]
       },
       server: {
-        options: {
-          optional: ['runtime']
-        },
         files: [{
           expand: true,
           cwd: '<%= yeoman.server %>',
@@ -649,7 +644,7 @@ module.exports = function (grunt) {
           ]
         }
       }
-    },
+    }
   });
 
   // Used for delaying livereload until after server has restarted

@@ -2,12 +2,13 @@
 
 class SignupController {
   //start-non-standard
-  user = {};
-  errors = {};
-  submitted = false;
   //end-non-standard
 
   constructor(Auth, $state) {
+    this.user = {};
+    this.errors = {};
+    this.submitted = false;
+
     this.Auth = Auth;
     this.$state = $state;
   }

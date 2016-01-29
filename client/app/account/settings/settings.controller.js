@@ -2,11 +2,11 @@
 
 class SettingsController {
   //start-non-standard
-  errors = {};
-  submitted = false;
   //end-non-standard
 
   constructor(Auth) {
+    this.errors = {};
+    this.submitted = false;
     this.Auth = Auth;
   }
 
