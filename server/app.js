@@ -41,4 +41,5 @@ function startServer() {
 setImmediate(startServer);
 
 // Expose app
-exports = module.exports = app;
+//exports = module.exports = app;
+export default app;
