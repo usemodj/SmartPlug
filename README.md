@@ -34,5 +34,5 @@ Running `npm test` will run the unit tests with karma.
 
 ## Run production mode
 
-smart-plug/dist$ NODE_ENV=production GOOGLE_ID=254143463317-v5i2cbc8ge0co2e1n70kgbu9oqrpp51s.apps.googleusercontent.com GOOGLE_SECRET=LmNueIMpMOUkLscJyqy2_aK-  npm start
+smart-plug/dist$ NODE_ENV=production GOOGLE_ID=<id> GOOGLE_SECRET=<secret>  npm start
 
