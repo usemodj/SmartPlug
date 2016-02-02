@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 mongoose.Promise = require('bluebird');
 import config from './config/environment';
 import http from 'http';
+import mailer from './config/mailer';
 
 // Connect to MongoDB
 mongoose.connect(config.mongo.uri, config.mongo.options);
@@ -27,9 +28,21 @@ var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',
   path: '/socket.io-client'
 });
+
+// Setup Mailer
+app.use(function(req, res, next){
+  mailer(function(transport){
+    req.transport = transport;
+    return next();
+  });
+});
+
 require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
+
+//  Avoids DEPTH_ZERO_SELF_SIGNED_CERT error
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // Start server
 function startServer() {
@@ -39,6 +52,7 @@ function startServer() {
 }
 
 setImmediate(startServer);
+
 
 // Expose app
 //exports = module.exports = app;

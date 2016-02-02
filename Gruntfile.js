@@ -542,8 +542,8 @@ module.exports = function (grunt) {
       options: {
         sourceMap: true,
         babelrc: true,
-        //presets: ['es2015'],
-        //plugins: ["babel-plugin-add-module-exports"]
+        presets: ['es2015'],
+        plugins: ["babel-plugin-add-module-exports"]
       },
       client: {
         files: [{

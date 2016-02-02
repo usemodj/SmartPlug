@@ -26,7 +26,7 @@ class LoginController {
         this.$state.go('main');
       })
       .catch(err => {
-        console.error(err);
+        //console.error(err);
         this.errors.other = err.message + err.provider;
         if(err.provider){
           this.$window.location.href = '/auth/' + err.provider;

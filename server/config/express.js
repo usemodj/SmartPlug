@@ -12,6 +12,7 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import errorHandler from 'errorhandler';
+import multipart from 'connect-multiparty';
 import path from 'path';
 import lusca from 'lusca';
 import config from './environment';
@@ -32,6 +33,9 @@ export default function(app) {
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
+  app.use(multipart({
+    uploadDir: config.uploadPath
+  }));
   app.use(passport.initialize());
 
   // Persist sessions with mongoStore / sequelizeStore

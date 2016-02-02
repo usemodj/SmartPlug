@@ -17,6 +17,20 @@ function UserResource($resource) {
       params: {
         id:'me'
       }
+    },
+    getForgotPasswordToken: {
+      method: 'GET',
+      params: {
+        id: 'token',
+        controller: 'forgotPassword'
+      }
+    },
+    resetPasswordByToken: {
+      method: 'PUT',
+      params: {
+        id: 'token',
+        controller: 'resetPassword'
+      }
     }
   });
 }

@@ -128,3 +128,55 @@ export function me(req, res, next) {
 export function authCallback(req, res, next) {
   res.redirect('/');
 }
+
+/**
+ * Get forgot password token
+ */
+export function getForgotPasswordToken(req, res, next){
+  var email = req.query.email;
+  console.log(email);
+  User.findOneAsync({email: email})
+    .then(user => {
+      if (!user) {
+        return res.status(404).json('Your email is not registered.');
+      }
+      if(user.provider != 'local'){
+        return res.status(404).json(`Your email is connected with social site: ${user.provider}.`);
+      }
+      user.makePasswordToken(user => {
+        user.saveAsync();
+        res.json( user);
+      });
+    })
+    .catch(err => {
+      //console.log(err.message);
+      res.status(500).json(err.message);
+    });
+}
+
+export function resetPasswordByToken(req, res, next){
+  var body = req.body;
+  var email = body.email;
+  var password = body.password;
+  var passwordToken = body.passwordToken;
+
+  User.findOneAsync({
+    email: email,
+    passwordToken: passwordToken
+  })
+  .then(user => {
+    if (!user) {
+      return res.status(404).json('Your email or token is invalid.');
+    }
+    user.password = password;
+    user.passwordToken = undefined;
+    return user.saveAsync();
+  })
+  .then(user => {
+    res.status(200).send();
+  })
+  .catch(err => {
+    res.status(500).json(err.message);
+
+  });
+}

@@ -33,7 +33,20 @@ angular.module('smartPlugApp')
         controller: 'SettingsController',
         controllerAs: 'vm',
         authenticate: true
+      })
+      .state('forgotPassword', {
+        url: '/forgot.password',
+        templateUrl: 'app/account/forgot.password/forgot.password.html',
+        controller: 'ForgotPasswordCtrl',
+        controllerAs: 'vm'
+      })
+      .state('forgotPasswordToken', {
+        url: '/forgot.password/:token',
+        templateUrl: 'app/account/forgot.password/reset.password.html',
+        controller: 'ForgotPasswordCtrl',
+        controllerAs: 'vm'
       });
+
   })
   .run(function($rootScope) {
     $rootScope.$on('$stateChangeStart', function(event, next, nextParams, current) {

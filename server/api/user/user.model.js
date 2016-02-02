@@ -19,6 +19,7 @@ var UserSchema = new Schema({
   password: String,
   provider: String,
   salt: String,
+  passwordToken: String,
   facebook: {},
   twitter: {},
   google: {},
@@ -187,15 +188,47 @@ UserSchema.methods = {
     }
 
     if (!callback) {
-      return crypto.randomBytes(byteSize).toString('base64');
+      return crypto.randomBytes(byteSize).toString('hex');
     }
 
     return crypto.randomBytes(byteSize, (err, salt) => {
       if (err) {
         callback(err);
       } else {
-        callback(null, salt.toString('base64'));
+        callback(null, salt.toString('hex'));
       }
+    });
+  },
+
+  makePasswordToken(byteSize, callback){
+    var defaultByteSize = 16;
+    if(typeof arguments[0] === 'function'){
+      callback = arguments[0];
+      byteSize = defaultByteSize;
+    }else if(typeof arguments[1] === 'function'){
+      callback = arguments[1];
+    }
+    if(!byteSize){
+      byteSize = defaultByteSize;
+    }
+
+    if(!callback){
+      this.passwordToken = this.encryptPassword(this.makeSalt());
+      return this;
+    }
+    // Make forgot password token with a callback
+    this.makeSalt((saltErr, salt) => {
+      if (saltErr) {
+        return callback(saltErr);
+      }
+      this.passwordToken = salt;
+      this.encryptPassword(this.passwordToken, (encryptErr, hashedPassword) => {
+        if (encryptErr) {
+          return callback(encryptErr);
+        }
+        this.passwordToken = hashedPassword;
+        callback(this);
+      });
     });
   },
 
@@ -214,18 +247,18 @@ UserSchema.methods = {
 
     var defaultIterations = 10000;
     var defaultKeyLength = 64;
-    var salt = new Buffer(this.salt, 'base64');
+    var salt = new Buffer(this.salt, 'hex');
 
     if (!callback) {
       return crypto.pbkdf2Sync(password, salt, defaultIterations, defaultKeyLength)
-                   .toString('base64');
+                   .toString('hex');
     }
 
     return crypto.pbkdf2(password, salt, defaultIterations, defaultKeyLength, (err, key) => {
       if (err) {
         callback(err);
       } else {
-        callback(null, key.toString('base64'));
+        callback(null, key.toString('hex'));
       }
     });
   }

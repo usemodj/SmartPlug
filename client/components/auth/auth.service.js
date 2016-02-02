@@ -2,7 +2,7 @@
 
 (function() {
 
-function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
+function AuthService($location, $http, $cookies, $q, appConfig, Util, User, Mail) {
   var safeCb = Util.safeCb;
   var currentUser = {};
   var userRoles = appConfig.userRoles || [];
@@ -177,6 +177,39 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
      */
     getToken() {
       return $cookies.get('token');
+    },
+
+    /**
+     * Get token for forgot password
+     */
+    forgotPasswordToken(email, callback){
+      return User.getForgotPasswordToken({
+          email: email
+      }, function(user){
+        return safeCb(callback)(null, user);
+        //return user;
+      }, function(err){
+          return safeCb(callback)(err.data);
+      }).$promise;
+
+    },
+    /**
+     * Send Mail for forgot password
+     */
+    mailForgotPassword(mail, callback){
+      return Mail.save(mail, function(mail) {
+        return safeCb(callback)(null, mail);
+      }, function(err) {
+        return safeCb(callback)(err);
+      }).$promise;
+    },
+
+    resetPasswordByToken(data, callback){
+      return User.resetPasswordByToken(data, function(mail) {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      }).$promise;
     }
   };
 
