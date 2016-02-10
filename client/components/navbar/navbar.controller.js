@@ -4,10 +4,17 @@ class NavbarController {
   //start-non-standard
   //end-non-standard
 
-  constructor(Auth) {
+  constructor(Auth, $state) {
+    this.$state = $state;
     this.menu = [{
       'title': 'Home',
       'state': 'main'
+    }, {
+      'title': 'Blog',
+      'state': 'blog.list'
+    }, {
+      'title': 'Support',
+      'state': 'supports.list'
     }];
 
     this.isCollapsed = true;

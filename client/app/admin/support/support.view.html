@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 text-right">
+      <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="admin.supports.list"><i class="fa fa-arrow-left"></i> Back </a></span>
+            <span class="badge" style="color:#666666;"><a ng-show="vm.Auth.isLoggedIn()"  data-placement="bottom" title="Request Support"
+                                                          class=" btn btn-default btn-xs" ui-sref="admin.supports.new"><i class="fa fa-edit"></i> New Ticket</a></span>
+    </div>
+  </div>
+
+  <div class="col-md-10 col-md-offset-1">
+    <h2><span class="badge">{{vm.support.status}}</span> {{vm.support.subject}}</h2>
+    <span ng-repeat="tag in vm.support.tags track by $index">
+      <a class="fa fa-tag" ui-sref="admin.supports.tag({tag: tag})">{{tag}}</a>
+    </span>
+
+    <div class="col-md-3 bg-info text-primary">
+      <div tooltip="{{vm.support.author.email}}">Written by {{vm.support.author.name}} </div>
+      <div>{{vm.support.updated_at | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+      <div>({{vm.support.updated_at | relativeDate}})</div>
+    </div>
+    <div class="panel-body" marked="vm.support.content"></div>
+    <div class="btn-group" ng-repeat="file in vm.support.files track by $index">
+      <a class="btn btn-default btn-sm" ng-href="/assets/upload/{{file.uri}}" alt="{{file.name}}" target="attachment">
+        <i class="fa fa-file"></i> {{file.name}} ({{file.size}})
+      </a>
+    </div>
+    <div class="well well-sm text-right">
+      <a class="btn btn-default btn-xs" ng-show="vm.Auth.getCurrentUser().email == vm.support.author.email" ng-click="vm.editSupport()">Edit</a>
+    </div>
+  </div>
+
+  <div class="col-md-11 col-md-offset-1">
+    <div class="panel-body">
+      <h2>Reply </h2>
+      <form class="form" name="form" ng-submit="vm.addComment(form)"  novalidate>
+        <div class="form-group">
+          <textarea  class="form-control" rows="9" ng-model="vm.content" markdown-editor required></textarea>
+        </div>
+
+        <div class="form-group has-info" ng-show="vm.progress">
+          <p class="help-block">Progress... {{ vm.progress }}%</p>
+        </div>
+
+        <div class="form-group has-error" ng-show="vm.errors">
+          <p class="help-block">{{vm.errors.other}}</p>
+        </div>
+        <div class="form-group has-success" ng-show="vm.success">
+          <p class="help-block">{{vm.success}}</p>
+        </div>
+
+        <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+        <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in vm.support.comments | orderBy:'-updated_at' ">
+    <div class="col-md-3 bg-info text-primary">
+      <div tooltip="{{item.author.email}}">Written by {{item.author.name}} </div>
+      <div>{{item.updated_at | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+      <div>({{item.updated_at | relativeDate}})</div>
+    </div>
+    <div class="col-md-9">
+      <div id="{{item._id}}" class="panel-body" marked="item.content"></div>
+      <div class="well well-sm text-right">
+        <a class="btn btn-default btn-xs" ng-show="vm.Auth.getCurrentUser().email == item.author.email" ng-click="vm.editComment(item)">Edit</a>
+      </div>
+    </div>
+  </div>
+
+</div>

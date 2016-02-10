@@ -1,0 +1,59 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Blog</h1>
+    <p class="lead">New Blog</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="panel">
+      <h2>New Blog</h2>
+      <div class="col-lg-12 col-sm-12 text-right">
+        <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="blog.list"><i class="fa fa-arrow-left"></i> Back </a></span>
+      </div>
+
+      <form class="myform" name="form" ng-submit="vm.saveBlog(form)"  novalidate>
+          <div class="form-group">
+            <label>Title *:</label>
+            <input  class="form-control"  ng-model="vm.blog.title" required>
+          </div>
+          <div class="form-group">
+            <label>Photo URL :</label>
+            <input  class="form-control"  ng-model="vm.blog.photo_url" >
+          </div>
+          <div class="form-group">
+            <label>Summary:</label>
+            <textarea maxlength="254" class="form-control" rows="3" ng-model="vm.blog.summary"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Content:</label>
+            <textarea  class="form-control" rows="15" ng-model="vm.blog.content" markdown-editor></textarea>
+          </div>
+
+          <div inputfile></div>
+          <div class="form-group">
+            <label>Tags: "," comma separator</label>
+            <input  class="form-control"  ng-model="vm.blog.tags" >
+          </div>
+
+          <div class="form-group has-info" ng-show="vm.progress">
+            <p class="help-block">Progress... {{ vm.progress }}%</p>
+          </div>
+          <div class="form-group has-error" ng-show="vm.errors">
+            <p class="help-block">{{ vm.errors.other }}</p>
+          </div>
+          <div class="form-group has-success" ng-show="vm.success">
+            <p class="help-block">{{ vm.success }}</p>
+          </div>
+
+          <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+          <button class="btn btn-primary" ng-click="vm.back()"> Back </button>
+        </form>
+
+    </div>
+  </div>
+  </div>
+</div>
+

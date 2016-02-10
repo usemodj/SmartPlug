@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-10 col-md-offset-1 text-right">
+    <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="supports.list"><i class="fa fa-arrow-left"></i> Back </a></span>
+  </div>
+</div>
+<div class="panel-default col-md-10 col-md-offset-1">
+  <div class="panel-body">
+    <h2>New Ticket</h2>
+    <form class="form" name="form" ng-submit="vm.saveSupport(form)"  novalidate>
+      <div class="form-group">
+        <label>Subject *:</label>
+        <input  class="form-control"  ng-model="vm.support.subject" required>
+      </div>
+      <div class="form-group">
+        <label>Message:</label>
+        <textarea id="topic-editor" class="form-control" rows="15" ng-model="vm.support.content" markdown-editor></textarea>
+      </div>
+
+      <div inputfile></div>
+      <div class="form-group">
+        <label>Tags: "," comma separator</label>
+        <input  class="form-control"  ng-model="vm.support.tags" >
+      </div>
+
+      <div class="form-group has-info" ng-show="vm.progress">
+        <p class="help-block">Progress... {{ vm.progress }}%</p>
+      </div>
+      <div class="form-group has-error" ng-show="vm.errors">
+        <p class="help-block">{{ vm.errors.other}}</p>
+      </div>
+      <div class="form-group has-success" ng-show="vm.success">
+        <p class="help-block">{{ vm.success }}</p>
+      </div>
+
+      <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+      <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+    </form>
+  </div>
+</div>

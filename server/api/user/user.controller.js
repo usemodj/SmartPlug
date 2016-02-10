@@ -4,6 +4,7 @@ import User from './user.model';
 import passport from 'passport';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import paginate from 'node-paginate-anything';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -31,11 +32,29 @@ function respondWith(res, statusCode) {
  * restriction: 'admin'
  */
 export function index(req, res) {
-  User.findAsync({}, '-salt -password')
-    .then(users => {
-      res.status(200).json(users);
-    })
-    .catch(handleError(res));
+  var clientLimit = req.query.clientLimit;
+  var email = req.query.email;
+  var role = req.query.role;
+  var active = req.query.active;
+  var where = {};
+  if(email) where.email = email;
+  if(role) where.role = role;
+  if(active || active == false) where.active = active;
+
+  User.countAsync(where)
+  .then(count => {
+      if(count == 0){
+        return [];
+      }
+      var totalItems = count;
+      var maxRangeSize = clientLimit;
+      var queryParams = paginate(req, res, totalItems, maxRangeSize);
+
+      return User.where(where).limit(queryParams.limit).skip(queryParams.skip).sort('-created_at').findAsync('-salt -password');
+  }).then(users => {
+    res.status(200).json(users);
+  })
+  .catch(handleError(res));
 }
 
 /**
@@ -106,6 +125,19 @@ export function changePassword(req, res, next) {
     });
 }
 
+export function updateUser(req, res, next){
+  var user = req.body.user;
+  User.findByIdAndUpdateAsync(user._id, {
+    role: user.role,
+    active: user.active
+  }, {new: true})
+  .then(user => {
+    res.status(200).json(user);
+  })
+  .catch(err => {
+    res.status(500).json(err.message || err);
+  });
+}
 /**
  * Get my info
  */

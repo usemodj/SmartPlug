@@ -1,0 +1,26 @@
+<div class="panel-body">
+
+  <form class="form" name="form" ng-submit="vm.saveUser(form)"  novalidate>
+    <input type="hidden" ng-model="vm.user._id">
+    <div class="form-group">
+      <label>Email:</label>
+      {{vm.user.email}}
+    </div>
+    <div class="form-group">
+      <label>Role:</label>
+      {{vm.user.role}}
+    </div>
+    <div class="form-group">
+      <label>Change Role:</label>
+      <select class="form-control"  name="role" ng-model="vm.user.role"
+              ng-options="role for role in vm.appConfig.userRoles" >
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Active:</label>{{vm.user.active}}
+      <input type="checkbox" ng-model="vm.user.active">
+    </div>
+    <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+    <button class="btn btn-primary" ng-click="vm.cancelEdit()">Cancel</button>
+  </form>
+</div>

@@ -1,0 +1,38 @@
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h2>Edit Ticket</h2>
+    <form class="form" name="form" ng-submit="vm.saveSupport(form)"  novalidate>
+      <div class="form-group">
+        <label>Title *:</label>
+        <input  class="form-control"  ng-model="vm.support.subject" required>
+      </div>
+      <div class="form-group">
+        <label>Content:</label>
+        <textarea  class="form-control" rows="13" ng-model="vm.support.content" markdown-editor></textarea>
+        <div class="btn-group" ng-repeat="file in vm.support.files track by $index">
+          <div>
+            <a class="btn btn-default btn-xs" ng-href="/uploads/{{file.uri}}"
+               alt="{{file.name}}" target="attachment">{{file.name}} ({{file.size}})</a><a class="btn btn-default btn-xs"
+               ng-click="vm.removeFile(file)" data-toggle="tooltip" data-placement="top" title="Remove '{{file.name}}'"><i class="fa fa-trash-o"></i></a>
+          </div>
+        </div>
+      </div>
+      <div inputfile></div>
+      <div class="form-group">
+        <label>Tags: "," comma separator</label>
+        <input  class="form-control"  ng-model="vm.support.tags" >
+      </div>
+
+      <div class="form-group has-error" ng-show="vm.errors">
+        <p class="help-block">{{ vm.errors.other }}</p>
+      </div>
+      <div class="form-group has-success" ng-show="vm.success">
+        <p class="help-block">{{ vm.success }}</p>
+      </div>
+
+      <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+      <button class="btn btn-primary" ng-click="vm.cancelSupport()">Cancel</button>
+    </form>
+  </div>
+</div>

@@ -12,6 +12,8 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 - [Ruby](https://www.ruby-lang.org) and then `gem install sass` or sudo apt-get install ruby-sass (ubuntu)
 - [Grunt](http://gruntjs.com/) (`npm install --global grunt-cli`)
 - [MongoDB](https://www.mongodb.org/) - Keep a running daemon with `mongod`
+- [Java](https://www.java.com/en/download/) - run Elasticsearch
+- [Elasticsearch](https://www.elastic.co/downloads/elasticsearch) - Full text search engine
 
 ### Developing
 
@@ -34,5 +36,5 @@ Running `npm test` will run the unit tests with karma.
 
 ## Run production mode
 
-smart-plug/dist$ NODE_ENV=production GOOGLE_ID=<id> GOOGLE_SECRET=<secret>  npm start
+smart-plug/dist$ NODE_ENV=production GOOGLE_ID=[id] GOOGLE_SECRET=[secret]  npm start
 

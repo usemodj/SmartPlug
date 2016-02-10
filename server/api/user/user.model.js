@@ -17,6 +17,7 @@ var UserSchema = new Schema({
     default: 'user'
   },
   password: String,
+  active: {type: Boolean, default: 'true'},
   provider: String,
   salt: String,
   passwordToken: String,

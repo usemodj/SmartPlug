@@ -1,0 +1,55 @@
+<div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-sm-10  col-sm-offset-1 text-right">
+        <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="blog.list"><i class="fa fa-arrow-left"></i> Back </a></span>
+            <span class="badge" style="color:#666666;"><a ng-show="vm.Auth.hasRole('admin')" ng-confirm-click="Are you sure?" ng-click="vm.deleteBlog(vm.blog)"
+               class="btn btn-default btn-xs" data-placement="bottom" title="Admin is allowed!">
+              <span class="glyphicon glyphicon-remove"></span> Delete Blog </a></span>
+            <span class="badge" style="color:#666666;"><a ng-show="vm.Auth.hasRole('admin')"
+               class=" btn btn-default btn-xs" ui-sref="blog.new" data-placement="bottom" title="Admin is allowed!">New Blog</a></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12">
+        <h2>{{vm.blog.title}}</h2>
+        <span ng-repeat="tag in vm.blog.tags track by $index">
+          <a class="fa fa-tag" ui-sref="blog.tag({tag: tag})">{{tag}}</a>
+        </span>
+      </div>
+      <div class="panel">
+        <div ng-show="vm.blog.photo_url"><img width="80%" ng-src="{{vm.blog.photo_url}}"></div>
+        <div>Written by {{vm.blog.author.email}} {{vm.blog.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+        <div class="panel-body" marked="vm.blog.content"></div>
+        <div class="btn-group" ng-repeat="file in vm.blog.files track by $index">
+          <a class="btn btn-default btn-sm" ng-href="/assets/upload/{{file.uri}}" alt="{{file.name}}" target="attachment">
+            <i class="fa fa-file"></i> {{file.name}} ({{file.size}})
+          </a>
+        </div>
+        <div ng-show="vm.Auth.isAdmin()" class="text-right">
+          <a class="btn btn-default btn-xs" ng-click="vm.editBlog(vm.blog)">Edit</a>
+          <a class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="vm.deleteBlog(vm.blog)">Delete</a>
+        </div>
+      </div>
+
+      <div class="panel col-lg-10 col-sm-10" ng-repeat="comment in vm.blog.comments">
+        <div tooltip="{{comment.author.email}}">Written by {{comment.author.name}} {{comment.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+        <div id="{{comment._id}}" class="panel-body" marked="comment.content"></div>
+        <div ng-show="vm.Auth.isAdmin() || vm.Auth.getCurrentUser().email == comment.author.email" class="well-xs text-right">
+          <a class="btn btn-default btn-xs" ng-click="vm.editComment(comment)">Edit</a>
+          <a class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="vm.deleteComment(comment)">Delete</a>
+        </div>
+      </div>
+      <form class="form">
+         <div class="col-lg-10 col-sm-10">
+           <label>Comments</label>
+          <textarea class="form-control" placeholder="Add a new comment here."
+                  ng-model="vm.newComment" markdown-editor></textarea>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-primary" ng-click="vm.addComment()">Add Comment</button>
+          </div>
+        </div>
+      </form>
+     </div>
+
+</div>
+
