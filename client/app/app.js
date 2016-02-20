@@ -16,8 +16,9 @@ angular.module('smartPlugApp', [
   'hljs', //highlightjs
   'hc.marked', //markdown
   'bgf.paginateAnything',
-  'relativeDate'
-])
+  'relativeDate',
+  'ui.sortable'
+  ])
   .config(['$urlRouterProvider', '$locationProvider', function($urlRouterProvider, $locationProvider) {
     $urlRouterProvider
       .otherwise('/');
@@ -45,9 +46,10 @@ angular.module('smartPlugApp', [
         templateUrl: 'app/layout.html'
        });
   }])
-  .run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams){
+  .run(['$rootScope', '$state', '$stateParams', 'Auth', function($rootScope, $state, $stateParams, Auth){
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+    $rootScope.Auth = Auth;
     $rootScope.$on('$stateChangeError',
       function (event, toState, toParams, fromState, fromParams, error) {
         console.log('$stateChangeError', event, toState, toParams, fromState, fromParams, error);

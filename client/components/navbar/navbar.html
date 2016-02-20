@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="/" class="navbar-brand">Smart Plug</a>
+      <a href="/"><img src="/assets/images/smartplug-logo.png"></a>
     </div>
     <div collapse="nav.isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
@@ -27,8 +27,9 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
             <li active-menu="settings"><a ui-sref="settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-            <li ng-class="{active:$state.includes('admin.users')}" ng-show="nav.isAdmin()"><a ui-sref="admin.users.list"><span class="fa fa-users"></span> Users</a></li>
-            <li ng-class="{active:$state.includes('admin.supports')}" ng-show="nav.isAdmin()"><a ui-sref="admin.supports.list"><span class="fa fa-comment"></span> Supports</a></li>
+            <li ng-class="{active:$state.includes('admin.users')}" ng-show="nav.isAdmin()"><a ui-sref="admin.users.list"><span class="fa fa-user-plus"></span> Users</a></li>
+            <li ng-class="{active:$state.includes('admin.forums')}" ng-show="nav.isAdmin()"><a ui-sref="admin.forums.list"><span class="fa fa-commenting"></span> Forums</a></li>
+            <li ng-class="{active:$state.includes('admin.supports')}" ng-show="nav.isAdmin()"><a ui-sref="admin.supports.list"><span class="fa fa-user"></span> Supports</a></li>
           </ul>
         </li>
         <li ng-show="nav.isLoggedIn()"><a ui-sref="logout">Logout</a></li>

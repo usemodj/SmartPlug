@@ -13,6 +13,9 @@ class NavbarController {
       'title': 'Blog',
       'state': 'blog.list'
     }, {
+      'title': 'Forum',
+      'state': 'forums.list'
+    }, {
       'title': 'Support',
       'state': 'supports.list'
     }];

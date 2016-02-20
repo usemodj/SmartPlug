@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 text-right">
+      <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="admin.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"></i> Back </a></span>
+            <span class="badge" style="color:#666666;"><a ng-show=" Auth.hasRole('admin') || (Auth.isLoggedIn() && Auth.getCurrentUser().email == vm.topic.posts[0].author.email)" ng-confirm-click="Are you sure?" ng-click="vm.deleteTopic()"
+                                                          class="btn btn-default btn-xs" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
+    </div>
+  </div>
+
+  <div class="col-md-10 col-md-offset-1">
+    <h2><span ng-show="vm.topic.sticky">Sticky:</span> <span ng-show="vm.topic.active">{{vm.topic.name}}</span> <span ng-hide="vm.topic.active" class="strike">{{vm.topic.name}}</span>
+      <i ng-if="vm.topic.locked" class="fa fa-unlock-alt"></i></h2>
+    <span ng-repeat="tag in vm.topic.tags track by $index">
+      <a class="fa fa-tag" ui-sref="admin.topics.tag({tag: tag})">{{tag}}</a>
+    </span>
+  </div>
+  <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in vm.topic.posts">
+    <div class="panel-heading">{{item.name}}</div>
+    <div> Written by {{item.author.name}} {{item.updated_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+    <div class="panel-body" marked="item.content"></div>
+    <div class="btn-group" ng-repeat="file in item.files">
+      <a class="btn btn-default btn-sm" ng-href="/assets/upload/{{file.uri}}" alt="{{file.name}}" target="attachment">
+        <i class="fa fa-file"></i> {{file.name}} ({{file.size}})
+      </a>
+    </div>
+    <div class="well well-sm text-right">
+      <a class="btn btn-default btn-xs" ng-show="Auth.hasRole('admin') || Auth.getCurrentUser().email === item.author.email" ng-click="vm.editPost(item)"> Edit <span ng-show="item.root">Topic</span></a>
+      <a ng-show="Auth.hasRole('admin') || Auth.getCurrentUser().email === item.author.email" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="vm.deletePost(item)">Delete</a>
+    </div>
+  </div>
+
+  <div ng-hide="vm.topic.locked" class="panel panel-default col-md-10 col-md-offset-1">
+    <div class="panel-body">
+      <h2>Reply
+              <span ng-hide="Auth.isLoggedIn()" class="label label-info label-lg">
+                Login Required if you can reply
+              </span>
+      </h2>
+      <form class="myform" name="form" ng-submit="vm.addPost(form)"  novalidate>
+        <div class="form-group">
+          <label>Subject *:</label>
+          <input  class="form-control" name="name" ng-model="vm.post.name" required>
+        </div>
+        <div class="form-group">
+          <label>Message:</label>
+          <textarea  class="form-control" rows="8" name="content" ng-model="vm.post.content" markdown-editor></textarea>
+        </div>
+        <div inputfile></div>
+
+        <div class="form-group has-error" ng-show="vm.errors">
+          <p class="help-block">{{vm.errors.other}}</p>
+        </div>
+        <div class="form-group has-success" ng-show="vm.success">
+          <p class="help-block">{{vm.success}}</p>
+        </div>
+
+        <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid || !Auth.isLoggedIn()">Save</button>
+        <button class="btn btn-primary" ng-click="vm.cancelEdit()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

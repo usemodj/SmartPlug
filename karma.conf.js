@@ -31,6 +31,8 @@ module.exports = function(config) {
       'client/bower_components/angular-marked/dist/angular-marked.js',
       'client/bower_components/highlightjs/highlight.pack.js',
       'client/bower_components/angular-paginate-anything/dist/paginate-anything-tpls.js',
+      'client/bower_components/jquery-ui/jquery-ui.js',
+      'client/bower_components/angular-ui-sortable/sortable.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

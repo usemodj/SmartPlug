@@ -17,8 +17,8 @@
         </span>
       </div>
       <div class="panel">
-        <div ng-show="vm.blog.photo_url"><img width="80%" ng-src="{{vm.blog.photo_url}}"></div>
-        <div>Written by {{vm.blog.author.email}} {{vm.blog.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+        <div ng-show="vm.blog.photo_url" class="text-center"><img height="90%" ng-src="{{vm.blog.photo_url}}"></div>
+        <div tooltip="{{vm.blog.author.email}}">Written by {{vm.blog.author.name}} {{vm.blog.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
         <div class="panel-body" marked="vm.blog.content"></div>
         <div class="btn-group" ng-repeat="file in vm.blog.files track by $index">
           <a class="btn btn-default btn-sm" ng-href="/assets/upload/{{file.uri}}" alt="{{file.name}}" target="attachment">
