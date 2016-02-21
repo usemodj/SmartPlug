@@ -33,7 +33,6 @@ class AdminTopicCtrl {
       forum_id: $stateParams.forum_id
     };
     $scope.transformResponse = function(response){
-      console.log(response)
       $scope.forum = response.forum;
       $scope.topics = response.topics;
     }
@@ -99,7 +98,6 @@ class AdminViewTopicCtrl {
     this.progress = 0;
 
     $scope.$on('fileSelected', (event, args) => {
-      //console.log(args.file);
       $scope.$apply(() => this.files.push(args.file));
     });
 
@@ -211,7 +209,6 @@ class AdminViewTopicCtrl {
           this.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         })
         .success((data, status, headers, config) => {
-          //this.$state.go('topics.view', {forum_id: this.$stateParams.forum_id, id: data.topic});
           this.topic.posts.push(data);
           this.post = {};
           this.files = [];
@@ -245,7 +242,6 @@ class AdminEditTopicCtrl {
     this.files = [];
 
     $scope.$on('fileSelected', (event, args) => {
-      //console.log(args.file);
       $scope.$apply(() => this.files.push(args.file));
     });
   }
