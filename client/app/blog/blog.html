@@ -1,0 +1,46 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Blog</h1>
+    <p class="lead">New Blog</p>
+  </div>
+</header>
+
+<div class="container-fluid" style="background-color: #eeeeee;">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <form class="form-search" name="form" ng-submit="vm.search(form)" novalidate>
+        <div id="custom-search-input" class="input-group col-xs-8 col-md-4 pull-right">
+          <input class="form-control search-query" ng-model="vm.qsearch" placeholder="Search">
+          <span class="input-group-btn">
+              <button class="btn btn-danger" type="button">
+                <span class=" glyphicon glyphicon-search"></span>
+              </button>
+          </span>
+        </div>
+      </form>
+      <h1 class="page-header">Blogs</h1>
+      <div class="col-lg-11 col-sm-11 text-right">
+        <span class="badge pull-right" style="color:#999999;"><a ng-show="vm.Auth.hasRole('admin')"
+        class=" btn btn-default btn-xs" ui-sref="blog.new" title="Admin is allowed!">New Blog</a></span>
+      </div>
+      <ul class="nav nav-stacked col-md-4 col-lg-4 col-sm-6 col-xs-6" ng-repeat="blog in vm.blogs track by $index">
+        <li class="item"><div class="panel-thumbnail"><a ng-show="blog.photo_url" ui-sref="blog.view({id: blog._id})"><img width="100%" ng-src="{{blog.photo_url}}" class="img-responsive"></a></div>
+          <a ui-sref="blog.view({id: blog._id})">{{blog.title}}</a>
+        <div>{{blog.summary}}</div>
+        <div class="small">
+          <small><span ng-repeat="tag in blog.tags track by $index">
+          <a class="fa fa-tag badge" ui-sref="blog.tag({tag: tag})">{{tag}}</a>
+        </span></small>
+        </div></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-10 col-sm-12 pull-right">
+      <bgf-pagination page="page" per-page="perPage" client-limit="clientLimit"
+        url="url" url-params="urlParams" collection="vm.blogs">
+      </bgf-pagination>
+    </div>
+  </div>
+</div>
+
