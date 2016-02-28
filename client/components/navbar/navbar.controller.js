@@ -8,7 +8,7 @@ class NavbarController {
     this.$state = $state;
     this.menu = [{
       'title': 'Home',
-      'state': 'main'
+      'state': 'home'
     }, {
       'title': 'Blog',
       'state': 'blog.list'

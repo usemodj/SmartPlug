@@ -245,7 +245,7 @@ class AdminViewSupportCtrl {
           .then(() => {
             comment.content = e.getContent();
             var el = angular.element($('.md-editor')).parents('.panel');
-            el.css( "background-color", "#ffeeff" );
+            el.css( "background-color", "#ffeeff" );g
             setTimeout(() => {
               el.css( "background-color", "#ffffff" );
             }, 2000);
