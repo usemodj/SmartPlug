@@ -28,6 +28,9 @@ var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',
   path: '/socket.io-client'
 });
+var env = app.get('env');
+// Populate databases with admin user
+if ('production' === env) {require('./config/seed.admin');}
 
 // Setup Mailer
 app.use(function(req, res, next){
