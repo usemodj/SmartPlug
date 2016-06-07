@@ -2,13 +2,13 @@
   <div class="row">
     <div class="col-md-10 col-md-offset-1 text-right">
       <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="admin.supports.list"><i class="fa fa-arrow-left"></i> Back </a></span>
-            <span class="badge" style="color:#666666;"><a ng-show="vm.Auth.isLoggedIn()"  data-placement="bottom" title="Request Support"
-                                                          class=" btn btn-default btn-xs" ui-sref="admin.supports.new"><i class="fa fa-edit"></i> New Ticket</a></span>
     </div>
   </div>
 
   <div class="col-md-10 col-md-offset-1">
-    <h2><span class="badge">{{vm.support.status}}</span> {{vm.support.subject}}</h2>
+    <h2><span class="badge">{{vm.support.status}}</span> {{vm.support.subject}}
+      <span class="badge" style="color:#666666;"><a ng-show="vm.Auth.isLoggedIn() && vm.support.status != 'Close'" class=" btn btn-success" ng-click="vm.close()"><i class="fa fa-check"></i> Close Ticket</a></span>
+    </h2>
     <span ng-repeat="tag in vm.support.tags track by $index">
       <a class="fa fa-tag" ui-sref="admin.supports.tag({tag: tag})">{{tag}}</a>
     </span>

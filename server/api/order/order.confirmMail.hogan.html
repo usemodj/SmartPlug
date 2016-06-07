@@ -1,0 +1,28 @@
+<style>
+  table tr td {
+    padding: 5px;
+    boder-bottom:  #ddd solid;
+  }
+</style>
+<table style="border:1; padding:5px; bodder-bottom: #ddd solid;">
+        <tbody>
+        {{#order.order_items}}
+        <tr>
+            <td><img width="110" src="{{siteUrl}}/assets/upload/{{uri}}"></td>
+            <td><a href="{{siteUrl}}/products/{{variant.product}}">{{name}}<br/>{{variant.options}}</a></td>
+            <td>{{variant.price}} x {{variant.quantity}}</td>
+            <td>{{variant.price * variant.quantity}}</td>
+        </tr>
+        {{/order.order_items}}
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Shipment:<br/>
+                Total:
+            </td>
+            <td>{{order.shipment_total}}<br/>
+                {{order.total}}
+            </td>
+        </tr>
+        </tbody>
+    </table>

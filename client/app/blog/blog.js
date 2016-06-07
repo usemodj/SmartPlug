@@ -16,7 +16,7 @@ angular.module('smartPlugApp')
         controllerAs: 'vm'
       })
       .state('blog.search', {
-        url: '/search/:qsearch',
+        url: '/search/:q',
         templateUrl: 'app/blog/blog.html',
         controller: 'BlogCtrl',
         controllerAs: 'vm'

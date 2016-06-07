@@ -1,0 +1,30 @@
+<div class="container">
+
+    <form name="form" ng-submit="vm.save(form)" novalidate>
+
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-5">
+                <h3>Payment Information:</h3>
+              <div class="btn-group btn-group-vertical">
+                <div data-toggle="buttons" ng-repeat="item in vm.paymentMethods">
+                  <label class="btn">
+                    <input type="radio" radio-button ng-model="vm.order.payment.payment_method" ng-value="item" required> {{item.name}}<br/>
+                    <i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> <span>  {{item.info}}</span>
+                  </label>
+                </div>
+              </div>
+           </div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+              <div class="form-group has-error" ng-show="vm.errors.other">
+                <p class="help-block">{{ vm.errors.other }}</p>
+              </div>
+              <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" >
+                  <span class="glyphicon glyphicon-send"></span> Save and Continue &gt;&gt; </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -182,6 +182,7 @@ export function search(req, res, next){
         console.error(err);
         throw err;
       }
+      console.log(results)
       if(results.hits.total == 0){
         return res.status(200).json([]);
       }

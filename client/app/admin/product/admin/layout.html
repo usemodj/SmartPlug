@@ -1,0 +1,22 @@
+<nav class="navbar navbar-default  navbar-static-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div ng-class="{active:$state.includes('admin.products.list')}" class="navbar-header">
+            <a class="navbar-brand" ui-sref="admin.products.list"> Products </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ng-class="{active:$state.includes('admin.products.optionTypes.list')}"><a ui-sref="admin.products.optionTypes.list">Option Types</a></li>
+                <li ng-class="{active:$state.includes('admin.products.taxonomies.list')}"><a ui-sref="admin.products.taxonomies.list">Taxonomies(Taxons)</a></li>
+                <li ng-class="{active:$state.includes('admin.products.shippingMethods.list')}"><a ui-sref="admin.products.shippingMethods.list">Shipping Methods</a></li>
+                <li ng-class="{active:$state.includes('admin.products.paymentMethods.list')}"><a ui-sref="admin.products.paymentMethods.list">Payment Methods</a></li>
+            </ul>
+       </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+    <div ui-view></div>
+</div>

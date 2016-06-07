@@ -18,8 +18,8 @@ export function register(socket) {
     SupportEvents.on(event, listener);
     socket.on('disconnect', removeListener(event, listener));
   }
-}
 
+}
 
 function createListener(event, socket) {
   return function(doc) {

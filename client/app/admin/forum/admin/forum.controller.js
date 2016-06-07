@@ -1,12 +1,12 @@
 'use strict';
 
 class AdminForumCtrl {
-  constructor(Auth, $modal, $state, $stateParams, $scope, $http,  $location, $window, $filter, socket, Modal) {
+  constructor(Auth, $uibModal, $state, $stateParams, $scope, $http,  $location, $window, $filter, socket, Modal) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.$http = $http;
@@ -82,7 +82,7 @@ class AdminForumCtrl {
   addForum(){
     this.submitted = true;
     var self = this;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/forum/admin/forum.new.html',
       controller: AdminNewForumCtrl,
       controllerAs: 'vm',
@@ -105,7 +105,7 @@ class AdminForumCtrl {
     forum.position = 0;
     this.$http.post('/api/admin/forums', forum)
     .then( response => {
-        this.$scope.forums.unshift(response.data);
+        //tetthis.$scope.forums.unshift(response.data);
     })
     .catch(err => {
         console.error(err);
@@ -115,7 +115,7 @@ class AdminForumCtrl {
 
   editForum(forum){
     this.submitted = true;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/forum/admin/forum.edit.html',
       controller: AdminEditForumCtrl,
       controllerAs: 'vm',
@@ -163,25 +163,25 @@ angular.module('smartPlugApp.admin')
   .controller('AdminForumCtrl', AdminForumCtrl);
 
 class AdminNewForumCtrl {
-  constructor(Auth, $scope, $state, $modalInstance) {
+  constructor(Auth, $scope, $state, $uibModalInstance) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.$state = $state;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.forum = { active: true};
   }
 
   saveForum(form){
     this.submitted = true;
     if(form.$valid) {
-      this.$modalInstance.close(this.forum);
+      this.$uibModalInstance.close(this.forum);
     }
   }
 
   cancelEdit(){
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   back(){
@@ -194,13 +194,13 @@ angular.module('smartPlugApp.admin')
   .controller('AdminNewForumCtrl', AdminNewForumCtrl);
 
 class AdminEditForumCtrl {
-  constructor(Auth, $scope, $state, $modalInstance, forum) {
+  constructor(Auth, $scope, $state, $uibModalInstance, forum) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.$state = $state;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.origin = angular.copy(forum);
     this.forum = forum;
   }
@@ -208,7 +208,7 @@ class AdminEditForumCtrl {
   saveForum(form){
     this.submitted = true;
     if(form.$valid) {
-      this.$modalInstance.close(this.forum);
+      this.$uibModalInstance.close(this.forum);
     }
   }
 
@@ -218,7 +218,7 @@ class AdminEditForumCtrl {
     this.forum.active = this.origin.active;
     this.forum.locked = this.origin.locked;
 
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   back(){

@@ -17,7 +17,11 @@ angular.module('smartPlugApp', [
   'hc.marked', //markdown
   'bgf.paginateAnything',
   'relativeDate',
-  'ui.sortable'
+  'ui.sortable',
+  'ui.select',
+  'ui.tree',
+  'ngClipboard',
+  'angularTreeview'
   ])
   .config(['$urlRouterProvider', '$locationProvider', function($urlRouterProvider, $locationProvider) {
     $urlRouterProvider
@@ -45,6 +49,9 @@ angular.module('smartPlugApp', [
         url: '',
         templateUrl: 'app/layout.html'
        });
+  }])
+  .config(['ngClipProvider', function(ngClipProvider) {
+    ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
   }])
   .run(['$rootScope', '$state', '$stateParams', 'Auth', function($rootScope, $state, $stateParams, Auth){
     $rootScope.$state = $state;

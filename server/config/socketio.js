@@ -17,6 +17,20 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/stateChange/stateChange.socket').register(socket);
+  require('../api/address/address.socket').register(socket);
+  require('../api/shippingMethod/shippingMethod.socket').register(socket);
+  require('../api/shipment/shipment.socket').register(socket);
+  require('../api/paymentMethod/paymentMethod.socket').register(socket);
+  require('../api/payment/payment.socket').register(socket);
+  require('../api/order/order.socket').register(socket);
+  require('../api/orderItem/orderItem.socket').register(socket);
+  require('../api/cart/cart.socket').register(socket);
+  require('../api/variant/variant.socket').register(socket);
+  require('../api/taxonomy/taxonomy.socket').register(socket);
+  require('../api/taxon/taxon.socket').register(socket);
+  require('../api/optionType/optionType.socket').register(socket);
+  require('../api/product/product.socket').register(socket);
   require('../api/topic/topic.socket').register(socket);
   require('../api/forum/forum.socket').register(socket);
   require('../api/support/support.socket').register(socket);

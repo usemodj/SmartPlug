@@ -1,0 +1,12 @@
+
+<div  style="overflow-x:auto;overflow-y:hidden; white-space:nowrap; width:100%;" ng-controller="TaxonTreeCtrl as vm">
+  <div ng-if="vm.taxonTree" style="display:inline-block;"
+      data-ng-click="vm.selectNode(this.taxonTree.currentNode)"
+      data-angular-treeview="true"
+      data-tree-id="taxonTree"
+      data-tree-model="vm.taxonTree"
+      data-node-id="_id"
+      data-node-label="name"
+      data-node-children="children" >
+  </div>
+</div>

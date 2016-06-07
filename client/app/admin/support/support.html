@@ -3,9 +3,6 @@
     <div class="col-xs-10 col-md-8">
       <h2>Tickets List</h2>
       <div class="col-xs-3 col-md-2 pull-right">
-      <span class="badge btn btn-xs" style="color:#666666;">
-      <a ng-show="vm.Auth.isLoggedIn()" class=" btn btn-default btn-xs" ui-sref="supports.new"
-         data-placement="bottom" title="Request Support"><i class="fa fa-edit"></i> New Ticket</a></span>
       </div>
     </div>
   </div>
@@ -17,7 +14,7 @@
       </div>
       <div class="form-group col-xs-4 col-md-4">
         <label>Status:</label><br/>
-        <select class="form-control" ng-model="vm.conditions.status" ng-options="value for value in ['Request','Feedback']">
+        <select class="form-control" ng-model="vm.conditions.status" ng-options="value for value in ['Request','Feedback', 'Close']">
           <option value="">-- Status --</option>
         </select>
       </div>

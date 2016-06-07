@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('smartPlugApp')
-  .factory('Modal', function ($rootScope, $modal) {
+  .factory('Modal', function ($rootScope, $uibModal) {
     /**
      * Opens a modal
      * @param  {Object} scope      - an object to be merged with modal's scope
      * @param  {String} modalClass - (optional) class(es) to be applied to the modal
-     * @return {Object}            - the instance $modal.open() returns
+     * @return {Object}            - the instance $uibModal.open() returns
      */
     function openModal(scope = {}, modalClass = 'modal-default') {
       var modalScope = $rootScope.$new();
 
       angular.extend(modalScope, scope);
 
-      return $modal.open({
+      return $uibModal.open({
         templateUrl: 'components/modal/modal.html',
         windowClass: modalClass,
         scope: modalScope
@@ -67,7 +67,46 @@ angular.module('smartPlugApp')
               del.apply(event, args);
             });
           };
+        },
+
+        continue(object = angular.noop) {
+          /**
+           * Open a continue confirmation modal
+           * @param  {String} name   - name or info to show on modal
+           * @param  {All}           - any additional args are passed straight to del callback
+           */
+          return function() {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              continueModal;
+
+            continueModal = openModal({
+              modal: {
+                dismissable: true,
+                title: 'Confirm',
+                html: '<p>Are you sure you want to continue <strong>' + name + '</strong> ?</p>',
+                buttons: [{
+                  classes: 'btn-warning',
+                  text: 'Continue',
+                  click: function(e) {
+                    continueModal.close(e);
+                  }
+                }, {
+                  classes: 'btn-default',
+                  text: 'Cancel',
+                  click: function(e) {
+                    continueModal.dismiss(e);
+                  }
+                }]
+              }
+            }, 'modal-danger');
+
+            continueModal.result.then(function(event) {
+              object.apply(event, args);
+            });
+          };
         }
+
       }
     };
   });

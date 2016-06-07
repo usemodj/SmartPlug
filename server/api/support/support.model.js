@@ -9,7 +9,7 @@ var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 var SupportSchema = new mongoose.Schema({
   subject: { type: String, required: true, index: true },
   content: String,
-  status: {type: String, enum: ['Request', 'Feedback']},
+  status: {type: String, enum: ['Request', 'Feedback', 'Close']},
   created_at: {type: Date, default: Date.now, index: true},
   updated_at: {type: Date, default: Date.now, index: true},
   views: {type: Number, default: 0},

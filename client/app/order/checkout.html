@@ -1,0 +1,100 @@
+<div class="container">
+    <h2>Order#: {{vm.order.number}} <a ng-show="vm.order.state == 'confirm'" ng-click="vm.confirm()" class="btn btn-primary" >
+      <span class="glyphicon glyphicon-ok"></span> Confirm </a>
+      <a ng-show="vm.order.state == 'complete' && vm.order.payment_state == 'balance_due' " ng-click="vm.payNow()" class="btn btn-primary" >
+        <span class="glyphicon glyphicon-ok"></span> Pay Now </a>
+    </h2>
+    <div class="row well">
+      <div class="col-md-4">
+        <label>Status</label><br/>
+        <div class="badge">{{vm.order.state}}</div>
+      </div>
+      <div class="col-md-4">
+        <label>Payment State</label><br/>
+        <div class="badge">{{vm.order.payment_state}}</div>
+      </div>
+      <div class="col-md-4">
+        <label>Shipment State</label><br/>
+        <div class="badge">{{vm.order.shipment_state}}</div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label>Billing Address:</label><br/>
+            {{vm.order.bill_address.name}}<br/>
+            {{vm.order.bill_address.zipcode}}<br/>
+            {{vm.order.bill_address.address1}}<br/>
+            {{vm.order.bill_address.address2}}<br/>
+            Mobile: {{vm.order.bill_address.mobile}}<br/>
+            Phone: {{vm.order.bill_address.phone}}
+        </div>
+        <div class="col-md-4">
+            <label>Shipping Address:</label><br/>
+            {{vm.order.ship_address.name}}<br/>
+            {{vm.order.ship_address.zipcode}}<br/>
+            {{vm.order.ship_address.address1}}<br/>
+            {{vm.order.ship_address.address2}}<br/>
+            Mobile: {{data.order.ship_address.mobile}}<br/>
+            Phone: {{data.order.ship_address.phone}}
+        </div>
+        <div class="col-md-2">
+            <label>Shipments:</label><br/>
+            {{vm.order.shipping_method.name}}<br/>
+            {{vm.order.shipping_method.amount | currency}}
+        </div>
+        <div class="col-md-2">
+            <label>Payments:</label><br/>
+            {{vm.order.payment_method.name}}<br/>
+            {{vm.order.payment_method.description}}
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th colspan="2" class="text-center">Item</th>
+            <th class="text-center">Price</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">SubTotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="line_item in vm.order.order_items">
+            <td class="col-md-1"><span class="height-72"><img ng-src="/assets/upload/{{line_item.uri}}"></span></td>
+            <td class="col-md-5"><a ui-sref="products.view({id: line_item.variant.product})"><strong>{{line_item.name}}</strong><br/> {{line_item.variant.options}}</a></td>
+            <td class="col-md-2 text-right">{{line_item.variant.price | currency}}</td>
+            <td class="col-md-1 text-center">{{line_item.quantity}}
+            </td>
+            <td class="col-md-2 text-right">{{line_item.variant.price * line_item.quantity | currency}}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <th colspan="2" class="text-right">
+                <div>Items Total:</div>
+                <div>Shipping:</div>
+                <div>Total:</div>
+            </th>
+            <td class="text-right">
+                <div>{{vm.order.item_total | currency}}</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-6  col-md-6">
+          <div class="form-group has-error" ng-show="vm.errors.other">
+            <p class="help-block">{{ vm.errors.other }}</p>
+          </div>
+          <div class="form-group has-success" ng-show="vm.success">
+            {{vm.success}}
+          </div>
+        </div>
+        <div class="col-xs-4 col-md-4 text-right">
+            <a ng-click="vm.address()" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-ok"></span> Continue &gt;&gt; </a>
+        </div>
+    </div>
+
+</div>

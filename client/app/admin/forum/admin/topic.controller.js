@@ -34,7 +34,7 @@ class AdminTopicCtrl {
     };
     $scope.transformResponse = function(response){
       $scope.forum = response.forum;
-      $scope.topics = response.topics;
+      $scope.topics = response.topics || [];
     }
 
     var tag = $stateParams.tag;
@@ -82,13 +82,13 @@ angular.module('smartPlugApp.admin')
   .controller('AdminTopicCtrl', AdminTopicCtrl);
 
 class AdminViewTopicCtrl {
-  constructor(Auth, Upload, $modal, $http, $state, $stateParams, $scope, socket) {
+  constructor(Auth, Upload, $uibModal, $http, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Upload = Upload;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$http = $http;
     this.$state = $state;
     this.$stateParams = $stateParams;
@@ -118,7 +118,7 @@ class AdminViewTopicCtrl {
     post.sticky = this.topic.sticky;
     post.active = this.topic.active;
     post.tags = this.topic.tags;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/forum/admin/topic.edit.html',
       controller: EditTopicCtrl,
       controllerAs: 'vm',
@@ -229,14 +229,14 @@ angular.module('smartPlugApp')
   .controller('AdminViewTopicCtrl', AdminViewTopicCtrl);
 
 class AdminEditTopicCtrl {
-  constructor(Auth, $scope, $http, $state, $modalInstance, post) {
+  constructor(Auth, $scope, $http, $state, $uibModalInstance, post) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.$http = $http;
     this.$state = $state;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.origin = angular.copy(post);
     this.post = post;
     this.files = [];
@@ -250,7 +250,7 @@ class AdminEditTopicCtrl {
     this.submitted = true;
     if(form.$valid) {
       this.post.files = this.files;
-      this.$modalInstance.close(this.post);
+      this.$uibModalInstance.close(this.post);
     }
   }
 
@@ -261,7 +261,7 @@ class AdminEditTopicCtrl {
     this.post.sticky = this.origin.sticky;
     this.post.locked = this.origin.locked;
 
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   removeFile(file){

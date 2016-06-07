@@ -6,7 +6,8 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/smartplug-dev'
+    uri: 'mongodb://localhost/smartplug-dev',
+    debug: true
   },
 
   // Seed database on startup

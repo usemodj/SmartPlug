@@ -36,8 +36,8 @@ class AdminForumTopicCtrl {
     $scope.transformResponse = function(response){
       console.log(response)
       $scope.forum = response.forum;
-      $scope.sticky_topics = response.sticky_topics;
-      $scope.topics = response.topics;
+      $scope.sticky_topics = response.sticky_topics || [];
+      $scope.topics = response.topics || [];
     }
 
     var tag = $stateParams.tag;
@@ -85,13 +85,13 @@ angular.module('smartPlugApp.admin')
   .controller('AdminForumTopicCtrl', AdminForumTopicCtrl);
 
 class AdminViewForumTopicCtrl {
-  constructor(Auth, Upload, $modal, $http, $state, $stateParams, $scope, socket) {
+  constructor(Auth, Upload, $uibModal, $http, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Upload = Upload;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$http = $http;
     this.$state = $state;
     this.$stateParams = $stateParams;
@@ -122,7 +122,7 @@ class AdminViewForumTopicCtrl {
     post.sticky = this.topic.sticky;
     post.active = this.topic.active;
     post.tags = this.topic.tags;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/forum/admin/topic.edit.html',
       controller: EditTopicCtrl,
       controllerAs: 'vm',
@@ -234,7 +234,7 @@ angular.module('smartPlugApp')
   .controller('AdminViewForumTopicCtrl', AdminViewForumTopicCtrl);
 
 class AdminEditForumTopicCtrl {
-  constructor(Auth, $scope, $http, $state, $stateParams, $modalInstance, post) {
+  constructor(Auth, $scope, $http, $state, $stateParams, $uibModalInstance, post) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
@@ -242,7 +242,7 @@ class AdminEditForumTopicCtrl {
     this.$http = $http;
     this.$state = $state;
     this.$stateParams = $stateParams;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.origin = angular.copy(post);
     this.post = post;
     this.files = [];
@@ -257,7 +257,7 @@ class AdminEditForumTopicCtrl {
     this.submitted = true;
     if(form.$valid) {
       this.post.files = this.files;
-      this.$modalInstance.close(this.post);
+      this.$uibModalInstance.close(this.post);
     }
   }
 
@@ -268,7 +268,7 @@ class AdminEditForumTopicCtrl {
     this.post.sticky = this.origin.sticky;
     this.post.locked = this.origin.locked;
 
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   removeFile(file){

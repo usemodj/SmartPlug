@@ -41,7 +41,6 @@ class AdminSupportCtrl {
     else if(tag){
       $scope.url = `/api/admin/supports/tag/${tag}`;
     } else {
-      console.log('>>page: ', $scope.urlParams.page);
       $scope.url = '/api/admin/supports';
     }
 
@@ -123,21 +122,20 @@ class AdminNewSupportCtrl {
   back(){
     this.$state.go('admin.supports.list');
   }
-
 }
 
 angular.module('smartPlugApp.admin')
   .controller('AdminNewSupportCtrl', AdminNewSupportCtrl);
 
 class AdminViewSupportCtrl {
-  constructor(Auth, AdminSupport, Upload, $modal, $state, $stateParams, $scope, socket) {
+  constructor(Auth, AdminSupport, Upload, $uibModal, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.AdminSupport = AdminSupport;
     this.Upload = Upload;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.support = {};
@@ -147,7 +145,6 @@ class AdminViewSupportCtrl {
     this.AdminSupport.get({id: $stateParams.id}).$promise
       .then(support => {
         this.support = support;
-        socket.syncUpdates('support', this.support.comments);
       });
 
     $scope.$on('$destroy', function() {
@@ -158,7 +155,7 @@ class AdminViewSupportCtrl {
   editSupport(){
     this.submitted = true;
     var self = this;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/support/support.edit.html',
       controller: AdminEditSupportCtrl,
       controllerAs: 'vm',
@@ -205,7 +202,17 @@ class AdminViewSupportCtrl {
         this.$state.go('admin.supports.list');
       })
       .catch(err => {
-        this.errors.other = err;
+        this.errors.other = err.statusText || err;
+      });
+  }
+
+  close(){
+    this.AdminSupport.close({id: this.$stateParams.id}).$promise
+    .then(() => {
+        this.$state.go('admin.supports.list');
+      })
+      .catch(err => {
+        this.errors.other = err.statusText || err;
       });
   }
 
@@ -220,7 +227,7 @@ class AdminViewSupportCtrl {
         //console.log(comment);
         this.support.comments.unshift(comment);
         this.newComment = '';
-        this.$state.go('admin.supports.view',{id: this.support._id},{reload: true});
+        this.$state.go('admin.supports.view',{_id: this.support._id},{reload: true});
       })
       .catch(err => {
         this.errors.other = err;
@@ -245,7 +252,7 @@ class AdminViewSupportCtrl {
           .then(() => {
             comment.content = e.getContent();
             var el = angular.element($('.md-editor')).parents('.panel');
-            el.css( "background-color", "#ffeeff" );g
+            el.css( "background-color", "#ffeeff" );
             setTimeout(() => {
               el.css( "background-color", "#ffffff" );
             }, 2000);
@@ -278,14 +285,14 @@ angular.module('smartPlugApp.admin')
   .controller('AdminViewSupportCtrl', AdminViewSupportCtrl);
 
 class AdminEditSupportCtrl {
-  constructor(Auth, AdminSupport, $scope, $state, $modalInstance, support) {
+  constructor(Auth, AdminSupport, $scope, $state, $uibModalInstance, support) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.AdminSupport = AdminSupport;
     this.$state = $state;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.origin = angular.copy(support);
     this.support = support;
     this.files = [];
@@ -300,7 +307,7 @@ class AdminEditSupportCtrl {
     this.submitted = true;
     if(form.$valid) {
       this.support.files = this.files;
-      this.$modalInstance.close(this.support);
+      this.$uibModalInstance.close(this.support);
     }
   }
 
@@ -309,7 +316,7 @@ class AdminEditSupportCtrl {
     this.support.content = this.origin.content;
     this.support.tags = this.origin.tags;
 
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   removeFile(file){

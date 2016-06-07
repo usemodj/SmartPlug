@@ -21,4 +21,6 @@ router.delete('/:id/comment/:comment_id', auth.hasRole('admin'), controller.dele
 router.post('/:id/comment/:comment_id', auth.hasRole('admin'), controller.saveComment); //edit comment
 router.get('/search/:terms', auth.hasRole('admin'), controller.search); //Elasticsearch full-text search
 
+router.post('/:id/close', auth.hasRole('user'), controller.close); //close ticket
+
 module.exports = router;

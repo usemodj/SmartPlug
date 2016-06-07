@@ -13,7 +13,7 @@ class BlogCtrl {
     this.$scope = $scope;
     this.$window = $window;
     this.blogs = $scope.blogs = [];
-    this.qsearch = '';
+    this.q = '';
 
     $scope.perPage = parseInt($location.search().perPage, 10) || 10;
     $scope.page = parseInt($location.search().page, 10) || 0;
@@ -33,9 +33,9 @@ class BlogCtrl {
     };
 
     var tag = $stateParams.tag;
-    this.qsearch = $stateParams.qsearch;
-    if(this.qsearch){
-      $scope.url = `/api/blogs/search/${this.qsearch}`;
+    this.q = $stateParams.q;
+    if(this.q){
+      $scope.url = `/api/blogs/search/${this.q}`;
     }
     else if(tag){
       $scope.url = `/api/blogs/tag/${tag}`;
@@ -66,8 +66,8 @@ class BlogCtrl {
 
   search(form){
     this.submitted = true;
-    //this.$scope.url = `/api/blogs/search/${this.qsearch}`;
-    this.$window.location.href = `/blog/search/${this.qsearch}`;
+    //this.$scope.url = `/api/blogs/search/${this.q}`;
+    this.$window.location.href = `/blog/search/${this.q}`;
   }
 
   deleteBlog(blog){

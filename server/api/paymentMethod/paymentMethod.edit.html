@@ -1,0 +1,43 @@
+<h2>Editing Payment Method: {{vm.paymentMethod.name}}</h2>
+
+<div class="panel-body" >
+    <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)">
+        <div class="row">
+            <div class="form-group col-xs-3 col-md-3">
+                <label>Name *:</label><br/>
+                <input class="form-control" ng-model="vm.paymentMethod.name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group col-xs-6 col-md-6">
+                <label>Info *:</label><br/>
+                <textarea class="form-control" cols="40" ng-model="vm.paymentMethod.info" placeholder="Enter info" required></textarea>
+            </div>
+            <div class="form-group col-xs-1 col-md-1">
+                <label>Active:</label><br/>
+                <input type="checkbox" class="form-control" ng-model="vm.paymentMethod.active" >
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <br>
+            </div>
+        </div>
+        <div class="form-group has-error" ng-show="vm.errors.other">
+            <p class="help-block">{{ vm.errors.other }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="vm.success">
+            <p class="help-block">{{ vm.success }}</p>
+        </div>
+
+        <br/>
+        <div class="row">
+            <div class="col-xs-2 col-md-2"></div>
+            <div class="text-center col-xs-6 col-md-6">
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Update</button>
+            </div>
+            <div class="text-right col-xs-4 col-md-4">
+                <a ui-sref="admin.products.paymentMethods.list" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+                <a ui-sref="admin.products.paymentMethods.edit({id: vm.paymentMethod._id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            </div>
+        </div>
+    </form>
+</div>

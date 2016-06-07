@@ -79,14 +79,15 @@ angular.module('smartPlugApp')
   .controller('SupportCtrl', SupportCtrl);
 
 class ViewSupportCtrl {
-  constructor(Auth, Support, Upload, $modal, $state, $stateParams, $scope, socket) {
+  constructor(Auth, Support, AdminSupport, Upload, $uibModal, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Support = Support;
+    this.AdminSupport = AdminSupport;
     this.Upload = Upload;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.support = {};
@@ -96,7 +97,6 @@ class ViewSupportCtrl {
     this.Support.get({id: $stateParams.id}).$promise
       .then(support => {
         this.support = support;
-        socket.syncUpdates('support', this.support.comments);
       });
 
     $scope.$on('$destroy', function() {
@@ -107,7 +107,7 @@ class ViewSupportCtrl {
   editSupport(){
     this.submitted = true;
     var self = this;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/support/support.edit.html',
       controller: EditSupportCtrl,
       controllerAs: 'vm',
@@ -158,6 +158,17 @@ class ViewSupportCtrl {
       });
   }
 
+  close(){
+    console.log(this.$stateParams.id)
+    this.AdminSupport.close({_id: this.$stateParams.id}).$promise
+      .then(() => {
+        this.$state.go('supports.list');
+      })
+      .catch(err => {
+        this.errors.other = err.statusText || err;
+      });
+  }
+
   addComment(){
     this.submitted = true;
     this.Support.addComment({
@@ -166,8 +177,6 @@ class ViewSupportCtrl {
       status: 'Request'
     }).$promise
       .then( comment => {
-        //console.log(comment);
-        this.support.comments.unshift(comment);
         this.newComment = '';
         this.$state.go('supports.view',{id: this.support._id},{reload: true});
       })
@@ -183,25 +192,25 @@ class ViewSupportCtrl {
       onShow: function(e) {
         e.setContent( comment.content);
       },
-      onSave: function(e) {//e: markdown editor
-        //alert("Saving '" + e.getContent() + "'...");
+      onSave: function(editor) {//e: markdown editor
+        console.log(editor);
         self.Support.saveComment({
           _id: self.support._id,
           comment_id: comment._id,
-          content: e.getContent(),
+          content: editor.getContent(),
           status: 'Request'
         }).$promise
           .then(() => {
-            comment.content = e.getContent();
+            comment.content = editor.getContent();
             var el = angular.element($('.md-editor')).parents('.panel');
             el.css( "background-color", "#ffeeff" );
             setTimeout(() => {
               el.css( "background-color", "#ffffff" );
             }, 2000);
-            e.blur();
+            editor.blur();
           })
           .catch(err => {
-            self.errors.other = err;
+            self.errors.other = err.statusText || err;
           });
       }
     });
@@ -213,7 +222,7 @@ class ViewSupportCtrl {
         this.support.comments.splice(this.support.comments.indexOf(comment), 1);
       })
       .catch(err => {
-        this.errors.other = err;
+        this.errors.other =  err.statusText || err;
       });
   }
 
@@ -227,14 +236,14 @@ angular.module('smartPlugApp')
   .controller('ViewSupportCtrl', ViewSupportCtrl);
 
 class EditSupportCtrl {
-  constructor(Auth, Support, $scope, $state, $modalInstance, support) {
+  constructor(Auth, Support, $scope, $state, $uibModalInstance, support) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Support = Support;
     this.$state = $state;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.origin = angular.copy(support);
     this.support = support;
     this.files = [];
@@ -249,7 +258,7 @@ class EditSupportCtrl {
     this.submitted = true;
     if(form.$valid) {
       this.support.files = this.files;
-      this.$modalInstance.close(this.support);
+      this.$uibModalInstance.close(this.support);
     }
   }
 
@@ -258,7 +267,7 @@ class EditSupportCtrl {
     this.support.content = this.origin.content;
     this.support.tags = this.origin.tags;
 
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   removeFile(file){

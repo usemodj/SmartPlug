@@ -15,16 +15,25 @@
       <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
       <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
       <link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css" />
+      <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
       <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
+      <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.css" />
+      <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.css" />
+      <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.date.css" />
+      <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.time.css" />
+      <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
       <!-- endbower -->
+      <link rel="stylesheet" href="bower_components/angular.treeview/css/angular.treeview.css" />
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
       <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
+    <script language="javascript" type="text/javascript"
+            src="https://api.paygate.net/ajax/common/OpenPayAPI.js"></script>
   </head>
   <body ng-app="smartPlugApp">
     <!--[if lt IE 7]>
@@ -72,10 +81,22 @@
       <script src="bower_components/angular-paginate-anything/dist/paginate-anything-tpls.js"></script>
       <script src="bower_components/jquery-ui/jquery-ui.js"></script>
       <script src="bower_components/angular-ui-sortable/sortable.js"></script>
+      <script src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+      <script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+      <script src="bower_components/ng-clip/src/ngClip.js"></script>
+      <script src="bower_components/pickadate/lib/picker.js"></script>
+      <script src="bower_components/pickadate/lib/picker.date.js"></script>
+      <script src="bower_components/pickadate/lib/picker.time.js"></script>
+      <script src="bower_components/angular-ui-select/dist/select.js"></script>
+      <script src="bower_components/angular.treeview/angular.treeview.js"></script>
+      <script src="bower_components/angular-bootstrap-checkbox/angular-bootstrap-checkbox.js"></script>
       <!-- endbower -->
       <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
       <script src="socket.io-client/socket.io.js"></script>
       <script src="bower_components/angular-relative-date/dist/angular-relative-date.min.js"></script>
+      <script src="bower_components/jquery-ui/ui/minified/i18n/datepicker-ko.min.js"></script>
+      <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
+      <script src="bower_components/pickadate/lib/translations/ko_KR.js"></script>
     <!-- endbuild -->
 
     <!-- build:js(.tmp) app/app.js -->
@@ -85,34 +106,59 @@
       <script src="app/admin/admin.module.js"></script>
       <script src="components/auth/auth.module.js"></script>
       <script src="components/util/util.module.js"></script>
-      <script src="app/main/main.js"></script>
+      <script src="app/order/order.js"></script>
       <script src="app/account/signup/signup.controller.js"></script>
       <script src="app/admin/admin.controller.js"></script>
       <script src="app/account/account.js"></script>
       <script src="app/admin/admin.router.js"></script>
+      <script src="app/admin/asset/admin/asset.controller.js"></script>
+      <script src="app/admin/asset/admin/asset.js"></script>
       <script src="app/admin/forum/admin/forum.controller.js"></script>
       <script src="app/admin/forum/admin/forum.js"></script>
       <script src="app/admin/forum/admin/forum.topic.controller.js"></script>
       <script src="app/admin/forum/admin/topic.controller.js"></script>
+      <script src="app/admin/optionType/admin/optionType.controller.js"></script>
+      <script src="app/admin/optionType/admin/optionType.js"></script>
+      <script src="app/admin/order/admin/order.controller.js"></script>
+      <script src="app/admin/order/admin/order.js"></script>
+      <script src="app/admin/paymentMethod/admin/paymentMethod.controller.js"></script>
+      <script src="app/admin/paymentMethod/admin/paymentMethod.js"></script>
+      <script src="app/admin/product/admin/product.controller.js"></script>
+      <script src="app/admin/product/admin/product.js"></script>
+      <script src="app/admin/shippingMethod/admin/shippingMethod.controller.js"></script>
+      <script src="app/admin/shippingMethod/admin/shippingMethod.js"></script>
       <script src="app/admin/support/support.controller.js"></script>
       <script src="app/admin/support/support.js"></script>
+      <script src="app/admin/taxonomy/admin/taxonomy.controller.js"></script>
+      <script src="app/admin/taxonomy/admin/taxonomy.js"></script>
       <script src="app/admin/user/user.controller.js"></script>
       <script src="app/admin/user/user.js"></script>
+      <script src="app/admin/variant/admin/variant.controller.js"></script>
+      <script src="app/admin/variant/admin/variant.js"></script>
       <script src="app/app.constant.js"></script>
       <script src="app/blog/blog.controller.js"></script>
       <script src="app/blog/blog.js"></script>
       <script src="app/blog/edit.blog.controller.js"></script>
       <script src="app/blog/new.blog.controller.js"></script>
       <script src="app/blog/view.blog.controller.js"></script>
+      <script src="app/cart/cart.controller.js"></script>
+      <script src="app/cart/cart.js"></script>
       <script src="app/common/settings.js"></script>
       <script src="app/forum/forum.controller.js"></script>
       <script src="app/forum/forum.js"></script>
       <script src="app/forum/topic.controller.js"></script>
       <script src="app/main/main.controller.js"></script>
+      <script src="app/main/main.js"></script>
+      <script src="app/order/order.controller.js"></script>
       <script src="app/account/forgot.password/forgot.password.controller.js"></script>
+      <script src="app/product/product.controller.js"></script>
+      <script src="app/product/product.js"></script>
       <script src="app/support/new.support.controller.js"></script>
       <script src="app/support/support.controller.js"></script>
       <script src="app/support/support.js"></script>
+      <script src="app/taxon/taxon.controller.js"></script>
+      <script src="app/taxon/taxon.js"></script>
+      <script src="components/adminOrder/adminOrder.service.js"></script>
       <script src="components/asset/asset.service.js"></script>
       <script src="app/account/login/login.controller.js"></script>
       <script src="components/auth/auth.service.js"></script>
@@ -120,9 +166,12 @@
       <script src="components/auth/router.decorator.js"></script>
       <script src="components/auth/user.service.js"></script>
       <script src="components/blog/blog.service.js"></script>
+      <script src="components/cart/cart.service.js"></script>
+      <script src="components/checkbox/checkbox.directive.js"></script>
       <script src="components/fileupload/fileupload.directive.js"></script>
       <script src="components/footer/footer.directive.js"></script>
       <script src="components/inputfile/inputfile.directive.js"></script>
+      <script src="components/jqdatepicker/jqdatepicker.directive.js"></script>
       <script src="components/mail/mail.service.js"></script>
       <script src="components/markdowneditor/markdowneditor.directive.js"></script>
       <script src="components/modal/modal.service.js"></script>
@@ -131,11 +180,23 @@
       <script src="components/navbar/navbar.directive.js"></script>
       <script src="components/oauth-buttons/oauth-buttons.controller.js"></script>
       <script src="components/oauth-buttons/oauth-buttons.directive.js"></script>
+      <script src="components/optionType/optionType.service.js"></script>
+      <script src="components/order/order.service.js"></script>
+      <script src="components/paymentMethod/paymentMethod.service.js"></script>
+      <script src="components/pickadate/pickadate.directive.js"></script>
+      <script src="components/product/product.service.js"></script>
+      <script src="components/radioButton/radioButton.directive.js"></script>
+      <script src="components/shippingMethod/shippingMethod.service.js"></script>
       <script src="components/socket/socket.service.js"></script>
       <script src="components/support/admin.support.service.js"></script>
       <script src="components/support/support.service.js"></script>
+      <script src="components/taxon/taxon.service.js"></script>
+      <script src="components/taxonTree/taxonTree.controller.js"></script>
+      <script src="components/taxonomy/taxonomy.service.js"></script>
+      <script src="components/toDate/toDate.filter.js"></script>
       <script src="app/account/settings/settings.controller.js"></script>
       <script src="components/util/util.service.js"></script>
+      <script src="components/variant/variant.service.js"></script>
       <!-- endinjector -->
     <!-- endbuild -->
   </body>

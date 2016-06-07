@@ -1,3 +1,4 @@
+
 'use strict';
 
 var path = require('path');
@@ -14,6 +15,9 @@ function requiredProcessEnv(name) {
 // ============================================
 var all = {
   env: process.env.NODE_ENV,
+  //site url
+  siteUrl: 'http://localhost:9000',
+  postmailer: 'postmaster@nodesoft.co.kr',
 
   // Root path of server
   root: path.normalize(__dirname + '/../../..'),

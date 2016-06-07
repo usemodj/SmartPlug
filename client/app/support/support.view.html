@@ -8,7 +8,9 @@
   </div>
 
   <div class="col-md-10 col-md-offset-1">
-    <h2><span class="badge">{{vm.support.status}}</span> {{vm.support.subject}}</h2>
+    <h2><span class="badge">{{vm.support.status}}</span> {{vm.support.subject}}
+      <span class="badge" style="color:#666666;"><a ng-show="vm.Auth.isLoggedIn() && vm.support.status != 'Close'" class=" btn btn-success" ng-click="vm.close()"><i class="fa fa-check"></i> Close Ticket</a></span>
+    </h2>
     <span ng-repeat="tag in vm.support.tags track by $index">
       <a class="fa fa-tag" ui-sref="supports.tag({tag: tag})">{{tag}}</a>
     </span>
@@ -59,16 +61,16 @@
     </div>
   </div>
 
-  <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in vm.support.comments | orderBy:'-updated_at' ">
+  <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="comment in vm.support.comments | orderBy:'-updated_at' ">
     <div class="col-md-3 bg-info text-primary">
-      <div tooltip="{{item.author.email}}">Written by {{item.author.name}} </div>
-      <div>{{item.updated_at | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
-      <div>({{item.updated_at | relativeDate}})</div>
+      <div tooltip="{{comment.author.email}}">Written by {{comment.author.name}} </div>
+      <div>{{comment.updated_at | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+      <div>({{comment.updated_at | relativeDate}})</div>
     </div>
     <div class="col-md-9">
-      <div id="{{item._id}}" class="panel-body" marked="item.content"></div>
+      <div id="{{comment._id}}" class="panel-body" marked="comment.content"></div>
       <div class="well well-sm text-right">
-        <a class="btn btn-default btn-xs" ng-show="vm.Auth.getCurrentUser().email == item.author.email" ng-click="vm.editComment(item)">Edit</a>
+        <a class="btn btn-default btn-xs" ng-show="vm.Auth.getCurrentUser().email == comment.author.email" ng-click="vm.editComment(comment)">Edit</a>
       </div>
     </div>
   </div>

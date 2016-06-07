@@ -156,6 +156,14 @@ export function destroy(req, res) {
     .catch(handleError(res));
 }
 
+export function close(req, res){
+  Support.findByIdAndUpdateAsync(req.params.id, {
+    status: 'Close'
+  },{new:true})
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+}
+
 export function search(req, res, next){
   var clientLimit = req.query.clientLimit;
   var terms = req.params.terms;

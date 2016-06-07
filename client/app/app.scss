@@ -60,18 +60,129 @@ img {
   z-index: 3;
 }
 
+.navbar-static-top .nav .dropdown-menu {
+  z-index:10002;
+}
+.navbar, .navbar-static-top {
+  position: static;
+  z-index: 1001;
+}
+
+/* Begin: Radio and Checkbox buttons style */
+label.btn span {
+  font-size: 1.5em ;
+}
+
+label input[type="radio"] ~ i.fa.fa-circle-o {
+  color: #c8c8c8;    display: inline;
+}
+label input[type="radio"] ~ i.fa.fa-check-circle-o {
+  display: none;
+}
+label input[type="radio"]:checked ~ i.fa.fa-circle-o {
+  display: none;
+}
+label input[type="radio"]:checked ~ i.fa.fa-check-circle-o {
+  color: #7AA3CC;    display: inline;
+}
+label:hover input[type="radio"] ~ i.fa {
+  color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label.active i.fa.fa-circle-o {
+  display: none;
+}
+div[data-toggle="buttons"] label.active i.fa.fa-check-circle-o {
+  color: #7AA3CC;    display: inline;
+}
+
+label input[type="checkbox"] ~ i.fa.fa-square-o {
+  color: #c8c8c8;    display: inline;
+}
+label input[type="checkbox"] ~ i.fa.fa-check-square-o {
+  display: none;
+}
+label input[type="checkbox"]:checked ~ i.fa.fa-square-o {
+  display: none;
+}
+label input[type="checkbox"]:checked ~ i.fa.fa-check-square-o {
+  color: #7AA3CC;    display: inline;
+}
+label:hover input[type="checkbox"] ~ i.fa {
+  color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label.active i.fa.fa-square-o {
+  display: none;
+}
+div[data-toggle="buttons"] label.active i.fa.fa-check-square-o {
+  color: #7AA3CC;    display: inline;
+}
+
+div[data-toggle="buttons"] label.active {
+  color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 2em;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: top;
+  cursor: pointer;
+  background-color: unset;
+  border: 0px solid
+  #c8c8c8;
+  border-radius: 3px;
+  color: #c8c8c8;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+div[data-toggle="buttons"] label:hover {
+  color: #7AA3CC;
+}
+
+div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+/* End: Radio and Checkbox buttons style */
+
 // Component styles are injected through grunt
 // injector
 @import 'admin/admin.scss';
+@import 'admin/asset/admin/asset.scss';
 @import 'admin/forum/admin/forum.scss';
+@import 'admin/optionType/admin/optionType.scss';
+@import 'admin/order/admin/order.scss';
+@import 'admin/paymentMethod/admin/paymentMethod.scss';
+@import 'admin/product/admin/product.scss';
+@import 'admin/shippingMethod/admin/shippingMethod.scss';
 @import 'admin/support/support.scss';
+@import 'admin/taxonomy/admin/taxonomy.scss';
 @import 'admin/user/user.scss';
+@import 'admin/variant/admin/variant.scss';
 @import 'blog/blog.scss';
+@import 'cart/cart.scss';
 @import 'forum/forum.scss';
 @import 'main/main.scss';
+@import 'order/order.scss';
+@import 'product/product.scss';
 @import 'support/support.scss';
+@import 'taxon/taxon.scss';
 @import '../components/footer/footer.scss';
 @import '../components/inputfile/inputfile.scss';
 @import '../components/modal/modal.scss';
 @import '../components/oauth-buttons/oauth-buttons.scss';
+@import '../components/pickadate/pickadate.scss';
 // endinjector
+

@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="pull-left">
+        <a ui-sref="products.list"> Home </a>
+    </div>
+    <div class="pull-right col-md-pull-1">
+        <a href="/carts"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group" >
+                <div class="list-group-item" style="width:180px;">
+                    <strong>Categories </strong>
+                </div>
+                <div ng-include="" src="'components/taxonTree/taxonTree.html'"></div>
+            </div>
+
+        </div>
+        <div class="col-md-9">
+            <div ui-view></div>
+        </div>
+    </div>
+</div>

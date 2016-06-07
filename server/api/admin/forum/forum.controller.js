@@ -144,7 +144,7 @@ export function destroy(req, res) {
 }
 
 export function updatePositions(req, res, next){
-  console.log(req.body);
+  //console.log(req.body);
   var entry = req.body.entry;
   var ids = [];
   if(entry) ids = entry.trim().split(/\s*,\s*/);

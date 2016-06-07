@@ -10,6 +10,9 @@ class NavbarController {
       'title': 'Home',
       'state': 'home'
     }, {
+      'title': 'Store',
+      'state': 'products.list'
+    }, {
       'title': 'Blog',
       'state': 'blog.list'
     }, {

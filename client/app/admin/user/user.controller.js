@@ -1,7 +1,7 @@
 'use strict';
 
 class UserCtrl {
-  constructor(Auth, $state, $stateParams, $http, $scope, $location, $window, $modal, socket, appConfig) {
+  constructor(Auth, $state, $stateParams, $http, $scope, $location, $window, $uibModal, socket, appConfig) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
@@ -9,7 +9,7 @@ class UserCtrl {
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.$http = $http;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$scope = $scope;
     this.$window = $window;
     this.appConfig = appConfig;
@@ -80,7 +80,7 @@ class UserCtrl {
 
   editUser(user){
     this.submitted = true;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/user/user.edit.html',
       controller: EditUserCtrl,
       controllerAs: 'vm',
@@ -111,8 +111,8 @@ angular.module('smartPlugApp.admin')
   .controller('UserCtrl', UserCtrl);
 
 class EditUserCtrl {
-  constructor($modalInstance, appConfig, user){
-    this.$modalInstance = $modalInstance;
+  constructor($uibModalInstance, appConfig, user){
+    this.$uibModalInstance = $uibModalInstance;
     this.appConfig = appConfig;
     this.user = user;
     this.oldUser = angular.copy(user);
@@ -121,14 +121,14 @@ class EditUserCtrl {
   saveUser(form){
     this.submitted = true;
     if(form.$valid) {
-      this.$modalInstance.close(this.user);
+      this.$uibModalInstance.close(this.user);
     }
   }
 
   cancelEdit(){
     this.user.role = this.oldUser.role;
     this.user.active = this.oldUser.active;
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 }
 angular.module('smartPlugApp.admin')

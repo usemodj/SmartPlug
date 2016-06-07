@@ -1,0 +1,45 @@
+<h2>Editing Shipping Method: {{vm.shippingMethod.name}}</h2>
+
+<div class="panel-body" >
+    <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)">
+        <div class="row">
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Name*:</label><br/>
+                <input class="form-control" ng-model="vm.shippingMethod.name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group col-xs-3 col-md-3">
+                <label>Amount*:</label><br/>
+              <input class="form-control" type="number" step="0.01" min="0" name="amount" ng-model="vm.shippingMethod.amount" required/>
+              <p class="error" ng-show="form.amount.$error.number">Not valid number!</p>
+            </div>
+            <div class="form-group col-xs-1 col-md-2">
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn">
+                  <input type="checkbox" checkbox ng-model="vm.shippingMethod.active">
+                  <i class="fa fa-square-o fa-2x"></i><i class="fa fa-check-square-o fa-2x"></i> <span> Active</span>
+                </label>
+              </div>
+            </div>
+        </div>
+        <div class="form-group has-error" ng-show="vm.errors.other">
+            <p class="help-block">{{ vm.errors.other }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="vm.success">
+            <p class="help-block">{{ vm.success }}</p>
+        </div>
+
+        <br/>
+        <div class="row">
+            <div class="col-xs-2 col-md-2"></div>
+            <div class="text-center col-xs-6 col-md-6">
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Update</button>
+            </div>
+            <div class="text-right col-xs-4 col-md-4">
+                <a ui-sref="admin.products.shippingMethods.list" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+                <a ui-sref="admin.products.shippingMethods.edit({id: vm.shippingMethod._id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            </div>
+        </div>
+    </form>
+</div>

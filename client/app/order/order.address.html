@@ -1,0 +1,81 @@
+<div class="container">
+
+    <form name="form" ng-submit="vm.save(form)" novalidate>
+
+        <div class="row">
+            <div class="col-md-5 col-push-1">
+                <h3>Billing Address :</h3>
+                <p>&nbsp;</p>
+                <div class="form-group">
+                    <label>Name *:</label>
+                    <input class="form-control" ng-model="vm.order.bill_address.name" required>
+                </div>
+                <div class="form-group">
+                    <label>Zipcode *:</label>
+                    <input class="form-control" ng-model="vm.order.bill_address.zipcode" required>
+                </div>
+                <div class="form-group">
+                    <label>Address1 *:</label>
+                    <input class="form-control" ng-model="vm.order.bill_address.address1" required>
+                </div>
+                <div class="form-group">
+                    <label>Address2 :</label>
+                    <input class="form-control" ng-model="vm.order.bill_address.address2" >
+                </div>
+                <div class="form-group">
+                  <label>Mobile *:</label>
+                  <input class="form-control" ng-model="vm.order.bill_address.mobile" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone :</label>
+                    <input class="form-control" ng-model="vm.order.bill_address.phone" >
+                </div>
+            </div>
+            <div class="col-md-5 col-pull-1">
+                <h3>Shipping Address:</h3>
+
+                <div class="btn-group btn-group-vertical" data-toggle="buttons" >
+                  <label class="btn">
+                    <input type="checkbox" checkbox ng-model="vm.order.use_bill_address" ng-change="vm.useBillingAddress()">
+                    <i class="fa fa-square-o fa-2x"></i><i class="fa fa-check-square-o fa-2x"></i> <span>Use Billing Address</span>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Name *:</label>
+                    <input class="form-control" ng-model="vm.order.ship_address.name" required>
+                </div>
+                <div class="form-group">
+                    <label>Zipcode *:</label>
+                    <input class="form-control" ng-model="vm.order.ship_address.zipcode" required>
+                </div>
+                <div class="form-group">
+                    <label>Address1 *:</label>
+                    <input class="form-control" ng-model="vm.order.ship_address.address1" required>
+                </div>
+                <div class="form-group">
+                    <label>Address2:</label>
+                    <input class="form-control" ng-model="vm.order.ship_address.address2" >
+                </div>
+                <div class="form-group">
+                  <label>Mobile *:</label>
+                  <input class="form-control" ng-model="vm.order.ship_address.mobile" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone :</label>
+                    <input class="form-control" ng-model="vm.order.ship_address.phone" >
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+              <div class="form-group has-error" ng-show="vm.errors.other">
+                <p class="help-block">{{ vm.errors.other }}</p>
+              </div>
+              <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" >
+                  <span class="glyphicon glyphicon-send"></span> Save and Continue &gt;&gt; </button>
+          </div>
+        </div>
+    </form>
+</div>

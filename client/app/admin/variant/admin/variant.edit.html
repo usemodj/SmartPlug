@@ -1,0 +1,72 @@
+<h2><label>Editing Product:</label> {{vm.product.name}}</h2>
+
+<div class="panel-body" >
+    <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)" novalidate>
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+
+              <div class="form-group" ng-hide="vm.product.option_types">
+                <label>Option Type *:</label>
+                <a class="form-control btn btn-primary" ui-sref="admin.products.edit({id: $stateParams.product_id})"> Select Option Types of the Product ...</a>
+              </div>
+              <div class="form-group" ng-repeat="(key, optionType) in vm.product.option_types | orderBy:'position' ">
+                <label>Option Type *:</label> {{optionType.presentation}}
+                <select style="width:100%" ng-model="vm.variant.options[optionType._id]" placeholder="Pick a option value" required>
+                  <option class="form-control" ng-repeat="optionValue in optionType.option_values | orderBy:'position' " value="{{optionValue._id}}" ng-selected="{{vm.variant.options[optionType._id] == optionValue._id}}">{{optionValue.presentation}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                  <label>SKU *:</label><br/>
+                  <input class="form-control" ng-model="vm.variant.sku" placeholder="Enter sku" required>
+              </div>
+              <div class="form-group">
+                  <label>Price *:</label><br/>
+                  <input class="form-control" type="number" min="0" name="price" ng-model="vm.variant.price" required/>
+                  <p class="error" ng-show="form.price.$error.number">Not valid number!</p>
+              </div>
+              <div class="form-group">
+                  <label>Cost price:</label><br/>
+                  <input class="form-control" type="number" min="0" name="cost_price" ng-model="vm.variant.cost_price"/>
+                  <p class="error" ng-show="form.cost_price.$error.number">Not valid number!</p>
+              </div>
+              <div>
+                <label>Quantity:</label><br/>
+                <input class="form-control" type="number" min="0" name="quantity" ng-model="vm.variant.quantity"/>
+                <p class="error" ng-show="form.quantity.$error.number">Not valid number!</p>
+              </div>
+            </div>
+            <div class="col-xs-6 col-md-6">
+              <div class="form-group">
+                  <label>Weight:</label><br/>
+                  <input class="form-control" type="text" name="weight" ng-model="vm.variant.weight" />
+              </div>
+              <div class="form-group">
+                  <label>Height:</label><br/>
+                  <input class="form-control" type="text" name="height" ng-model="vm.variant.height" />
+              </div>
+              <div class="form-group">
+                  <label>Width:</label><br/>
+                  <input class="form-control" type="text" name="width" ng-model="vm.variant.width" />
+              </div>
+              <div class="form-group">
+                  <label>Depth:</label><br/>
+                  <input class="form-control" type="text" name="depth" ng-model="vm.variant.depth" />
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center col-xs-12 col-md-12">
+                <br>
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Update</button>
+            </div>
+        </div>
+        <div class="form-group has-error" ng-show="vm.errors.other">
+            <p class="help-block">{{ vm.errors.other }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="vm.success">
+            <p class="help-block">{{ vm.success }}</p>
+        </div>
+
+    </form>
+
+ </div>
