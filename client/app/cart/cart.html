@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="pull-left">
+    <a ui-sref="products.list"> Home </a>
+  </div>
+  <div class="pull-right">
+    <a ui-sref="carts.list"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
+  </div>
+  <h2>Shopping Cart</h2>
+  <form name="form" ng-submit="vm.save(form)" novalidate>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <th colspan="2" class="text-center">Item</th>
+        <th class="text-center">Price</th>
+        <th class="text-center">Qty</th>
+        <th class="text-center">Sub total</th>
+        <th class="text-center"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="lineItem in vm.orders">
+        <td class="col-md-1"><div class="cart-thumb"><img ng-src="/assets/upload/{{lineItem.uri}}"></div></td>
+        <td class="col-md-5"><a ui-sref="products.view({id:lineItem.variant.product})"><strong>{{lineItem.name}}</strong><br/> {{lineItem.variant.options}}</a></td>
+        <td class="col-md-2 text-right">{{lineItem.variant.price | currency}}</td>
+        <td class="col-md-1">
+          <input style="width:80px" class="form-control" type="number" min="0" name="quantity"
+                 ng-model="lineItem.quantity"/>
+          <p class="error" ng-show="form.quantity.$error.number">Not valid number!</p>
+        </td>
+        <td class="col-md-2 text-right">{{lineItem.variant.price * lineItem.quantity | currency}}</td>
+        <td class="col-md-1 text-center">
+          <a ng-click="vm.delete(lineItem)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-remove"></span></a>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+        <th class="text-center">Total:</th>
+        <td class="text-right">{{vm.total | currency}}</td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-xs-2 col-md-2"></div>
+      <div class="col-xs-6  col-md-6">
+      </div>
+      <div class="col-xs-4 col-md-4">
+        <button type="submit" class="btn btn-primary"  ng-disabled="!form.$dirty">
+          <span class="glyphicon glyphicon-repeat"></span> Update </button>
+        <a ng-click="vm.checkout()" class="btn btn-primary" ng-disabled="form.$dirty || vm.orders.length === 0">
+          <span class="glyphicon glyphicon-send"></span> Checkout &gt;&gt; </a>
+      </div>
+    </div>
+  </form>
+</div>

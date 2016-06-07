@@ -1,0 +1,109 @@
+
+.thumbnail {
+  width: 250px
+}
+
+ul#products:after {
+  content: " ";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0px;
+}
+ul, ol {
+  margin-left: 0px;
+  margin-top: 0px;
+  padding-left: 0px;
+  list-style-position: inside;
+}
+ul, ol {
+  list-style-position: inside;
+}
+ul#products li {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+ul.inline li, ol.inline li {
+  display: inline-block;
+}
+ul#products li .product-image {
+  border: 1px solid #D9D9DB;
+  padding: 5px;
+  max-height: 110px;
+  background-color: #FFF;
+}
+ul#products li {
+  text-align: center;
+  font-weight: bold;
+}
+ul#products li a.info {
+  height: 35px;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #BBB;
+  border-bottom: 1px solid #D9D9DB;
+  overflow: hidden;
+}
+ul#products li a {
+  display: block;
+}
+a {
+  text-decoration: none;
+  color: #00ADEE;
+}
+
+ul#products li .price {
+  color: #e61876;
+  font-size: 16px;
+  padding-top: 5px;
+  display: block;
+}
+
+#product-price .price {
+  color: #e61876;
+  font-size: 26px;
+  padding-top: 5px;
+  display: block;
+}
+span.price.selling, #checkout-summary table tr[data-hook="item_total"] td:last-child strong.selling, #checkout-summary table #summary-order-total.selling, #order_details td.price span.selling, #order_details td.total span.selling, #order_summary td.price span.selling, #order_summary td.total span.selling, table#cart-detail tbody#line_items tr td[data-hook="cart_item_price"], table#cart-detail tbody#line_items tr td[data-hook="cart_item_total"], div[data-hook="inside_cart_form"] #subtotal span.selling.order-total {
+  font-size: 20px;
+}
+span.price, #checkout-summary table tr[data-hook="item_total"] td:last-child strong, #checkout-summary table #summary-order-total, #order_details td.price span, #order_details td.total span, #order_summary td.price span, #order_summary td.total span, table#cart-detail tbody#line_items tr td[data-hook="cart_item_price"], table#cart-detail tbody#line_items tr td[data-hook="cart_item_total"], div[data-hook="inside_cart_form"] #subtotal span.order-total {
+  font-weight: bold;
+  color: #e61876;
+}
+
+/* radio button */
+#ck-button {
+  margin:2px;
+  padding:1px;
+  border-radius:8px;
+  border:1px solid #D0D0D0;
+  overflow:auto;
+  float:left;
+}
+#ck-button label {
+  float:left;
+  /*width:4.0em;*/
+}
+#ck-button label span {
+  text-align:center;
+  padding:5px;
+  display:block;
+  cursor: pointer;
+}
+#ck-button label input {
+  position:absolute;
+  //top:-17px;
+}
+#ck-button label input[type="radio"] {
+  margin-left: -999px;/* hide input */
+}
+
+#ck-button label input:checked + span {
+ background-color: #00aae4;
+ color: #e61876;
+}
+

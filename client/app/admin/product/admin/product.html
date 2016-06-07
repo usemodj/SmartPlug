@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-8 col-md-8">
+      <h2>Products List</h2>
+    </div>
+    <div class="col-xs-4 col-md-4 text-center">
+      <br/>
+      <button class="btn btn-primary" ui-sref="admin.products.new"><span class="glyphicon glyphicon-plus"></span> New Product &nbsp;&nbsp; </button>
+    </div>
+  </div>
+  <div class="panel-body" >
+    <form name="form" class="form-inline" role="form" ng-submit="vm.search(form)">
+      <div class="row">
+        <div class="form-group col-xs-7 col-md-4">
+          <label>Name:</label><br/>
+          <input class="form-control" ng-model="vm.q.name" placeholder="Enter name">
+        </div>
+        <div class="form-group col-xs-6 col-md-3">
+          <label>SKU:</label><br/>
+          <input class="form-control" ng-model="vm.q.sku" placeholder="Enter sku">
+        </div>
+        <div class="form-group col-xs-3 col-md-3">
+          <div class="btn-group btn-group-vertical" data-toggle="buttons" >
+            <label class="btn">
+              <input type="checkbox" checkbox ng-model="vm.q.deleted">
+              <i class="fa fa-square-o fa-2x"></i><i class="fa fa-check-square-o fa-2x"></i> <span>Show Deleted</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-2 col-md-2">
+          <br>
+          <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+        </div>
+      </div>
+    </form>
+    <br/>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Name</th>
+        <th>Master Price</th>
+        <th>Available On</th>
+        <th>Deleted At</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="item in vm.products">
+        <td>{{item.sku}}</td>
+        <td><a ui-sref="admin.products.edit({id: item._id})" data-placement="bottom" title="Edit"><span class="height-53"><img ng-src="/assets/upload/{{item.assets.uri}}"></span>{{item.name}}</a></td>
+        <td>{{item.variants[0].price | currency}}</td>
+        <td>{{item.available_on | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+        <td>{{item.deleted_at | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+        <td class="text-center">
+          <a ui-sref="admin.products.edit({id: item._id})" class="btn btn-xs btn-primary" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+          <a ui-sref="admin.products.clone({id: item._id})" class="btn btn-xs btn-primary" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Clone"><span class="glyphicon glyphicon-file"></span></a>
+          <a ng-hide="item.deleted_at != null && (item.deleted_at | toDate) < data.now " ng-confirm-click="Are you sure?" ng-click="vm.delete(item)" class="btn btn-xs btn-primary" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-lg-10 col-sm-12 pull-right">
+        <bgf-pagination page="page" per-page="perPage" client-limit="clientLimit"
+                        url="url" url-params="urlParams" collection="vm.products">
+        </bgf-pagination>
+      </div>
+      <div class="col-xs-2 col-md-2">
+        <a ui-sref="admin.products.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+          <span class="glyphicon glyphicon-refresh"></span> Refresh </a>
+      </div>
+    </div>
+  </div>
+</div>

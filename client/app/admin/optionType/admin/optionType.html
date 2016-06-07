@@ -1,0 +1,53 @@
+<h2>Option Types</h2>
+
+<div class="panel-body" >
+  <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)">
+    <div class="row">
+      <div class="form-group col-xs-5 col-md-5">
+        <label>Name*:</label><br/>
+        <input class="form-control" ng-model="vm.optionType.name" placeholder="Enter name" required>
+      </div>
+      <div class="form-group col-xs-5 col-md-5">
+        <label>Presentation*:</label><br/>
+        <input class="form-control" ng-model="vm.optionType.presentation" placeholder="Enter presentation" required>
+      </div>
+      <div class="col-xs-2 col-md-2">
+        <br>
+        <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+      </div>
+    </div>
+    <div class="form-group has-error" ng-show="vm.errors">
+      <p class="help-block">{{ vm.errors }}</p>
+    </div>
+
+  </form>
+  <br/>
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Presentation</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody ui-sortable="vm.sortableOptions" ng-model="vm.optionTypes">
+    <tr ng-repeat="item in vm.optionTypes">
+      <td style="width:300px" class="col-md-5"><span class="glyphicon glyphicon-list"></span> {{item.name}}</td>
+      <td style="width:300px" class="col-md-5">{{item.presentation}} </td>
+      <td class="col-md-2 text-center">
+        <a ui-sref="admin.products.optionTypes.edit({id: item._id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-plus"></span> Add Option Value</a>
+        <a ng-confirm-click="Are you sure?" ng-click="vm.delete(item)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-xs-2 col-md-2"></div>
+    <div class="col-xs-8  col-md-8">
+    </div>
+    <div class="col-xs-2 col-md-2">
+      <a ui-sref="admin.products.optionTypes.list" ui-sref-opts="{reload: true}" class="btn btn-primary btn-xs" >
+        <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<h2>Shipping Methods</h2>
+
+<div class="panel-body" >
+  <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)" novalidate>
+    <div class="row">
+      <div class="form-group col-xs-3 col-md-3">
+        <label>Name*:</label><br/>
+        <input class="form-control" ng-model="vm.shippingMethod.name" placeholder="Enter name" required>
+      </div>
+      <div class="form-group col-xs-3 col-md-3">
+        <label>Amount*:</label><br/>
+        <input class="form-control" type="number" step="0.01" min="0" name="amount" ng-model="vm.shippingMethod.amount" required/>
+        <p class="error" ng-show="form.amount.$error.number">Not valid number!</p>
+      </div>
+      <div class="form-group col-xs-1 col-md-2">
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn">
+            <input type="checkbox" checkbox ng-model="vm.shippingMethod.active">
+            <i class="fa fa-square-o fa-2x"></i><i class="fa fa-check-square-o fa-2x"></i> <span> Active</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group col-xs-2 col-md-2">
+        <br>
+        <button type="submit" ng-disabled="form.$invalid" class="form-control btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+      </div>
+    </div>
+    <div class="form-group has-error" ng-show="vm.errors.other">
+      <p class="help-block">{{ vm.errors.other }}</p>
+    </div>
+
+  </form>
+  <br/>
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Active</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody ui-sortable="vm.sortableOptions" ng-model="vm.shippingMethods">
+    <tr ng-repeat="item in vm.shippingMethods">
+      <td style="width:300px" class="col-md-5"><span class="glyphicon glyphicon-list"></span> {{item.name}}</td>
+      <td style="width:300px" class="col-md-3">{{item.amount}} </td>
+      <td style="width:200px" class="col-md-2">{{item.active}}</td>
+      <td class="col-md-2 text-center">
+        <a ui-sref="admin.products.shippingMethods.edit({id: item._id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+        <a ng-confirm-click="Are you sure?" ng-click="vm.delete(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-xs-2 col-md-2"></div>
+    <div class="col-xs-8  col-md-8">
+    </div>
+    <div class="col-xs-2 col-md-2">
+      <a ui-sref="admin.products.shippingMethods.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+        <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    </div>
+  </div>
+</div>

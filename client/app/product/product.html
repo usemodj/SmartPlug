@@ -1,0 +1,44 @@
+<div class="panel-body" >
+  <div class="row">
+    <form class="form-search col-md-12" name="form" ng-submit="vm.search(form)" novalidate>
+      <div id="custom-search-input" class="input-group col-xs-8 col-md-4 pull-right">
+        <input class="form-control search-query" ng-model="vm.q" placeholder="Search">
+          <span class="input-group-btn">
+              <button class="btn btn-danger" type="submit">
+                <span class=" glyphicon glyphicon-search"></span>
+              </button>
+          </span>
+      </div>
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <ul id="products" class="inline product-listing">
+        <li class="columns three alpha" ng-repeat="item in vm.products">
+          <div class="clearfix">
+            <div class="thumbnail">
+              <a ui-sref="products.view({id: item._id})">
+                <img width="290px"  ng-src="/assets/upload/{{item.assets.uri}}" alt="{{item.assets.alt}}"/>
+              </a>
+            </div>
+            <div class="info">
+              <a class="" ui-sref="products.view({id: item._id})">{{item.name}}</a>
+              <span class="price selling">{{item.variants[0].price | currency}}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-10 col-sm-12 pull-right">
+      <bgf-pagination page="page" per-page="perPage" client-limit="clientLimit"
+                      url="url" url-params="urlParams" collection="vm.products">
+      </bgf-pagination>
+    </div>
+  </div>
+</div>
+

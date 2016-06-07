@@ -1,0 +1,75 @@
+
+<h2><label> Images of Product:</label> {{vm.product.name}}</h2>
+
+<div class="panel-body" >
+  <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)" novalidate>
+    <div class="row">
+      <div class="col-xs-2 col-md-2">
+      </div>
+      <div class="form-group col-xs-5 col-md-5 ">
+        <div class="row">
+          <div class="form-group">
+            <label>File Name:</label><br/>
+            <input class="form-control btn-xs" type="file" fileupload accept="image/*"  onclick="this.value=null">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label> Variant: </label><br/>
+            <select style='width:90%' class="form-control" ng-model="vm.asset.variant" ng-options="variant._id as variant.options for variant in vm.variants">
+              <option value=""> -- All -- </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-xs-5 col-md-5">
+        <label>Alternative Text:</label><br/>
+        <textarea class="form-control" rows="5" ng-model="vm.asset.alt"></textarea>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="form-group has-error" ng-show="vm.errors.other">
+        <p class="help-block">{{ vm.errors.other }}</p>
+      </div>
+      <div class="form-group has-success" ng-show="vm.success">
+        <p class="help-block">{{ vm.success }}</p>
+      </div>
+      <div class="form-group">
+        <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Upload &nbsp;&nbsp; </button>
+      </div>
+    </div>
+  </form>
+  <br/>
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Thumbnail</th>
+      <th>Variant</th>
+      <th>Alternative Text</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody ui-sortable="vm.sortableOptions" ng-model="vm.assets">
+    <tr ng-repeat="item in vm.assets">
+      <td style="width:100px" class="col-md-4"><span class="glyphicon glyphicon-list"></span> <img  height="50" ng-src="/assets/upload/{{item.uri}}"/>
+        <input style="width:90px" ng-model="vm.copy[$index]"><button class="btn btn-default btn-sm" clip-copy="vm.copy[$index]">Copy</button>
+      </td>
+      <td style="width:300px" class="col-md-3"> {{item.variant._id == vm.masterVariant._id ? 'All': item.variant.options}}<br/>{{item.variant.price | currency}}</td>
+      <td style="width:300px" class="col-md-4">{{item.alt}} </td>
+      <td class="col-md-2 text-center">
+        <a ng-confirm-click="Are you sure?" ng-click="vm.delete(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-xs-2 col-md-2"></div>
+    <div class="col-xs-8  col-md-8">
+    </div>
+    <div class="col-xs-2 col-md-2">
+      <a ui-sref="admin.products.assets.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+        <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    </div>
+  </div>
+</div>
