@@ -109,6 +109,10 @@ class ViewProductCtrl {
     this.Cart.save(this.order).$promise
     .then(response => {
         this.$state.go('carts.list');
+      })
+    .catch(err => {
+        console.error(err);
+        this.$state.go('carts.list');
       });
   }
 

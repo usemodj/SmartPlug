@@ -14,6 +14,24 @@ angular.module('smartPlugApp')
           params: {
             controller: 'view'
           }
+        },
+        state: {
+          method: 'POST',
+          params: {
+            controller: 'state'
+          }
+        },
+        paid: {
+          method: 'POST',
+          params: {
+            controller: 'paid'
+          }
+        },
+        shipped: {
+          method: 'POST',
+          params: {
+            controller: 'shipped'
+          }
         }
       });
     }

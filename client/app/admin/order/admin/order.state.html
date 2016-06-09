@@ -23,21 +23,32 @@
             <th class="col-md-2">Previous State</th>
             <th class="col-md-2">Next State</th>
             <th class="col-md-2">By User</th>
-            <th class="col-md-2">Created At</th>
+            <th class="col-md-2">Updated At</th>
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="change in vm.order.state_changes">
+          <tr ng-repeat="change in vm.stateChanges">
             <td>{{change.name}}</td>
             <td>{{change.previous_state}}</td>
             <td>{{change.next_state}}</td>
             <td>{{change.user.email}}</td>
-            <td>{{change.created_at}}</td>
+            <td>{{change.updated_at | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div><!--/col-md-9 -->
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-xs-10 text-center">
+      <bgf-pagination page="page" per-page="perPage" client-limit="clientLimit"
+                      url="url" url-params="urlParams" collection="vm.stateChanges">
+      </bgf-pagination>
+    </div>
+    <div class="col-xs-2 col-md-2">
+      <a ui-sref="admin.orders.states({id: $stateParams.id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+        <span class="glyphicon glyphicon-refresh"></span> Refresh </a>
+    </div>
   </div>
 
 </div>

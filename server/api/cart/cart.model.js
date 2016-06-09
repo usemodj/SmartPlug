@@ -12,7 +12,7 @@ var CartSchema = new mongoose.Schema({
     email: String,
     name: String
   },
-  variant: mongoose.Schema.Types.Mixed,
+  variant: {type: mongoose.Schema.Types.ObjectId, ref:'Variant'},
   created_at: {type: Date, default: Date.now()},
   updated_at: {type: Date, default: Date.now()}
 });

@@ -27,7 +27,7 @@ import paginate from 'node-paginate-anything';
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    console.log(entity);
+    //console.log(entity);
     if (entity) {
       res.status(statusCode).json(entity);
     }
@@ -76,14 +76,14 @@ function handleError(res, statusCode) {
 function sendOrderConfirmMail(req, order, callback){
   var filename = path.join(__dirname, './order.confirmMail.hogan.html');
   var transport = req.transport;
-  console.log(filename)
+  //console.log(filename)
   return Order.findById(order._id).populate('order_items')
   .execAsync()
   .then(updatedOrder => {
-      console.log(updatedOrder)
+      //console.log(updatedOrder)
       fs.readFile(filename, function(err, contents){
         if(err) return callback(err);
-        console.log(contents);
+        //console.log(contents);
         var template = hogan.compile(contents.toString());
         //order.subTotal = function(price, qty){ return price * qty};
         var html = template.render({order: updatedOrder, siteUrl: config.siteUrl});
@@ -93,15 +93,14 @@ function sendOrderConfirmMail(req, order, callback){
         message.to = order.user.email;
         message.subject = 'Order Confirmation Mail';
         message.html = html;
-        console.log(message);
+        //console.log(message);
         transport.sendMail(message, function (err) {
           if (err) {
             console.error(err);
             return callback(err);
 
           }
-          console.log('Confirm Mail sent successfully!');
-          //log.debug(message);
+          //console.log('Confirm Mail sent successfully!');
           // if you don't want to use this transport object anymore, uncomment following line
           //transport.close(); // close the connection pool
           return callback(null, message);
@@ -110,6 +109,7 @@ function sendOrderConfirmMail(req, order, callback){
       });
     });
 }
+
 // Gets a list of Orders
 export function index(req, res) {
   var clientLimit = req.query.clientLimit;
@@ -176,7 +176,7 @@ export function destroy(req, res) {
 }
 
 export function state(req, res){
-  console.log(req.body);
+  //console.log(req.body);
   Order.findByIdAndUpdateAsync(req.params.id, {
     state: req.body.state,
     last_ip_address: req.connection.remoteAddress
@@ -186,7 +186,7 @@ export function state(req, res){
 }
 
 export function address(req, res){
-  console.log(req.body);
+  //console.log(req.body);
   var order = req.body;
   var billAddress = order.bill_address;
   var shipAddress = order.ship_address;
@@ -209,17 +209,18 @@ export function address(req, res){
     })
   .then(order => {
       return Order.findByIdAndUpdateAsync(req.params.id, {
-        state: 'shipping',
+        state: 'Shipping',
         last_ip_address: req.connection.remoteAddress,
         bill_address: order.bill_address,
         ship_address: order.ship_address
       }, {new:true});
     })
     .then(updatedOrder => {
-      StateChange.findOneAndUpdateAsync({order:updatedOrder, previous_state: 'address'}, {
-        name: 'order',
-        next_state: 'shipping',
-        previous_state: 'address',
+      StateChange.findOneAndUpdateAsync({order:updatedOrder, previous_state: 'Address'}, {
+        name: 'Order',
+        next_state: 'Shipping',
+        previous_state: 'Address',
+        order: updatedOrder,
         user: req.user,
         updated_at: new Date()
       },{new:true, upsert:true});
@@ -243,7 +244,7 @@ export function shipping(req, res){
   }, {new:true, upsert: true})
   .then(shipment => {
       return Order.findByIdAndUpdateAsync(order._id, {
-        state: 'payment',
+        state: 'Payment',
         last_ip_address: req.connection.remoteAddress,
         shipment_total: shipment.cost,
         total: order.item_total + shipment.cost,
@@ -251,10 +252,10 @@ export function shipping(req, res){
       }, {new:true});
     })
     .then(updatedOrder => {
-      StateChange.findOneAndUpdateAsync({order: updatedOrder, previous_state: 'shipping'},{
-        name: 'order',
-        next_state: 'payment',
-        previous_state: 'shipping',
+      StateChange.findOneAndUpdateAsync({order: updatedOrder, previous_state: 'Shipping'},{
+        name: 'Order',
+        next_state: 'Payment',
+        previous_state: 'Shipping',
         order: updatedOrder,
         user: req.user,
         updated_at: new Date()
@@ -277,35 +278,35 @@ export function payment(req, res){
   }, {new:true, upsert: true})
     .then(payment => {
       return Order.findByIdAndUpdateAsync(order._id, {
-        state: 'confirm',
+        state: 'Confirm',
         last_ip_address: req.connection.remoteAddress,
         payment: payment,
-        shipment_state: 'pending',
-        payment_state: 'balance-due'
+        shipment_state: 'Pending',
+        payment_state: 'Balance-Due'
       }, {new:true});
     })
     .then(updatedOrder => {
-      StateChange.findOneAndUpdateAsync({order: updatedOrder, previous_state: 'payment'},{
-        name: 'order',
-        previous_state: 'payment',
-        next_state: 'confirm',
+      StateChange.findOneAndUpdateAsync({order: updatedOrder, previous_state: 'Payment'},{
+        name: 'Order',
+        previous_state: 'Payment',
+        next_state: 'Confirm',
         order: updatedOrder,
         user: req.user,
         updated_at: new Date()
       },{new:true, upsert:true});
 
-      StateChange.findOneAndUpdateAsync({order: updatedOrder, name: 'payment', previous_state: null},{
-        name: 'payment',
-        next_state: 'balance-due',
+      StateChange.findOneAndUpdateAsync({order: updatedOrder, name: 'Payment', previous_state: null},{
+        name: 'Payment',
+        next_state: 'Balance-Due',
         previous_state: null,
         order: updatedOrder,
         user: req.user,
         updated_at: new Date()
       },{new:true, upsert:true});
 
-      StateChange.findOneAndUpdateAsync({order: updatedOrder, name: 'shipment', previous_state: null},{
-        name: 'shipment',
-        next_state: 'pending',
+      StateChange.findOneAndUpdateAsync({order: updatedOrder, name: 'Shipment', previous_state: null},{
+        name: 'Shipment',
+        next_state: 'Pending',
         previous_state: null,
         order: updatedOrder,
         user: req.user,
@@ -323,15 +324,15 @@ export function confirm(req, res){
   var order = req.body;
 
   Order.findOneAndUpdateAsync({_id: order._id, 'user.email': req.user.email, completed_at:null}, {
-      state: 'complete',
+      state: 'Complete',
       last_ip_address: req.connection.remoteAddress,
       completed_at: new Date()
     }, {new:true})
     .then(updatedOrder => {
-      StateChange.findOneAndUpdateAsync({order: updatedOrder, previous_state: 'confirm'},{
-        name: 'order',
-        next_state: 'complete',
-        previous_state: 'confirm',
+      StateChange.findOneAndUpdateAsync({order: updatedOrder, previous_state: 'Confirm'},{
+        name: 'Order',
+        next_state: 'Complete',
+        previous_state: 'Confirm',
         order: updatedOrder,
         user: req.user,
         updated_at: new Date()
@@ -364,7 +365,7 @@ export function confirm(req, res){
 // update creditcard payment
 export function updatePayment(req, res){
   var payment = req.body;
-  console.log(payment);
+  //console.log(payment);
   Payment.findOneAsync({order: payment.order._id})
     .then(entity => {
       var updated = _.merge(entity, payment);
@@ -378,32 +379,32 @@ export function updatePayment(req, res){
 
         return Order.findByIdAndUpdateAsync(payment.order, {
           last_ip_address: req.connection.remoteAddress,
-          shipment_state: 'ready',
-          payment_state: 'paid'
+          shipment_state: 'Ready',
+          payment_state: 'Paid'
         }, {new:true})
         .then(updatedOrder => {
           StateChange.createAsync({
-            name: 'order',
-            next_state: 'shipment',
-            previous_state: 'paid',
+            name: 'Order',
+            next_state: 'Shipment',
+            previous_state: 'Paid',
             order: updatedOrder,
             user: req.user,
             updated_at: new Date()
           });
 
           StateChange.createAsync({
-            name: 'payment',
-            next_state: 'paid',
-            previous_state: 'balance-due',
+            name: 'Payment',
+            next_state: 'Paid',
+            previous_state: 'Balance-Due',
             order: updatedOrder,
             user: req.user,
             updated_at: new Date()
           });
 
           StateChange.createAsync({
-            name: 'shipment',
-            next_state: 'ready',
-            previous_state: 'pending',
+            name: 'Shipment',
+            next_state: 'Ready',
+            previous_state: 'Pending',
             order: updatedOrder,
             user: req.user,
             updated_at: new Date()

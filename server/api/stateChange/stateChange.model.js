@@ -10,8 +10,8 @@ var StateChangeSchema = new mongoose.Schema({
   order:{ type: mongoose.Schema.Types.ObjectId, ref:'Order'},
   user:{ type: mongoose.Schema.Types.ObjectId, ref:'User'},
 
-  created_at: {type: Date, default: Date.now()},
-  updated_at: {type: Date, default: Date.now()}
+  created_at: {type: Date, default: Date.now},
+  updated_at: {type: Date, default: Date.now}
 });
 
 var validatePresenceOf = function(value) {

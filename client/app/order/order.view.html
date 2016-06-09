@@ -1,7 +1,7 @@
 <div class="container">
-  <h2>Order {{vm.order.number}} <a ng-show="vm.order.state == 'confirm'" ng-click="vm.confirm()" class="btn btn-primary" >
+  <h2>Order {{vm.order.number}} <a ng-show="vm.order.state == 'Confirm'" ng-click="vm.confirm()" class="btn btn-primary" >
     <span class="glyphicon glyphicon-ok"></span> Confirm </a>
-    <a ng-show="vm.order.state == 'complete' && vm.order.payment_state == 'balance-due' " ng-click="vm.payByCreditCard()" class="btn btn-primary" >
+    <a ng-show="vm.order.state == 'Complete' && vm.order.payment_state == 'Balance-Due' " ng-click="vm.payByCreditCard()" class="btn btn-primary" >
       <span class="glyphicon glyphicon-ok"></span> Pay by CreditCard </a>
   </h2>
   <div class="row well">
@@ -45,7 +45,7 @@
     <div class="col-md-2">
       <label>Payments:</label><br/>
       {{vm.order.payment.payment_method.name}}<br/>
-      {{vm.order.payment.payment_method.description}}
+      {{vm.order.payment.payment_method.info}}
     </div>
   </div>
 
@@ -93,13 +93,13 @@
       </div>
     </div>
     <div class="col-xs-4 col-md-4 text-right">
-      <a ng-show="vm.order.state == 'address'" ui-sref="orders.address({id:$stateParams.id})" class="btn btn-primary" >
+      <a ng-show="vm.order.state == 'Address'" ui-sref="orders.address({id:$stateParams.id})" class="btn btn-primary" >
         <span class="glyphicon glyphicon-ok"></span> Address &gt;&gt; </a>
-      <a ng-show="vm.order.state == 'shipping'" ui-sref="orders.shipping({id:$stateParams.id})" class="btn btn-primary" >
+      <a ng-show="vm.order.state == 'Shipping'" ui-sref="orders.shipping({id:$stateParams.id})" class="btn btn-primary" >
         <span class="glyphicon glyphicon-ok"></span> Shipping &gt;&gt; </a>
-      <a ng-show="vm.order.state == 'payment'" ui-sref="orders.payment({id:$stateParams.id})" class="btn btn-primary" >
+      <a ng-show="vm.order.state == 'Payment'" ui-sref="orders.payment({id:$stateParams.id})" class="btn btn-primary" >
         <span class="glyphicon glyphicon-ok"></span> Payment &gt;&gt; </a>
-      <a ng-show="vm.order.state == 'confirm'" ng-click="vm.confirm()" class="btn btn-primary" >
+      <a ng-show="vm.order.state == 'Confirm'" ng-click="vm.confirm()" class="btn btn-primary" >
         <span class="glyphicon glyphicon-ok"></span> Confirm </a>
     </div>
   </div>

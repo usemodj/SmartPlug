@@ -10,7 +10,13 @@
 'use strict';
 
 import _ from 'lodash';
+import hogan from 'hogan.js';
+import fs from 'fs';
+import path from 'path';
+import config from '../../../config/environment';
+
 import Order from '../../order/order.model';
+import StateChange from '../../stateChange/stateChange.model';
 import paginate from 'node-paginate-anything';
 
 function respondWithResult(res, statusCode) {
@@ -60,6 +66,45 @@ function handleError(res, statusCode) {
   };
 }
 
+// callback(err, message)
+function sendOrderShippedMail(req, order, callback){
+  var filename = path.join(__dirname, './order.shippedMail.hogan.html');
+  var transport = req.transport;
+  //console.log(filename)
+  return Order.findById(order._id).populate('order_items')
+    .execAsync()
+    .then(updatedOrder => {
+      //console.log(updatedOrder)
+      fs.readFile(filename, function(err, contents){
+        if(err) return callback(err);
+        //console.log(contents);
+        var template = hogan.compile(contents.toString());
+        //order.subTotal = function(price, qty){ return price * qty};
+        var html = template.render({order: updatedOrder, siteUrl: config.siteUrl});
+
+        var message = {};
+        message.from = config.postmailer;
+        message.to = order.user.email;
+        message.subject = 'Order Shipped Mail';
+        message.html = html;
+        //console.log(message);
+        transport.sendMail(message, function (err) {
+          if (err) {
+            console.error(err);
+            return callback(err);
+
+          }
+          //console.log('Confirm Mail sent successfully!');
+          // if you don't want to use this transport object anymore, uncomment following line
+          //transport.close(); // close the connection pool
+          return callback(null, message);
+
+        });
+      });
+    });
+}
+
+
 // Gets a list of Orders
 export function index(req, res) {
   console.log(req.query);
@@ -89,8 +134,8 @@ export function index(req, res) {
   if(q.completed){
     conditions.push({completed_at: {$exists: true, $ne: null}});
   }
-  if(q.staus){
-    conditions.push({status: q.status});
+  if(q.state){
+    conditions.push({state: q.state});
   }
 
 
@@ -151,5 +196,132 @@ export function destroy(req, res) {
   Order.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
+    .catch(handleError(res));
+}
+
+export function state(req, res){
+  //console.log(req.body);
+  var previousState = '';
+  Order.findByIdAsync(req.params.id)
+  .then(order => {
+      previousState = order.state;
+      order.state = req.body.state;
+      order.approver = {
+        object: req.user._id,
+          email: req.user.email,
+          name: req.user.name
+      };
+      return order.saveAsync().spread(updated => { return updated});
+  })
+  .then(updatedOrder => {
+      StateChange.createAsync({
+        name: 'Order',
+        next_state: updatedOrder.state,
+        previous_state: previousState,
+        order: updatedOrder,
+        user: req.user._id,
+        updated_at: new Date()
+      });
+
+      return updatedOrder;
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+
+}
+
+export function paid(req, res){
+  //console.log(req.body);
+  Order.findByIdAsync(req.params.id)
+    .then(order => {
+      order.payment_state = 'Paid';
+      order.shipment_state = 'Ready';
+      order.approver = {
+        object: req.user._id,
+        email: req.user.email,
+        name: req.user.name
+      };
+      return order.saveAsync().spread(updated => { return updated});
+    })
+    .then(updatedOrder => {
+      StateChange.createAsync([{
+        name: 'Payment',
+        next_state: updatedOrder.payment_state,
+        previous_state: 'Balance-Due',
+        order: updatedOrder,
+        user: req.user,
+        updated_at: new Date()
+      },{
+        name: 'Shipment',
+        next_state: updatedOrder.shipment_state,
+        previous_state: 'Pending',
+        order: updatedOrder,
+        user: req.user,
+        updated_at: new Date()
+      }]);
+
+      return updatedOrder;
+    })
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+
+}
+export function shipped(req, res){
+  console.log(req.body);
+  Order.findByIdAsync(req.params.id)
+    .then(order => {
+      if(order.shipment_state !== 'Ready'){
+        return res.status(500).json('Shipment state must be "Ready"!');
+      }
+
+      order.shipment_state = 'Shipped';
+      order.approver = {
+        object: req.user._id,
+        email: req.user.email,
+        name: req.user.name
+      };
+      return order.saveAsync().spread(updated => { return updated});
+    })
+    .then(updatedOrder => {
+      StateChange.createAsync({
+        name: 'Shipment',
+        next_state: updatedOrder.shipment_state,
+        previous_state: 'Ready',
+        order: updatedOrder,
+        user: req.user,
+        updated_at: new Date()
+      });
+
+      sendOrderShippedMail(req, updatedOrder, (err, message) => {
+        if(err) {
+          console.log(err);
+        } else {
+          console.log('Order Shipped Mail is sent successfully.');
+        }
+      });
+
+      return updatedOrder;
+    })
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+
+}
+
+export function stateChanges(req, res) {
+  console.log(req.query);
+  var clientLimit = req.query.clientLimit;
+  var query = {order: req.params.id};
+  StateChange.countAsync(query)
+    .then(count => {
+      if(count == 0){
+        return [];
+      }
+      var totalItems = count;
+      var maxRangeSize = clientLimit;
+      var queryParams = paginate(req, res, totalItems, maxRangeSize);
+
+      return StateChange.where(query).populate('user').limit(queryParams.limit).skip(queryParams.skip).sort('-updated_at').findAsync()
+    })
+    .then(respondWithResult(res))
     .catch(handleError(res));
 }

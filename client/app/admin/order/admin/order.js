@@ -21,8 +21,8 @@ angular.module('smartPlugApp')
         controller: 'EditOrderCtrl',
         controllerAs: 'vm'
       })
-      .state('admin.orders.state', {
-        url: '',
+      .state('admin.orders.states', {
+        url: '/:id/states',
         templateUrl: 'app/admin/order/admin/order.state.html',
         controller: 'StateOrderCtrl',
         controllerAs: 'vm'

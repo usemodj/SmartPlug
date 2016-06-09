@@ -7,7 +7,7 @@
   </div>
   <h2>Shopping Cart</h2>
   <form name="form" ng-submit="vm.save(form)" novalidate>
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-hover">
       <thead>
       <tr>
         <th colspan="2" class="text-center">Item</th>
@@ -22,9 +22,10 @@
         <td class="col-md-1"><div class="cart-thumb"><img ng-src="/assets/upload/{{lineItem.uri}}"></div></td>
         <td class="col-md-5"><a ui-sref="products.view({id:lineItem.variant.product})"><strong>{{lineItem.name}}</strong><br/> {{lineItem.variant.options}}</a></td>
         <td class="col-md-2 text-right">{{lineItem.variant.price | currency}}</td>
-        <td class="col-md-1">
+        <td class="col-md-1" id="{{lineItem._id}}">
           <input style="width:80px" class="form-control" type="number" min="0" name="quantity"
                  ng-model="lineItem.quantity"/>
+          Remain:{{lineItem.variant.quantity}}
           <p class="error" ng-show="form.quantity.$error.number">Not valid number!</p>
         </td>
         <td class="col-md-2 text-right">{{lineItem.variant.price * lineItem.quantity | currency}}</td>

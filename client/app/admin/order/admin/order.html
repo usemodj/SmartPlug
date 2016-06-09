@@ -5,11 +5,11 @@
     <div class="col-xs-4 col-md-4 text-center">
     </div>
   </div>
-  <div class="panel-body" >
+  <div class="panel-body">
     <form name="form" class="" role="form" ng-submit="vm.search(form)">
       <div class="row">
         <div class="form-group col-xs-2 col-md-2">
-          <label>Date Range:</label><br/>
+          <label>Completed At:</label><br/>
           <input class="form-control" ng-model="vm.q.from" placeholder="Start" pickadate>
 
         </div>
@@ -39,17 +39,18 @@
         <div class="form-group col-xs-2 col-md-2">
           <label>Status:</label><br/>
           <select class="form-control" ng-model="vm.q.state" >
-            <option value="">-- state --</option>
-            <option>cart</option>
-            <option>address</option>
-            <option>delivery</option>
-            <option>payment</option>
-            <option>confirm</option>
-            <option>complete</option>
-            <option>canceled</option>
-            <option>awaiting return</option>
-            <option>returned</option>
-            <option>refund</option>
+            <option value="">-- State --</option>
+            <option>Cart</option>
+            <option>Address</option>
+            <option>Shipping</option>
+            <option>Payment</option>
+            <option>Confirm</option>
+            <option>Complete</option>
+            <option>Canceled</option>
+            <option>Awaiting-Return</option>
+            <option>Returned</option>
+            <option>Refund</option>
+            <option>Finish</option>
           </select>
         </div>
         <div class="form-group col-xs-3 col-md-3">
@@ -65,7 +66,7 @@
     <br/>
 
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-12">
 
         <table class="table table-striped table-bordered table-hover">
           <thead>
@@ -84,7 +85,7 @@
           <tbody>
           <tr ng-repeat="item in vm.orders">
             <td>{{item.completed_at | date: 'yyyy-MM-dd HH:mm:ss'}} </td>
-            <td><a ui-sref="admin.orders.edit({id: item._id})">{{item.number}}</a> ({{item.completed_at | relativeDate}})</td>
+            <td><a ui-sref="admin.orders.edit({id: item._id})">{{item.number}}</a> <span ng-show="item.completed_at">({{item.completed_at | relativeDate}})</span></td>
             <td>{{item.state}}</td>
             <td>{{item.payment_state}}</td>
             <td>{{item.shipment_state}}</td>
@@ -98,7 +99,7 @@
           </tbody>
         </table>
         <div class="row">
-          <div class="col-lg-10 col-sm-12 pull-right">
+          <div class="col-md-10 col-xs-10 text-center">
             <bgf-pagination page="page" per-page="perPage" client-limit="clientLimit"
                             url="url" url-params="urlParams" collection="vm.orders">
             </bgf-pagination>

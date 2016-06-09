@@ -8,7 +8,7 @@
       <th class="text-center">Status</th>
       <th class="text-center">Payment State</th>
       <th class="text-center">Shipment State</th>
-      <th class="text-center">Item Total / Shippment</th>
+      <th class="text-center">Item Total / Shipping Cost</th>
     </tr>
     </thead>
     <tbody>
@@ -18,7 +18,7 @@
       <td class="col-md-2 text-center">{{item.state}}</td>
       <td class="col-md-2 text-center">{{item.payment_state}}</td>
       <td class="col-md-2 text-center">{{item.shipment_state}}</td>
-      <td class="col-md-2 text-right">{{item.item_total | currency}} / {{(item.state == 'complete')? item.shipment.cost: 'pending'}}</td>
+      <td class="col-md-2 text-right">{{item.item_total | currency}} / {{(item.state == 'complete')? (item.shipment.cost | currency): 'pending'}}</td>
     </tr>
     </tbody>
   </table>

@@ -247,7 +247,7 @@ class CheckoutOrderCtrl {
 
 
   address(){
-    this.Order.state({_id: this.$stateParams.id, state: 'address'}).$promise
+    this.Order.state({_id: this.$stateParams.id, state: 'Address'}).$promise
       .then(response => {
         this.$state.go('orders.address', {id: response._id});
       })

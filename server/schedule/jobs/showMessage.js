@@ -3,7 +3,8 @@
  */
 exports.showMessage = function(agenda) {
   agenda.define('show message', function(job, done) {
-    console.log("Shows message.");
+    console.log("Shows message Job.");
+    console.log(new Date())
     done();
   });
 }

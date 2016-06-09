@@ -19,8 +19,6 @@ import StateChange from '../stateChange/stateChange.model';
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    console.log('>> respond with ...');
-    console.log(entity);
     if (entity) {
       res.status(statusCode).json(entity);
     }
@@ -69,6 +67,7 @@ function handleError(res, statusCode) {
 export function index(req, res) {
 
   Cart.find({'user.email': req.user.email})
+    .populate('variant')
     .sort({created_at:1})
     .execAsync()
     .then(respondWithResult(res))
@@ -85,15 +84,23 @@ export function show(req, res) {
 
 // Creates a new Cart in the DB
 export function create(req, res) {
-  var order = req.body;
-  order.user = {
+  var cart = req.body;
+  cart.user = {
     object: req.user,
     email: req.user.email,
     name: req.user.name
   };
-  delete order._id;
+  delete cart._id;
 
-  Cart.createAsync(order)
+  Cart.countAsync({variant: cart.variant})
+  .then(count => {
+      if(count == 0) {
+        return Cart.createAsync(cart);
+      } else {
+        return null;
+      }
+    })
+    .then(handleEntityNotFound(res))
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
@@ -142,11 +149,23 @@ export function destroy(req, res) {
 //Checkout Cart orders
 export function checkout(req, res){
   Cart.find({'user.email': req.user.email})
+    .populate('variant')
     .sort({created_at:1})
     .execAsync()
     .then(lineItems => {
+      var invalid = false;
+      _.some(lineItems, item => {
+        if(item.quantity > item.variant.quantity){
+          invalid = true;
+          return true;
+        }
+      });
+      if(invalid){
+        return res.status(500).json(lineItems);
+      }
+
       return Order.createAsync({
-        state: 'address',
+        state: 'Address',
         last_ip_address: req.connection.remoteAddress,
         user:{
           object: req.user._id,
@@ -157,17 +176,22 @@ export function checkout(req, res){
       .then(order => {
           var orderItems = [];
           async.each(lineItems, (item, callback) => {
-            OrderItem.createAsync({
-              order: order._id,
-              name: item.name,
-              quantity: item.quantity,
-              uri: item.uri,
-              variant: item.variant,
-              user: {
-                object: req.user._id,
-                email: req.user.email,
-                name: req.user.name
-              }
+            console.log('>> item.variant: ', item.variant);
+            item.variant.quantity -= item.quantity;
+            item.variant.saveAsync()
+            .then(variant =>{
+              return OrderItem.createAsync({
+                order: order._id,
+                name: item.name,
+                quantity: item.quantity,
+                uri: item.uri,
+                variant:item.variant.toObject(),
+                user: {
+                  object: req.user._id,
+                  email: req.user.email,
+                  name: req.user.name
+                }
+              });
             })
             .then(orderItem => {
                 orderItems.push(orderItem);
@@ -195,10 +219,10 @@ export function checkout(req, res){
               .spread(updated => {return updated;})
               .then(updated => {
                 Cart.removeAsync({'user.email': req.user.email});
-                StateChange.findOneAndUpdateAsync({order:updated, previous_state: 'cart'}, {
-                  name: 'order',
-                  next_state: 'address',
-                  previous_state: 'cart',
+                StateChange.findOneAndUpdateAsync({order:updated, previous_state: 'Cart'}, {
+                  name: 'Order',
+                  next_state: 'Address',
+                  previous_state: 'Cart',
                   user: req.user,
                   updated_at: new Date()
                 },{new:true, upsert:true});

@@ -1,4 +1,3 @@
-<div class="container-fluid">
   <div class="row">
     <div class="col-md-3 col-md-push-9">
       <div class="list-group" >
@@ -6,7 +5,7 @@
           <strong>Menu</strong>
           <ul class="list-unstyled">
             <li><a ng-class="{active: $state.includes('admin.orders.list')}" ui-sref="admin.orders.list"> Orders List</a>
-            </li><li><a ng-class="{active: $state.includes('admin.orders.state')}" ui-sref="admin.orders.state({id: $stateParams.id})"> State Changes</a>
+            </li><li><a ng-class="{active: $state.includes('admin.orders.state')}" ui-sref="admin.orders.states({id: $stateParams.id})"> State Changes</a>
             </li>
           </ul>
         </div>
@@ -20,23 +19,23 @@
         <div class="col-md-4 text-center">
           <label>Status</label><br/>
           <div class="badge">{{vm.order.state}}</div>
-          <div class="input-group" ng-hide="['cart','address','shipping','payment','confirm'].indexOf(vm.order.state) != -1">
+          <div class="input-group" ng-hide="['Address','Shipping','Payment','Confirm'].indexOf(vm.order.state) != -1">
             <select class="form-control" ng-model="vm.order.state">
               <option value="">-- State --</option>
-              <option ng-repeat="state in ['complete','canceled','awaiting return','returned','refund']">{{state}}</option>
-            </select><span class="input-group-addon"><a class="btn btn-success btn-xs" ng-click="vm.state('Change State to '+ vm.order.state)">Save</a></span>
+              <option ng-repeat="state in ['Complete','Canceled','Awaiting-Return','Returned','Refund', 'Finish']">{{state}}</option>
+            </select><span class="input-group-addon"><a class="btn btn-success btn-xs" ng-click="vm.state(' State to '+ vm.order.state)">Save</a></span>
           </div>
         </div>
         <div class="col-md-4 text-center">
           <label>Payment State</label><br/>
           <div class="badge">{{vm.order.payment_state}}</div>
-          <div><a ng-if="vm.order.payment_state === 'balance-due' && vm.order.state === 'complete'" class="btn btn-success btn-sm btn-block active"
+          <div><a ng-if="vm.order.payment_state === 'Balance-Due' && vm.order.state === 'Complete'" class="btn btn-success btn-sm btn-block active"
                   ng-click="vm.paid(' Change to Paid State')"> Paid </a></a></div>
         </div>
         <div class="col-md-4 text-center">
           <label>Shipment State</label><br/>
           <div class="badge">{{vm.order.shipment_state}}</div>
-          <div><a ng-if="vm.order.shipment_state == 'ready'" class="btn btn-success btn-sm btn-block active"
+          <div><a ng-if="vm.order.shipment_state == 'Ready'" class="btn btn-success btn-sm btn-block active"
                   ng-click="vm.shipped('Change to Shipped State')"> Shipped </a></a></div>
         </div>
       </div>
@@ -82,8 +81,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="item in vm.order.order_items">
-          <td class="col-md-1"><img width="72px" height="72px" ng-src="/assets/upload/{{item.uri}}"></td>
-          <td class="col-md-5"><a ui-sref="products.view({id: item.variant.product})"><strong>{{item.name}}</strong><br/> {{item.options}}</a></td>
+          <td class="col-md-1"><div class="height-72"><img ng-src="/assets/upload/{{item.uri}}"></div></td>
+          <td class="col-md-5"><a ui-sref="products.view({id: item.variant.product})"><strong>{{item.name}}</strong><br/> {{item.variant.options}}</a></td>
           <td class="col-md-2 text-right">{{item.variant.price | currency}}</td>
           <td class="col-md-1 text-center">{{item.quantity}}
           </td>
@@ -120,5 +119,3 @@
 
     </div><!--/col-md-9 -->
   </div>
-
-</div>

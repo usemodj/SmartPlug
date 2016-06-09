@@ -86,7 +86,7 @@ class EditOrderCtrl {
     var self = this;
 
     this.paid = Modal.confirm.continue( () => {
-      AdminOrder.paid({id: this.order._id}).$promise
+      AdminOrder.paid({_id: this.order._id}).$promise
       .then(response => {
           this.order.payment_state = response.payment_state;
           this.order.shipment_state = response.shipment_state;
@@ -94,7 +94,7 @@ class EditOrderCtrl {
     });
 
     this.shipped = Modal.confirm.continue( () => {
-      AdminOrder.paid({id: this.order._id}).$promise
+      AdminOrder.shipped({_id: this.order._id}).$promise
         .then(response => {
           this.order.shipment_state = response.shipment_state;
         });
@@ -102,7 +102,7 @@ class EditOrderCtrl {
 
     this.state = Modal.confirm.continue( () => {
       if(!this.order.state) return;
-      AdminOrder.state({id: this.order._id, state: this.order.state}).$promise
+      AdminOrder.state({_id: this.order._id, state: this.order.state}).$promise
         .then(response => {
           this.order.state = response.state;
         });
@@ -131,3 +131,49 @@ class EditOrderCtrl {
 }
 angular.module('smartPlugApp.admin')
   .controller('EditOrderCtrl', EditOrderCtrl);
+
+class StateOrderCtrl {
+  constructor(Auth, AdminOrder, $state, $stateParams, $http, $scope, $location, $window, socket) {
+    this.errors = {};
+    this.success = '';
+    this.submitted = false;
+    this.Auth = Auth;
+    this.AdminOrder = AdminOrder;
+    this.$state = $state;
+    this.$stateParams = $stateParams;
+    this.$http = $http;
+    this.$scope = $scope;
+    this.$window = $window;
+    this.stateChanges = [];
+    var self = this;
+
+    $scope.perPage = parseInt($location.search().perPage, 10) || 10;
+    $scope.page = parseInt($location.search().page, 10) || 0;
+    $scope.clientLimit = 250;
+
+    $scope.$watch('page', function(page) { $location.search('page', page); });
+    $scope.$watch('perPage', function(page) { $location.search('perPage', page); });
+    $scope.$on('$locationChangeSuccess', function() {
+      var page = +$location.search().page,
+        perPage = +$location.search().perPage;
+      if(page >= 0) { $scope.page = page; };
+      if(perPage >= 0) { $scope.perPage = perPage; };
+    });
+
+    $scope.urlParams = {
+      clientLimit: $scope.clientLimit
+    };
+
+    $scope.url = `/api/admin/orders/${$stateParams.id}/stateChanges`;
+
+    $scope.$on('pagination:loadPage', function (event, status, config) {
+      // config contains parameters of the page request
+      //console.log(config.url);
+      // status is the HTTP status of the result
+      socket.syncUpdates('stateChange', self.stateChanges);
+    });
+  }
+
+}
+angular.module('smartPlugApp.admin')
+  .controller('StateOrderCtrl', StateOrderCtrl);

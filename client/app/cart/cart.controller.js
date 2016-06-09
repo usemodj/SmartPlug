@@ -38,7 +38,6 @@ class CartCtrl {
     var self = this;
     self.Cart.delete({id: lineItem._id}).$promise
     .then(() => {
-        self.orders.splice(self.orders.indexOf(lineItem), 1);
         self.total = 0;
         if(self.orders){
           self.orders.forEach(order => {
@@ -71,6 +70,13 @@ class CartCtrl {
       })
     .catch(err => {
         console.error(err);
+        var data = err.data;
+        data.forEach(item => {
+          if(item.quantity > item.variant.quantity){
+            $(`#${item._id}`).addClass('danger');
+          }
+        });
+
         this.errors.other = err.message || err.data || err;
       });
   }
