@@ -18,13 +18,12 @@ export default function(config) {
     });
     //agenda.every('tomorrow at noon', ['printAnalyticsReport', 'sendNotifications', 'updateUserRecords']);
     //agenda.every('5 seconds', 'show message');
-    //every 02:00, 03:00 AM
-    //agenda.every('0 2,3 * * *', [
+    //agenda.every('60 seconds', [
     //  'show message',
     //  'rollback order'
     //]);
-    agenda.every('60 seconds', [
-      'show message',
+    //every 02:00, 03:00 AM
+    agenda.every('0 2,3 * * *', [
       'rollback order'
     ]);
   });
