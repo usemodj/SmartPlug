@@ -162,10 +162,10 @@ export function index(req, res) {
 export function show(req, res) {
   Order.findById(req.params.id)
     .populate('order_items')
-    .populate('shipment')
-    .populate('payment')
     .populate('bill_address')
     .populate('ship_address')
+    .populate({path: 'payment', populate:{path: 'payment_method', model:'PaymentMethod'}})
+    .populate({path: 'shipment', populate:{path: 'shipping_method', model:'ShippingMethod'}})
     .execAsync()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
@@ -267,13 +267,13 @@ export function paid(req, res){
 
 }
 export function shipped(req, res){
-  console.log(req.body);
+  //console.log(req.body);
   Order.findByIdAsync(req.params.id)
     .then(order => {
       if(order.shipment_state !== 'Ready'){
         return res.status(500).json('Shipment state must be "Ready"!');
       }
-
+      order.ship_info = req.body.ship_info;
       order.shipment_state = 'Shipped';
       order.approver = {
         object: req.user._id,

@@ -15,6 +15,7 @@ class AdminSupportCtrl {
     this.supports = [];
     this.conditions = {};
     this.qsearch = '';
+    var self = this;
 
     $scope.perPage = parseInt($location.search().perPage, 10) || 10;
     $scope.page = parseInt($location.search().page, 10) || 0;
@@ -53,7 +54,7 @@ class AdminSupportCtrl {
       //console.log(config.url);
       // status is the HTTP status of the result
       //console.log(status);
-      socket.syncUpdates('support', $scope.supports);
+      socket.syncUpdates('support', self.supports);
     });
   }
 

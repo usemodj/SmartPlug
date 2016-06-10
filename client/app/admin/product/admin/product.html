@@ -53,9 +53,9 @@
         <td>{{item.available_on | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
         <td>{{item.deleted_at | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
         <td class="text-center">
-          <a ui-sref="admin.products.edit({id: item._id})" class="btn btn-xs btn-primary" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
-          <a ui-sref="admin.products.clone({id: item._id})" class="btn btn-xs btn-primary" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Clone"><span class="glyphicon glyphicon-file"></span></a>
-          <a ng-hide="item.deleted_at != null && (item.deleted_at | toDate) < data.now " ng-confirm-click="Are you sure?" ng-click="vm.delete(item)" class="btn btn-xs btn-primary" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
+          <a ui-sref="admin.products.edit({id: item._id})" class="btn btn-xs btn-primary"  title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+          <a ui-sref="admin.products.clone({id: item._id})" class="btn btn-xs btn-warning" title="Clone"><span class="glyphicon glyphicon-file"></span></a>
+          <a ng-hide="item.deleted_at != null && (item.deleted_at | toDate) <= vm.now " ng-click="vm.delete(item.name, item)" class="btn btn-xs btn-danger" title="Delete Now"><span class="glyphicon glyphicon-trash"></span></a>
         </td>
       </tr>
       </tbody>

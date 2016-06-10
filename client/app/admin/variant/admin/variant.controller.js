@@ -15,7 +15,7 @@ class AdminVariantCtrl {
     this.$filter = $filter;
     this.socket = socket;
     this.variants = $scope.variants = [];
-    this.variant = { option_values: {}};
+    this.variant = { active: true, option_values: {}};
     this.product = {};
     this.deleted = false;
     this.beforeSort = '';

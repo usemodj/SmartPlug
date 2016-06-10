@@ -1,6 +1,7 @@
 
 .thumbnail {
-  width: 250px
+  width: 290px;
+  text-align:center;
 }
 
 ul#products:after {
@@ -29,8 +30,8 @@ ul.inline li, ol.inline li {
   display: inline-block;
 }
 ul#products li .product-image {
-  border: 1px solid #D9D9DB;
-  padding: 5px;
+//  border: 1px solid #fefefe;
+  padding: 5px 2px;
   max-height: 110px;
   background-color: #FFF;
 }
@@ -90,7 +91,7 @@ span.price, #checkout-summary table tr[data-hook="item_total"] td:last-child str
 }
 #ck-button label span {
   text-align:center;
-  padding:5px;
+  padding:5px 2px;
   display:block;
   cursor: pointer;
 }

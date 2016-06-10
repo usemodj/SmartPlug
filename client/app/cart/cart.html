@@ -19,7 +19,7 @@
       </thead>
       <tbody>
       <tr ng-repeat="lineItem in vm.orders">
-        <td class="col-md-1"><div class="cart-thumb"><img ng-src="/assets/upload/{{lineItem.uri}}"></div></td>
+        <td class="col-md-1"><div class="height-72"><img height="72px" ng-src="/assets/upload/{{lineItem.uri}}"></div></td>
         <td class="col-md-5"><a ui-sref="products.view({id:lineItem.variant.product})"><strong>{{lineItem.name}}</strong><br/> {{lineItem.variant.options}}</a></td>
         <td class="col-md-2 text-right">{{lineItem.variant.price | currency}}</td>
         <td class="col-md-1" id="{{lineItem._id}}">

@@ -15,5 +15,6 @@ router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
 router.get('/:id/view', controller.view);
+router.post('/clone', auth.hasRole('admin'), controller.clone);
 
 module.exports = router;

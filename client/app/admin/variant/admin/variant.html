@@ -2,8 +2,6 @@
 <div class="text-center"><strong>(Master SKU:{{vm.product.sku}}, Master Price:{{vm.product.variant.price}},
   Cost Price:{{vm.product.variant.cost_price}})</strong>
   <div class="pull-right">
-    <a ng-hide="vm.deleted" ng-click="vm.show(true)" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Show Deleted </a>
-    <a ng-show="vm.deleted" ng-click="vm.show(false)" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Show Active </a>
   </div>
 </div>
 
@@ -11,12 +9,12 @@
   <h3>New Variant</h3>
   <form name="form" class="form-inline" role="form" ng-submit="vm.save(form)">
     <div class="row">
-      <div class="form-group col-xs-6 col-md-6">
-        <div ng-show="vm.product.option_types == null || vm.product.option_types.length == 0">
+      <div class="col-xs-6 col-md-6">
+        <div class="form-group" ng-show="vm.product.option_types == null || vm.product.option_types.length == 0">
           <label>Option Type *:</label>
           <a class="form-control btn btn-primary" ui-sref="admin.products.edit({id: $stateParams.product_id})" target="product"> Select Option Types of the Product ...</a>
         </div>
-        <div ng-repeat="(key, optionType) in vm.product.option_types | orderBy:'position' ">
+        <div class="form-group" ng-repeat="(key, optionType) in vm.product.option_types | orderBy:'position' ">
           <label>Option Type *:</label> {{optionType.presentation}}
           <select style="width:100%" ng-model="vm.variant.options[optionType._id]" placeholder="Pick a option value" required>
             <option class="form-control" ng-repeat="optionValue in optionType.option_values | orderBy:'position' " value="{{optionValue._id}}" ng-selected="vm.variant.option_values[optionType._id] == optionValue._id">{{optionValue.presentation}}</option>
@@ -25,24 +23,32 @@
             <a class="btn-primary" ui-sref="admin.products.optionTypes.edit({id: optionType._id})" target="option_values"> Create Option Values of {{optionType.presentation}}...</a>
           </div>
         </div>
-        <div>
+        <div class="form-group">
           <label>SKU *: </label><br/>
           <input class="form-control" ng-model="vm.variant.sku" placeholder="Enter sku" required>
         </div>
-        <div>
+        <div class="form-group">
           <label>Price *: </label><br/>
           <input class="form-control" type="number" min="0" name="price" ng-model="vm.variant.price" required/>
           <p class="error" ng-show="form.price.$error.number">Not valid number!</p>
         </div>
-        <div>
+        <div class="form-group">
           <label>Cost price:</label><br/>
           <input class="form-control" type="number" min="0" name="cost_price" ng-model="vm.variant.cost_price"/>
           <p class="error" ng-show="form.cost_price.$error.number">Not valid number!</p>
         </div>
-        <div>
-          <label>Quantity:</label><br/>
-          <input class="form-control" type="number" min="0" name="quantity" ng-model="vm.variant.quantity"/>
+        <div class="form-group">
+          <label>Quantity *:</label><br/>
+          <input class="form-control" type="number" min="0" name="quantity" ng-model="vm.variant.quantity" required/>
           <p class="error" ng-show="form.quantity.$error.number">Not valid number!</p>
+        </div>
+        <div>
+          <div class="form-group btn-group btn-group-vertical" data-toggle="buttons" >
+            <label class="btn">
+              <input class="form-control" type="checkbox" checkbox ng-model="vm.variant.active">
+              <i class="fa fa-square-o fa-2x"></i><i class="fa fa-check-square-o fa-2x"></i> <span>Active</span>
+            </label>
+          </div>
         </div>
       </div>
       <div class="col-xs-6 col-md-6">
@@ -88,6 +94,7 @@
       <th>Price</th>
       <th>Quantity</th>
       <th>SKU</th>
+      <th>Active</th>
       <th></th>
     </tr>
     </thead>
@@ -97,11 +104,9 @@
       <td style="width:150px" class="col-md-2 text-right">{{item.price}}</td>
       <td style="width:100px" class="col-md-1 text-right">{{item.quantity}}</td>
       <td style="width:200px" class="col-md-2">{{item.sku}}</td>
+      <td style="width:200px" class="col-md-1">{{item.active}}</td>
       <td class="col-md-2 text-center">
-        <div ng-hide="vm.deleted">
-          <a ui-sref="admin.products.variants.edit({id: item._id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-          <a ng-confirm-click="Are you sure?" ng-click="vm.delete(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
-        </div>
+        <a ui-sref="admin.products.variants.edit({id: item._id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
       </td>
     </tr>
     </tbody>

@@ -73,7 +73,7 @@ function removeEntity(res) {
     if (entity) {
       return entity.removeAsync()
         .then(() => {
-          res.status(204).end();
+          res.status(204).end();// 204 No Content
         });
     }
   };
@@ -96,7 +96,7 @@ function handleError(res, statusCode) {
   };
 }
 
-// Gets a list of Products
+//Public: Gets a list of Products
 export function index(req, res) {
   //Product.findAsync()
   //  .then(respondWithResult(res))
@@ -182,11 +182,11 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
-// Gets a single Public Product from the DB
+// Public: Gets a single Public Product from the DB
 export function view(req, res) {
-  Product.where({_id:req.params.id})
+  Product.where({_id:req.params.id, $or:[{deleted_at:null},{deleted_at:{$exists:true, $ne:null, $gt: new Date()}}]})
     .populate([{
-      path:'variants', match:{is_master: false}, options:{sort:{position:1, created_at:1}},
+      path:'variants', match:{is_master: false, active: true}, options:{sort:{position:1, created_at:1}},
       populate:{
         path: 'option_values', model:'OptionValue', populate: {path: 'option_type', model: 'OptionType'}
       }
@@ -212,7 +212,7 @@ export function create(req, res) {
   //  .then(respondWithResult(res, 201))
   //  .catch(handleError(res));
   var body = req.body;
-  console.log(body);
+  //console.log('>> req.body: ', body);
   var product = {
     name: body.name,
     available_on:body.available_on
@@ -221,7 +221,7 @@ export function create(req, res) {
     product.available_on = body.available_on_submit;
   } else if(product.available_on){
     product.available_on = new Date(product.available_on + 'T00:00:00');
-    console.log(product);
+    //console.log(product);
   }
   //console.log(product);
   Product.createAsync(product)
@@ -260,10 +260,16 @@ export function update(req, res) {
 
 // Deletes a Product from the DB
 export function destroy(req, res) {
-  Product.findByIdAsync(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+  //Product.findByIdAsync(req.params.id)
+  //  .then(handleEntityNotFound(res))
+  //  .then(removeEntity(res))
+  //  .catch(handleError(res));
+  Product.findByIdAndUpdateAsync(req.params.id, {
+    deleted_at: new Date()
+  }, {new: true})
+  .then(entity => {
+      res.status(204).end(); // 204 No Content
+    });
 }
 
 // Admin: index of Products
@@ -271,7 +277,7 @@ export function list(req, res){
   //Product.findAsync()
   //  .then(respondWithResult(res))
   //  .catch(handleError(res));
-  console.log(req.query);
+  //console.log(req.query);
   var clientLimit = req.query.clientLimit;
   var q = JSON.parse(req.query.q);
   var now = new Date();
@@ -284,9 +290,9 @@ export function list(req, res){
     conditions.push({sku: new RegExp(q.sku, 'i')});
   }
   if(q.deleted){
-    conditions.push({deleted_at:{$exists:true, $ne:null}});
+    conditions.push({deleted_at:{$exists:true, $ne:null, $lte: now}});
   } else {
-    conditions.push({deleted_at:null});
+    conditions.push({$or:[{deleted_at:null},{deleted_at:{$exists:true, $ne:null, $gt: now}}]});
   }
 
   var query = {};
@@ -347,5 +353,60 @@ export function list(req, res){
     })
     .then(respondWithResult(res))
     .catch(handleError(res));
+}
+
+// Admin: Clone a new Product in the DB
+export function clone(req, res) {
+  var body = req.body;
+  console.log('>> req.body: ', body);
+
+  delete body._id;
+  body.variant.is_master = true;
+  if(body.option_types){
+    body.option_types = body.option_types.map(function(item){
+      return item._id;
+    });
+  }
+  if(body.taxons){
+    body.taxons = body.taxons.map(function(item){
+      return item._id;
+    });
+  }
+  if(body.available_on_submit){
+    body.available_on = body.available_on_submit;
+  } else if(body.available_on){
+    body.available_on = new Date(body.available_on);
+    body.available_on.setHours(0,0,0,0);
+  }
+  if(body.deleted_at_submit){
+    body.deleted_at = body.deleted_at_submit;
+  } else if(body.deleted_at){
+    body.deleted_at = new Date(body.deleted_at);
+    body.deleted_at.setHours(0,0,0,0);
+  }
+
+  //console.log('>> updated body: ', body);
+  var product = null;
+  Product.createAsync(body)
+    .then(result => {
+      product = result;
+      var variant = body.variant;
+      delete variant._id;
+      variant.sku = body.sku;
+      variant.is_master = true;
+      variant.product = product;
+      //console.log(variant);
+      return Variant.createAsync(variant);
+    })
+    .then(variant => {
+      product.variants.push(variant);
+      return product.saveAsync()
+        .spread(updated => {
+          return updated;
+        });
+    })
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+
 }
 

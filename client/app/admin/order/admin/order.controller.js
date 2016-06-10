@@ -94,7 +94,7 @@ class EditOrderCtrl {
     });
 
     this.shipped = Modal.confirm.continue( () => {
-      AdminOrder.shipped({_id: this.order._id}).$promise
+      AdminOrder.shipped({_id: this.order._id, ship_info: this.order.ship_info}).$promise
         .then(response => {
           this.order.shipment_state = response.shipment_state;
         });

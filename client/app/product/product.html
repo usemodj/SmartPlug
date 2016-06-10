@@ -1,4 +1,4 @@
-<div class="panel-body" >
+<div>
   <div class="row">
     <form class="form-search col-md-12" name="form" ng-submit="vm.search(form)" novalidate>
       <div id="custom-search-input" class="input-group col-xs-8 col-md-4 pull-right">
@@ -11,15 +11,15 @@
       </div>
     </form>
   </div>
-
+  <br/>
   <div class="row">
-    <div class="col-md-12">
-      <ul id="products" class="inline product-listing">
-        <li class="columns three alpha" ng-repeat="item in vm.products">
+    <div class="col-md-12 col-xs-12">
+      <ul id="products" class="inline product-listing  center-block">
+        <li class="columns" ng-repeat="item in vm.products">
           <div class="clearfix">
             <div class="thumbnail">
               <a ui-sref="products.view({id: item._id})">
-                <img width="290px"  ng-src="/assets/upload/{{item.assets.uri}}" alt="{{item.assets.alt}}"/>
+                <img ng-src="/assets/upload/{{item.assets.uri}}" alt="{{item.assets.alt}}"/>
               </a>
             </div>
             <div class="info">

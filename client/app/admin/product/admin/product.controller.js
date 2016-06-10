@@ -1,20 +1,31 @@
 'use strict';
 
 class AdminProductCtrl {
-  constructor(Auth, Product, $state, $stateParams, $http, $scope, $location, $window, socket) {
+  constructor(Auth, Product, Modal, $state, $stateParams, $http, $scope, $location, $window, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Product = Product;
+    this.Modal = Modal;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.$http = $http;
     this.$scope = $scope;
     this.$window = $window;
     this.products = $scope.products = [];
+    this.now = new Date();
     this.q = {};
     var self = this;
+
+    this.delete = Modal.confirm.delete( product => {
+      this.submitted = true;
+      this.Product.delete( {id: product._id},() => {
+        this.products.splice(this.products.indexOf(product), 1);
+      }, (err) => {
+        this.errors.other = err.statusText || err.data || err;
+      });
+    });
 
     $scope.perPage = parseInt($location.search().perPage, 10) || 10;
     $scope.page = parseInt($location.search().page, 10) || 0;
@@ -54,14 +65,6 @@ class AdminProductCtrl {
 
   }
 
-  delete(product){
-    this.submitted = true;
-    this.Product.delete( {id: product._id},() => {
-      this.products.splice(this.products.indexOf(product), 1);
-    }, (err) => {
-      this.errors.other = err.message || err;
-    });
-  }
 }
 
 angular.module('smartPlugApp.admin')
@@ -131,7 +134,7 @@ class EditProductCtrl {
 
     Product.get({id: $stateParams.id}).$promise
     .then(response => {
-        console.log(response);
+        //console.log(response);
         this.product = response;
         this.product.available_on = $filter('date')(this.product.available_on, 'yyyy-MM-dd');
         this.product.deleted_at = $filter('date')(this.product.deleted_at, 'yyyy-MM-dd');
@@ -141,7 +144,7 @@ class EditProductCtrl {
       })
     .catch(err => {
         console.error(err);
-        this.errors.other = err.message || err;
+        this.errors.other = err.statusText || err.data || err;
       });
   }
 
@@ -155,7 +158,7 @@ class EditProductCtrl {
         })
         .catch(err => {
           console.error(err);
-          this.errors.other = err.message || err;
+          this.errors.other = err.statusText || err.data || err;
         });
     }
   }
@@ -203,22 +206,15 @@ class CloneProductCtrl {
         console.log(response);
         this.product = response;
         this.product.name = 'Copy of ' + this.product.name;
-        //this.product.available_on = $filter('date')(this.product.available_on, 'yyyy-MM-dd');
-        //this.product.deleted_at = $filter('date')(this.product.deleted_at, 'yyyy-MM-dd');
-        if(this.product.option_types){
-          this.product.option_type_ids = this.product.option_types.map(function(item){
-            return item.id;
-          });
-        }
-        if(this.product.taxons){
-          this.product.taxon_ids = this.product.taxons.map(function(item){
-            return item.id;
-          });
+        this.product.available_on = $filter('date')(this.product.available_on, 'yyyy-MM-dd');
+        this.product.deleted_at = $filter('date')(this.product.deleted_at, 'yyyy-MM-dd');
+        if(this.product.variants){
+          this.product.variant = this.product.variants[0];
         }
       })
       .catch(err => {
         console.error(err);
-        this.errors.other = err.message || err;
+        this.errors.other = err.statusText || err.data || err;
       });
   }
 
@@ -233,7 +229,7 @@ class CloneProductCtrl {
         })
         .catch(err => {
           console.error(err);
-          this.errors.other = err.message || err;
+          this.errors.other = err.statusText || err.data || err;
         });
     }
   }

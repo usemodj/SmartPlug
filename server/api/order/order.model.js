@@ -22,6 +22,7 @@ var OrderSchema = new mongoose.Schema({
   shipment_total: {type:Number, default: 0.0},
   shipment_state: String,
   payment_state: String,
+  ship_info: String,
   special_instructions: String,
   currency: String,
   confirmation_delivered: Boolean,

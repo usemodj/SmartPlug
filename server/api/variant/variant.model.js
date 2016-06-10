@@ -6,17 +6,17 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var VariantSchema = new mongoose.Schema({
-  sku: {type: String, required: true},
+  sku: {type: String},
   weight: String,
   height: String,
   width: String,
   depth: String,
   is_master: {type: Boolean, default: false},
-  deleted_at: Date,
-  price: Number,
-  cost_price: Number,
+  active: {type: Boolean, default: true},
+  price: {type: Number, default: 0.0},
+  cost_price: {type: Number, default: 0.0},
   cost_currency: String,
-  quantity: Number,
+  quantity: {type: Number, default: 0},
   position: {type: Number, default: 0},
   options: mongoose.Schema.Types.Mixed,
   product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
