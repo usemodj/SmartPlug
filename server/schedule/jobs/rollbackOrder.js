@@ -12,8 +12,8 @@ exports.rollbackOrder = function(agenda) {
   agenda.define('rollback order', function(job, done) {
     console.log("Rollback Order Job.");
     try {
-      //var date = moment().subtract(3, 'days');
-      var date = moment().subtract(2, 'minutes')
+      //var date = moment().subtract(2, 'minutes')
+      var date = moment().subtract(3, 'days');
       //console.log('>>Date: ', date);
       Order.find({
         $and:[
