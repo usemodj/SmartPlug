@@ -6,9 +6,9 @@ angular.module('smartPlugApp')
       .state('supports', {
         parent: 'site',
         abstract: true,
+        authenticate: true,
         url: '/supports',
         template: '<div ui-view></div>'
-
       })
       .state('supports.list', {
         url: '',

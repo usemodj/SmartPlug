@@ -57,13 +57,19 @@ angular.module('smartPlugApp', [
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     $rootScope.Auth = Auth;
+
     $rootScope.$on('$stateChangeError',
       function (event, toState, toParams, fromState, fromParams, error) {
         console.log('$stateChangeError', event, toState, toParams, fromState, fromParams, error);
       });
   }])
-  .run(['$rootScope', '$state', '$injector', function ($rootScope, $state, $injector) {
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+  .run(['$rootScope', '$state', '$stateParams', function ($rootScope, $state, $stateParams) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+
+  }])
+  .run(['$rootScope', '$state', '$injector','Auth', function ($rootScope, $state, $injector, Auth) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
       var redirect = toState.redirectTo;
       if (redirect) {
         if (angular.isString(redirect)) {
@@ -83,6 +89,17 @@ angular.module('smartPlugApp', [
             }
           }
         }
+      }
+
+      var requiresLogin = toState.authenticate;
+      if(requiresLogin && !Auth.isLoggedIn()){
+        event.preventDefault();
+        $state.go('login');
+      }
+
+      if(toState.name === 'login'){
+        $state.previousState = fromState;
+        $state.previousParams = fromParams;
       }
     });
   }]);

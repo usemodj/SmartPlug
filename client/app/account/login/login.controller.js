@@ -22,8 +22,12 @@ class LoginController {
         password: this.user.password
       })
       .then(() => {
-        // Logged in, redirect to home
-        this.$state.go('main');
+        if(this.$state.previousState) {
+          this.$state.go(this.$state.previousState.name, this.$state.previousParams);
+        }else {
+          // Logged in, redirect to home
+          this.$state.go('home');
+        }
       })
       .catch(err => {
         //console.error(err);
