@@ -7,6 +7,8 @@
 
 module.exports = {
   DOMAIN:           'http://localhost:9000',
+  POST_MAILER: 'postmaster@localhost',
+
   SESSION_SECRET:   'smartplug-secret',
 
   FACEBOOK_ID:      'app-id',

@@ -16,8 +16,8 @@ function requiredProcessEnv(name) {
 var all = {
   env: process.env.NODE_ENV,
   //site url
-  siteUrl: 'http://localhost:9000',
-  postmailer: 'postmaster@nodesoft.co.kr',
+  domain: process.env.domain || 'http://localhost:9000',
+  postmailer: process.env.POST_MAILER || 'postmaster@nodesoft.co.kr',
 
   // Root path of server
   root: path.normalize(__dirname + '/../../..'),
@@ -51,19 +51,19 @@ var all = {
   facebook: {
     clientID:     process.env.FACEBOOK_ID || 'id',
     clientSecret: process.env.FACEBOOK_SECRET || 'secret',
-    callbackURL:  (process.env.DOMAIN || '') + '/auth/facebook/callback'
+    callbackURL:  (process.env.domain || '') + '/auth/facebook/callback'
   },
 
   twitter: {
     clientID:     process.env.TWITTER_ID || 'id',
     clientSecret: process.env.TWITTER_SECRET || 'secret',
-    callbackURL:  (process.env.DOMAIN || '') + '/auth/twitter/callback'
+    callbackURL:  (process.env.domain || '') + '/auth/twitter/callback'
   },
 
   google: {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
-    callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+    callbackURL:  (process.env.domain || '') + '/auth/google/callback'
   }
 };
 

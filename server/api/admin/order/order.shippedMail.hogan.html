@@ -5,12 +5,12 @@
   }
 </style>
 <h2> Your Order#: {{order.number}} is Shipped.</h2>
-<table style="border:1; padding:5px; bodder-bottom: #ddd solid;">
+<table style="border:1px; padding:5px; bodder-bottom: #ddd solid;">
         <tbody>
         {{#order.order_items}}
         <tr>
-            <td><div style="height:72px;"><img width="110" src="{{siteUrl}}/assets/upload/{{uri}}"></div></td>
-            <td><a href="{{siteUrl}}/products/{{variant.product}}">{{name}}<br/>{{variant.options}}</a></td>
+            <td><div style="height:72px;"><img width="110" src="{{domain}}/assets/upload/{{uri}}"></div></td>
+            <td><a href="{{domain}}/products/{{variant.product}}">{{name}}<br/>{{variant.options}}</a></td>
             <td>{{variant.price}} x {{quantity}}</td>
         </tr>
         {{/order.order_items}}

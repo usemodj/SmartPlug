@@ -80,7 +80,7 @@ function sendOrderShippedMail(req, order, callback){
         //console.log(contents);
         var template = hogan.compile(contents.toString());
         //order.subTotal = function(price, qty){ return price * qty};
-        var html = template.render({order: updatedOrder, siteUrl: config.siteUrl});
+        var html = template.render({order: updatedOrder, siteUrl: config.domain});
 
         var message = {};
         message.from = config.postmailer;

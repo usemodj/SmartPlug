@@ -3,6 +3,10 @@
 // Production specific configuration
 // =================================
 module.exports = {
+  //Server Mail
+  domain: process.env.domain || undefined,
+  postmailer: process.env.POST_MAILER || undefined,
+
   // Server IP
   ip:     process.env.OPENSHIFT_NODEJS_IP ||
           process.env.IP ||

@@ -3,6 +3,9 @@
 // Development specific configuration
 // ==================================
 module.exports = {
+  //site url
+  domain: 'http://localhost:9000',
+  postmailer: 'postmaster@nodesoft.co.kr',
 
   // MongoDB connection options
   mongo: {
