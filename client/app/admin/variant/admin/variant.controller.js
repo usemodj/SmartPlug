@@ -35,7 +35,7 @@ class AdminVariantCtrl {
         var entry = self.variants.map(function(item){
           return item._id;
         }).join(',');
-        self.sorted = entry != self.beforeSort;
+        self.sorted = entry !== self.beforeSort;
         // IF sorted == true, updatePosition()
         if(self.sorted){
           self.updatePosition(entry);
@@ -63,8 +63,7 @@ class AdminVariantCtrl {
         console.log(err);
         this.errors.other = err.message || err.data || err;
       });
-
-  };
+  }
 
   list(deleted){
     this.submitted = true;
@@ -130,8 +129,9 @@ class EditVariantCtrl {
         this.variant.options = {};
         if(response.option_values){
           for(var i=0; i < response.option_values.length; ++i){
-            if(response.option_values[i])
+            if(response.option_values[i]) {
               this.variant.options[response.option_values[i].option_type] = response.option_values[i]._id;
+            }
           }
         }
         //console.log(this.variant);

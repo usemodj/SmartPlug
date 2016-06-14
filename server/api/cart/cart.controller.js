@@ -94,7 +94,7 @@ export function create(req, res) {
 
   Cart.countAsync({variant: cart.variant})
   .then(count => {
-      if(count == 0) {
+      if(count === 0) {
         return Cart.createAsync(cart);
       } else {
         return null;

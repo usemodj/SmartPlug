@@ -31,7 +31,7 @@ class AdminOptionTypeCtrl {
         var entry = self.optionTypes.map(function(item){
           return item._id;
         }).join(',');
-        self.sorted = entry != self.beforeSort;
+        self.sorted = entry !== self.beforeSort;
         // IF sorted == true, updatePosition()
         if(self.sorted){
           self.updatePosition(entry);
@@ -48,8 +48,7 @@ class AdminOptionTypeCtrl {
         console.log(err);
         this.errors.other = err.message || err.data || err;
       });
-
-  };
+  }
 
   list(){
     this.submitted = true;
@@ -114,7 +113,7 @@ class EditOptionTypeCtrl {
         var entry = self.optionType.option_values.map(function(item){
           return item._id;
         }).join(',');
-        self.sorted = entry != self.beforeSort;
+        self.sorted = entry !== self.beforeSort;
       }
     };
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('smartPlugApp')
-  .directive('radioButton', function ($parse,$timeout) {
+  .directive('radioButton', function ($parse) {
     return {
       replace: false,
       require: 'ngModel',
@@ -11,7 +11,7 @@ angular.module('smartPlugApp')
         var valueAccessor = $parse(attrs.ngValue);
         var isObject = function(obj) {
           //return obj === Object(obj);
-          return (typeof obj === "object" && !Array.isArray(obj) && obj !== null);
+          return (typeof obj === 'object' && !Array.isArray(obj) && obj !== null);
         };
 
         scope.$watch(valueAccessor, function (val) {
@@ -20,13 +20,7 @@ angular.module('smartPlugApp')
 
         scope.$watch(modelAccessor, function (val) {
           var value = attrs.value;
-          //console.log('>>ngModel.watch....')
-          //console.log(val)
-          //console.log(attrs)
-          //console.log(value)
-          //console.log(ngModelCtrl.$modelValue)
-          //console.log(isObject(value))
-          var checked = (isObject(value) && isObject(val))? (value._id == val._id): (value == val);
+          var checked = (isObject(value) && isObject(val))? (value._id === val._id): (value === val);
           element[0].checked = checked;
           scope.checked = checked;
           if(element[0].checked) {
@@ -38,8 +32,9 @@ angular.module('smartPlugApp')
 
         $(element).change(function () {
           scope.$apply(function () {
-            if(element[0].checked)
+            if(element[0].checked) {
               ngModelCtrl.$setViewValue(attrs.value);
+            }
           });
         });
       }

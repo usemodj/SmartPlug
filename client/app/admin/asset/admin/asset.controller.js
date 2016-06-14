@@ -41,7 +41,7 @@ class AdminAssetCtrl {
         var entry = self.assets.map(function(item){
           return item._id;
         }).join(',');
-        self.sorted = entry != self.beforeSort;
+        self.sorted = entry !== self.beforeSort;
         // IF sorted == true, updatePosition()
         if(self.sorted){
           self.updatePosition(entry);
@@ -58,8 +58,7 @@ class AdminAssetCtrl {
         console.log(err);
         this.errors.other = err.message || err.data || err;
       });
-
-  };
+  }
 
   list(){
     this.submitted = true;
@@ -70,15 +69,15 @@ class AdminAssetCtrl {
         this.assets = this.$filter('orderBy')(response.assets, 'position', false);
         if(this.assets){
           for(var i = 0; i < this.assets.length; ++i){
-            this.copy.push(this.$location.protocol() + '://' + this.$location.host() + ':' + this.$location.port()
-              + '/assets/upload/' + this.assets[i].uri);
+            this.copy.push(this.$location.protocol() + '://' + this.$location.host() + ':' + this.$location.port() +
+              '/assets/upload/' + this.assets[i].uri);
           }
         }
         if(this.variants){
           this.product = this.variants[0].product;
-          for(var i = 0; i < this.variants.length; ++i){
-            if(this.variants[i].is_master) {
-              this.masterVariant = this.variants[i];
+          for(var k = 0; k < this.variants.length; ++k){
+            if(this.variants[k].is_master) {
+              this.masterVariant = this.variants[k];
               this.variants.splice(this.variants.indexOf(this.masterVariant), 1);
               break;
             }
@@ -97,13 +96,15 @@ class AdminAssetCtrl {
     this.progress = 0;
     if(form.$valid) {
       this.asset.product = this.$stateParams.product_id;
-      if(!this.asset.variant) this.asset.variant = this.masterVariant._id;
+      if(!this.asset.variant) {
+        this.asset.variant = this.masterVariant._id;
+      }
 
       this.Upload.upload({
         url: '/api/assets',
         method: 'POST',
         fields: {asset: this.asset},
-        file: (this.files != null) ? this.files : null,
+        file: (this.files !== null) ? this.files : null,
         fileFormatDataName: 'file'
       })
       .progress((evt) => {

@@ -15,7 +15,7 @@ class CartCtrl {
     this.orders = $scope.orders = [];
     this.total = 0;
 
-    this.list()
+    this.list();
   }
 
   list(){

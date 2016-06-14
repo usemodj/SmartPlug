@@ -121,16 +121,17 @@ export function index(req, res) {
   if(q.email){
     conditions.push({'user.email': new RegExp(q.email, 'i')});
   }
+  var date;
   if(q.from){
-    var date = new Date(q.from);
+    date = new Date(q.from);
     date.setHours(0,0,0,0);
     conditions.push({completed_at: {$gte: date}});
-  };
+  }
   if(q.to){
-    var date = new Date(q.to);
+    date = new Date(q.to);
     date.setHours(0,0,0,0);
     conditions.push({completed_at: {$lte: date}});
-  };
+  }
   if(q.completed){
     conditions.push({completed_at: {$exists: true, $ne: null}});
   }
@@ -141,11 +142,11 @@ export function index(req, res) {
 
   var query = (conditions.length > 1)? {
     $and: conditions
-  }: (conditions.length == 1)? conditions[0]: {};
+  }: (conditions.length === 1)? conditions[0]: {};
 
   Order.countAsync(query)
     .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       var totalItems = count;
@@ -313,7 +314,7 @@ export function stateChanges(req, res) {
   var query = {order: req.params.id};
   StateChange.countAsync(query)
     .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       var totalItems = count;

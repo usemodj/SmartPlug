@@ -51,7 +51,7 @@ angular.module('smartPlugApp', [
        });
   }])
   .config(['ngClipProvider', function(ngClipProvider) {
-    ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
+    ngClipProvider.setPath('bower_components/zeroclipboard/dist/ZeroClipboard.swf');
   }])
   .run(['$rootScope', '$state', '$stateParams', 'Auth', function($rootScope, $state, $stateParams, Auth){
     $rootScope.$state = $state;

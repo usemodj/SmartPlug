@@ -76,7 +76,7 @@ export function index(req, res) {
   var clientLimit = req.query.clientLimit;
   Blog.countAsync()
   .then(count => {
-    if(count == 0){
+    if(count === 0){
       return [];
     }
     var totalItems = count;
@@ -114,7 +114,7 @@ export function create(req, res) {
         return res.status(401).json('Login is required.'); //unauthorized
       }
 
-      var tags = (!blog.tags)? []: (typeof blog.tags == 'string')? blog.tags.trim().split(/\s*,\s*/): blog.tags;
+      var tags = (!blog.tags)? []: (typeof blog.tags === 'string')? blog.tags.trim().split(/\s*,\s*/): blog.tags;
 
       Blog.createAsync({
           title: blog.title,
@@ -183,7 +183,7 @@ export function search(req, res, next){
         throw err;
       }
       console.log(results)
-      if(results.hits.total == 0){
+      if(results.hits.total === 0){
         return res.status(200).json([]);
       }
       var totalItems = results.hits.total;
@@ -270,7 +270,7 @@ export function updateBlog(req, res, next){
       return res.status(401).json('Login is required.'); //unauthorized
     }
 
-    var tags = (!blog.tags)? []: (typeof blog.tags == 'string')? blog.tags.trim().split(/\s*,\s*/): blog.tags;
+    var tags = (!blog.tags)? []: (typeof blog.tags === 'string')? blog.tags.trim().split(/\s*,\s*/): blog.tags;
 
     Blog.findByIdAndUpdateAsync(blog._id, {
       title: blog.title,

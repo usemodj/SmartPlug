@@ -25,8 +25,8 @@ class TopicCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -37,7 +37,7 @@ class TopicCtrl {
       $scope.forum = response.forum;
       $scope.sticky_topics = response.sticky_topics;
       $scope.topics = response.topics;
-    }
+    };
 
     var tag = $stateParams.tag;
     this.q = $stateParams.q;
@@ -115,7 +115,7 @@ class NewTopicCtrl {
         url: '/api/topics',
         method: 'POST',
         fields: {topic: this.topic},
-        file: (this.files != null) ? this.files : null,
+        file: (this.files !== null) ? this.files : null,
         fileFormatDataName: 'file'
       })
       .progress((evt) => {
@@ -203,13 +203,13 @@ class ViewTopicCtrl {
       url: `/api/topics/${post.forum}/posts/${post._id}`,
       method: 'POST',
       fields: {post: post},
-      file: (post.files != null) ? post.files : null,
+      file: (post.files !== null) ? post.files : null,
       fileFormatDataName: 'file'
     })
       .progress((evt) => {
         this.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
       })
-      .success((data, status, headers, config) => {
+      .success(() => {
         this.$state.go('topics.view', {forum_id: this.$stateParams.forum_id, id: this.$stateParams.id}, {reload: true});
       })
       .error((data, status, headers, config) => {
@@ -260,7 +260,7 @@ class ViewTopicCtrl {
         url: '/api/topics/post',
         method: 'POST',
         fields: {post: this.post},
-        file: (this.files != null) ? this.files : null,
+        file: (this.files !== null) ? this.files : null,
         fileFormatDataName: 'file'
       })
         .progress((evt) => {
@@ -296,9 +296,9 @@ class ViewTopicCtrl {
           .then(() => {
             comment.content = e.getContent();
             var el = angular.element($('.md-editor')).parents('.panel');
-            el.css( "background-color", "#ffeeff" );
+            el.css( 'background-color', '#ffeeff');
             setTimeout(() => {
-              el.css( "background-color", "#ffffff" );
+              el.css( 'background-color', '#ffffff' );
             }, 2000);
             e.blur();
           })

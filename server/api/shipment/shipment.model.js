@@ -17,6 +17,18 @@ var ShipmentSchema = new mongoose.Schema({
   updated_at: {type: Date, default: Date.now}
 });
 
+var validatePresenceOf = function(value) {
+  return value && value.length;
+};
+
+var genShippingNumber = function(date){
+  var now = date? moment(date): moment();
+  //return `S${10000 * now.getFullYear() + 100 * (now.getMonth()+1) + now.getDate()}-`
+  //  + `${10000 * now.getHours() + 100 * now.getMinutes() + now.getSeconds()}-`
+  //  + `${1000 + now.getMilliseconds()}`;
+  return 'S'+ now.format('YYYYMMDD-HHmmss-1SSS');
+};
+
 /**
  * Pre-save hook
  */
@@ -31,17 +43,6 @@ ShipmentSchema.pre('save', function(next) {
   return next();
 });
 
-var validatePresenceOf = function(value) {
-  return value && value.length;
-};
-
-var genShippingNumber = function(date){
-  var now = date? moment(date): moment();
-  //return `S${10000 * now.getFullYear() + 100 * (now.getMonth()+1) + now.getDate()}-`
-  //  + `${10000 * now.getHours() + 100 * now.getMinutes() + now.getSeconds()}-`
-  //  + `${1000 + now.getMilliseconds()}`;
-  return now.format('YYYYMMDD-HHmmss-1SSS');
-};
 
 ShipmentSchema.methods = {
 

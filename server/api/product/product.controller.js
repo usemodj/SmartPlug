@@ -57,7 +57,7 @@ function saveUpdates(updates) {
     //console.log(updated);
     return Variant.findOneAndUpdateAsync({product: updated._id, is_master: true}, updated.variant, {upsert: true, new: true})
     .then(variant => {
-        if(updated.variants.indexOf(variant._id) == -1){
+        if(updated.variants.indexOf(variant._id) === -1){
           updated.variants.push(variant._id);
         }
         return updated.saveAsync()
@@ -119,7 +119,7 @@ export function index(req, res) {
     ]};
   Product.countAsync(query)
     .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       //console.log('>>count: ' + count);
@@ -153,7 +153,7 @@ export function index(req, res) {
       .then(assets => {
           for(var k=0; k < assets.length; k++) {
             for(var i=0; i < products.length; ++i){
-              if(products[i]._id.toString() == assets[k]._id){
+              if(products[i]._id.toString() === assets[k]._id){
                 products[i].assets = assets[k];
                 break;
               }
@@ -308,7 +308,7 @@ export function list(req, res){
     .populate({path:'variants', match: variantMatch})
     .execAsync()
     .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       //console.log('>>count: ' + count);
@@ -342,7 +342,7 @@ export function list(req, res){
         .then(assets => {
           for(var k=0; k < assets.length; k++) {
             for(var i=0; i < products.length; ++i){
-              if(products[i]._id.toString() == assets[k]._id){
+              if(products[i]._id.toString() === assets[k]._id){
                 products[i].assets = assets[k];
                 break;
               }

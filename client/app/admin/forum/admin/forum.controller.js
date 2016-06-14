@@ -33,7 +33,7 @@ class AdminForumCtrl {
         var entry = $scope.forums.map(function(item){
           return item._id;
         }).join(',');
-        $scope.sorted = entry != $scope.beforeSort;
+        $scope.sorted = entry !== $scope.beforeSort;
         $scope.sortEntry = entry;
         // IF sorted == true, updatePosition()
         //if(sorted){
@@ -57,7 +57,7 @@ class AdminForumCtrl {
       .then( () => {
           $scope.forums.splice($scope.forums.indexOf(forum), 1);
         });
-    })
+    });
   }
 
   search(form){
@@ -248,8 +248,8 @@ class AdminSearchForumCtrl{
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {

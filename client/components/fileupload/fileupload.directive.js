@@ -12,7 +12,7 @@ angular.module('smartPlugApp')
             //emit event upward
             scope.$emit('fileSelected', { file: files[i]});
           }
-        })
+        });
       }
     };
   });

@@ -10,8 +10,8 @@ angular.module('smartPlugApp')
       link: function(scope, element, attrs, ngModelCtrl) {
         var modelAccessor = $parse(attrs.ngModel);
 
-        var html = '<input type="text" class="form-control" placeholder="yyyy-mm-dd" name="'+ attrs.name + '" ng-model="'+ attrs.ngModel+ '">'
-          + '<input type="hidden" name="'+ attrs.name + '_submit' + '" ng-model="'+ attrs.ngModel + '_submit'+ '">';
+        var html = '<input type="text" class="form-control" placeholder="yyyy-mm-dd" name="'+ attrs.name + '" ng-model="'+ attrs.ngModel+ '">' +
+          '<input type="hidden" name="'+ attrs.name + '_submit' + '" ng-model="'+ attrs.ngModel + '_submit'+ '">';
         var e = $compile(html)(scope);
         element.replaceWith(e);
         element = e;

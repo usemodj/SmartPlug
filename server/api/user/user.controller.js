@@ -39,11 +39,11 @@ export function index(req, res) {
   var where = {};
   if(email) where.email = email;
   if(role) where.role = role;
-  if(active || active == false) where.active = active;
+  if(active || active === false) where.active = active;
 
   User.countAsync(where)
   .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       var totalItems = count;
@@ -172,7 +172,7 @@ export function getForgotPasswordToken(req, res, next){
       if (!user) {
         return res.status(404).json('Your email is not registered.');
       }
-      if(user.provider != 'local'){
+      if(user.provider !== 'local'){
         return res.status(404).json(`Your email is connected with social site: ${user.provider}.`);
       }
       user.makePasswordToken(user => {

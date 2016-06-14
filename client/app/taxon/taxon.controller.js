@@ -29,8 +29,8 @@ class TaxonCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     this.q = $stateParams.q? $stateParams.q: '';

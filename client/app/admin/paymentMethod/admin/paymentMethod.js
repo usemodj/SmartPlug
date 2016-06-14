@@ -20,5 +20,5 @@ angular.module('smartPlugApp')
         templateUrl: 'app/admin/paymentMethod/admin/paymentMethod.edit.html',
         controller: 'EditPaymentMethodCtrl',
         controllerAs: 'vm'
-      })
+      });
   });

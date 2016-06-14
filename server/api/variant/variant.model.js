@@ -25,6 +25,10 @@ var VariantSchema = new mongoose.Schema({
 
 });
 
+var validatePresenceOf = function(value) {
+  return value && value.length;
+};
+
 /**
  * Pre-save hook
  */
@@ -55,10 +59,6 @@ VariantSchema.pre('save', function(next) {
       next(err);
     });
 });
-
-var validatePresenceOf = function(value) {
-  return value && value.length;
-};
 
 VariantSchema.methods = {
 

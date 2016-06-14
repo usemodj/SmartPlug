@@ -47,4 +47,4 @@ export default function(app) {
     .get((req, res) => {
       res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
     });
-};
+}

@@ -26,8 +26,8 @@ class UserCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -40,10 +40,6 @@ class UserCtrl {
       $scope.url = `/api/users/search/${this.qsearch}`;
     } else {
       $scope.url = '/api/users';
-      //$http.get('/api/blogs').then(response => {
-      //  this.blogs = response.data;
-      //  socket.syncUpdates('blog', this.blogs);
-      //});
     }
 
     $scope.$on('$destroy', function() {

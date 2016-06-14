@@ -84,7 +84,7 @@ export function index(req, res) {
     if(status) q.status = status;
       Support.countAsync(q)
       .then(count => {
-          if (count == 0) {
+          if (count === 0) {
             return [];
           }
           var totalItems = count;
@@ -127,7 +127,7 @@ export function create(req, res) {
         return res.status(401).json('Login is required.'); //unauthorized
       }
 
-      var tags = (!support.tags)? []: (typeof support.tags == 'string')? support.tags.trim().split(/\s*,\s*/): support.tags;
+      var tags = (!support.tags)? []: (typeof support.tags === 'string')? support.tags.trim().split(/\s*,\s*/): support.tags;
 
       Support.createAsync({
         subject: support.subject,
@@ -213,7 +213,7 @@ export function search(req, res, next){
         console.error(err);
         throw err;
       }
-      if(results.hits.total == 0){
+      if(results.hits.total === 0){
         return res.status(200).json([]);
       }
       var totalItems = results.hits.total;
@@ -287,7 +287,7 @@ export function updateSupport(req, res, next){
         return res.status(401).json('Login is required.'); //unauthorized
       }
 
-      var tags = (!support.tags)? []: (typeof support.tags == 'string')? support.tags.trim().split(/\s*,\s*/): support.tags;
+      var tags = (!support.tags)? []: (typeof support.tags === 'string')? support.tags.trim().split(/\s*,\s*/): support.tags;
 
       Support.findByIdAndUpdateAsync(support._id, {
         subject: support.subject,

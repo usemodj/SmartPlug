@@ -11,7 +11,7 @@ function localAuthenticate(User, email, password, done) {
           message: 'This email is not registered.'
         });
       }
-      if(user.provider != 'local'){
+      if(user.provider !== 'local'){
           return done(null, false, { provider:user.provider, message: 'OAuth login is required.'});
       }
 

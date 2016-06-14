@@ -137,7 +137,7 @@ export function products(req, res){
 
   Product.countAsync(query)
     .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       console.log('>>count: ' + count);
@@ -169,7 +169,7 @@ export function products(req, res){
         .then(assets => {
           for(var k=0; k < assets.length; k++) {
             for(var i=0; i < products.length; ++i){
-              if(products[i]._id.toString() == assets[k]._id){
+              if(products[i]._id.toString() === assets[k]._id){
                 products[i].assets = assets[k];
                 break;
               }

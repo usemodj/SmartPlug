@@ -25,8 +25,8 @@ class AdminForumTopicCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -34,11 +34,10 @@ class AdminForumTopicCtrl {
       forum_id: $stateParams.forum_id
     };
     $scope.transformResponse = function(response){
-      console.log(response)
       $scope.forum = response.forum;
       $scope.sticky_topics = response.sticky_topics || [];
       $scope.topics = response.topics || [];
-    }
+    };
 
     var tag = $stateParams.tag;
     this.q = $stateParams.q;
@@ -124,7 +123,7 @@ class AdminViewForumTopicCtrl {
     post.tags = this.topic.tags;
     var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/forum/admin/topic.edit.html',
-      controller: EditTopicCtrl,
+      controller: AdminEditTopicCtrl,
       controllerAs: 'vm',
       resolve: {
         post: function () {
@@ -149,7 +148,7 @@ class AdminViewForumTopicCtrl {
       url: `/api/admin/topics/${post.forum}/posts/${post._id}`,
       method: 'POST',
       fields: {post: post},
-      file: (post.files != null) ? post.files : null,
+      file: (post.files !== null) ? post.files : null,
       fileFormatDataName: 'file'
     })
       .progress((evt) => {
@@ -206,7 +205,7 @@ class AdminViewForumTopicCtrl {
         url: '/api/admin/topics/post',
         method: 'POST',
         fields: {post: this.post},
-        file: (this.files != null) ? this.files : null,
+        file: (this.files !== null) ? this.files : null,
         fileFormatDataName: 'file'
       })
         .progress((evt) => {

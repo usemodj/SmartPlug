@@ -83,7 +83,7 @@ export function index(req, res) {
   if(forumId) q.forum = forumId;
   Topic.countAsync(q)
     .then(count => {
-      if (count == 0) {
+      if (count === 0) {
         return [];
       }
 
@@ -356,7 +356,7 @@ export function updatePost(req, res) {
         post.save()
           .then(post => {
             if(post.root) {
-              var tags = (!qPost.tags)? []: (typeof qPost.tags == 'string')? qPost.tags.trim().split(/\s*,\s*/): qPost.tags;
+              var tags = (!qPost.tags)? []: (typeof qPost.tags === 'string')? qPost.tags.trim().split(/\s*,\s*/): qPost.tags;
 
               Topic.findByIdAndUpdate(post.topic, {
                 name: post.name,

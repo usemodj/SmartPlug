@@ -36,8 +36,8 @@ class AdminProductCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -122,8 +122,10 @@ class EditProductCtrl {
     this.Product = Product;
     this.OptionType = OptionType;
     this.Taxon = Taxon;
-    this.$state = $state;
     this.$scope = $scope;
+    this.$state = $state;
+    this.$stateParams = $stateParams;
+    this.$window = $window;
     this.product = {};
     this.optionTypes = optionTypes;
     this.taxons = taxons;
@@ -179,7 +181,7 @@ class EditProductCtrl {
   }
 
   showSomeHelp(){
-    $window.open("http://daringfireball.net/projects/markdown/syntax", "_blank");
+    this.$window.open('http://daringfireball.net/projects/markdown/syntax', '_blank');
   }
 }
 
@@ -196,7 +198,10 @@ class CloneProductCtrl {
     this.Product = Product;
     this.OptionType = OptionType;
     this.Taxon = Taxon;
+    this.$scope = $scope;
     this.$state = $state;
+    this.$stateParams = $stateParams;
+    this.$window = $window;
     this.product = {};
     this.optionTypes = optionTypes;
     this.taxons = taxons;
@@ -250,7 +255,7 @@ class CloneProductCtrl {
   }
 
   showSomeHelp(){
-    $window.open("http://daringfireball.net/projects/markdown/syntax", "_blank");
+    this.$window.open('http://daringfireball.net/projects/markdown/syntax', '_blank');
   }
 }
 

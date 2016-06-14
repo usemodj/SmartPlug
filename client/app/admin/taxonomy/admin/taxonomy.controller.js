@@ -32,7 +32,7 @@ class AdminTaxonomyCtrl {
         var entry = self.taxonomies.map(function(item){
           return item._id;
         }).join(',');
-        self.sorted = entry != self.beforeSort;
+        self.sorted = entry !== self.beforeSort;
         // IF sorted == true, updatePosition()
         if(self.sorted){
           self.updatePosition(entry);
@@ -50,8 +50,7 @@ class AdminTaxonomyCtrl {
         console.log(err);
         this.errors.other = err.message || err.data || err;
       });
-
-  };
+  }
 
   list(){
     this.submitted = true;
@@ -139,15 +138,17 @@ class EditTaxonomyCtrl {
 
   cancelEditingItem(scope) {
     scope.editing = false;
-    if(scope.$parentNodesScope)
+    if(scope.$parentNodesScope) {
       scope.$parentNodesScope.editing = false;
+    }
   }
 
   saveItem(scope) {
     //console.log(scope)
     scope.editing = false;
-    if(scope.$parentNodesScope)
+    if(scope.$parentNodesScope) {
       scope.$parentNodesScope.editing = false;
+    }
   }
 
   save(form){

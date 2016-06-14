@@ -26,7 +26,7 @@ class NewBlogCtrl {
           url: '/api/blogs',
           method: 'POST',
           fields: {blog: this.blog},
-          file: (this.files != null) ? this.files : null,
+          file: (this.files !== null) ? this.files : null,
           fileFormatDataName: 'file'
         })
         .progress((evt) => {

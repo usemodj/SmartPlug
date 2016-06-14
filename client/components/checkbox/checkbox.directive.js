@@ -23,13 +23,13 @@ angular.module('smartPlugApp')
 
         scope.$watch(modelAccessor, function (val) {
           //console.log('>> $watch....')
-          scope.checked = val == trueValue;
+          scope.checked = val === trueValue;
         });
 
         $timeout( function(){
           if(element[0].checked) {
             //console.log('>> element.checked....')
-            $(element).parent().addClass('active')
+            $(element).parent().addClass('active');
           }
         }, 0);
 

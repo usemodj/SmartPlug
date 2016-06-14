@@ -75,7 +75,7 @@ export function index(req, res) {
   //console.log(req.body);
   var product_id = req.query.product;
   var deleted = req.query.deleted;
-  if(deleted == true){
+  if(deleted === true){
     deleted = {$ne: null};
   } else {
     deleted = null;
@@ -159,7 +159,7 @@ export function list(req, res){
   //console.log(req.body);
   var product_id = req.body.product;
   var deleted = req.body.deleted;
-  if(deleted == true){
+  if(deleted === true){
     deleted = {$ne: null};
   } else {
     deleted = null;

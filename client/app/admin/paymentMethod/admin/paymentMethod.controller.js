@@ -31,7 +31,7 @@ class AdminPaymentMethodCtrl {
         var entry = self.paymentMethods.map(function(item){
           return item._id;
         }).join(',');
-        self.sorted = entry != self.beforeSort;
+        self.sorted = entry !== self.beforeSort;
         // IF sorted == true, updatePosition()
         if(self.sorted){
           self.updatePosition(entry);
@@ -48,8 +48,7 @@ class AdminPaymentMethodCtrl {
         console.log(err);
         this.errors.other = err.message || err.statusText || err.data || err;
       });
-
-  };
+  }
 
   list(){
     this.submitted = true;

@@ -27,7 +27,7 @@ class NewSupportCtrl {
         url: '/api/supports',
         method: 'POST',
         fields: {support: this.support},
-        file: (this.files != null) ? this.files : null,
+        file: (this.files !== null) ? this.files : null,
         fileFormatDataName: 'file'
       })
         .progress((evt) => {

@@ -46,6 +46,18 @@ var OrderSchema = new mongoose.Schema({
   updated_at: {type: Date, default: Date.now}
 });
 
+var validatePresenceOf = function(value) {
+  return value && value.length;
+};
+
+var genOrderNumber = function(date){
+  var now = date? moment(date): moment();
+  //return `S${10000 * now.getFullYear() + 100 * (now.getMonth()+1) + now.getDate()}-`
+  //  + `${10000 * now.getHours() + 100 * now.getMinutes() + now.getSeconds()}-`
+  //  + `${1000 + now.getMilliseconds()}`;
+  return now.format('YYYYMMDD-HHmmss-1SSS');
+};
+
 /**
  * Pre-save hook
  */
@@ -60,17 +72,6 @@ OrderSchema.pre('save', function(next) {
   return next();
 });
 
-var validatePresenceOf = function(value) {
-  return value && value.length;
-};
-
-var genOrderNumber = function(date){
-  var now = date? moment(date): moment();
-  //return `S${10000 * now.getFullYear() + 100 * (now.getMonth()+1) + now.getDate()}-`
-  //  + `${10000 * now.getHours() + 100 * now.getMinutes() + now.getSeconds()}-`
-  //  + `${1000 + now.getMilliseconds()}`;
-  return now.format('YYYYMMDD-HHmmss-1SSS');
-};
 
 OrderSchema.methods = {
 

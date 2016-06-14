@@ -116,7 +116,7 @@ export function index(req, res) {
   var query = {'user.email': req.user.email};
   Order.countAsync(query)
     .then(count => {
-      if(count == 0){
+      if(count === 0){
         return [];
       }
       var totalItems = count;
@@ -375,7 +375,7 @@ export function updatePayment(req, res){
       .spread(updated => { return updated;});
     })
     .then(payment => {
-      if(payment.reply_code == '0000'){ //payment success
+      if(payment.reply_code === '0000'){ //payment success
 
         return Order.findByIdAndUpdateAsync(payment.order, {
           last_ip_address: req.connection.remoteAddress,

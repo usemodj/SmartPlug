@@ -25,8 +25,8 @@ class SupportCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -133,7 +133,7 @@ class ViewSupportCtrl {
       url: '/api/supports/updateSupport',
       method: 'POST',
       fields:{ support: support },
-      file: (support.files != null)? support.files: null,
+      file: (support.files !== null)? support.files: null,
       fileFormatDataName: 'file'
     })
       .progress((evt) => {
@@ -159,7 +159,7 @@ class ViewSupportCtrl {
   }
 
   close(){
-    console.log(this.$stateParams.id)
+    //console.log(this.$stateParams.id);
     this.AdminSupport.close({_id: this.$stateParams.id}).$promise
       .then(() => {
         this.$state.go('supports.list');
@@ -182,7 +182,7 @@ class ViewSupportCtrl {
       })
       .catch(err => {
         this.errors.other = err;
-      })
+      });
   }
 
   editComment(comment){
@@ -203,9 +203,9 @@ class ViewSupportCtrl {
           .then(() => {
             comment.content = editor.getContent();
             var el = angular.element($('.md-editor')).parents('.panel');
-            el.css( "background-color", "#ffeeff" );
+            el.css( 'background-color', '#ffeeff' );
             setTimeout(() => {
-              el.css( "background-color", "#ffffff" );
+              el.css( 'background-color', '#ffffff' );
             }, 2000);
             editor.blur();
           })

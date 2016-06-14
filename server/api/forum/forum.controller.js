@@ -72,7 +72,7 @@ export function index(req, res) {
   var q = {active: true};
   Forum.countAsync(q)
     .then(count => {
-      if (count == 0) {
+      if (count === 0) {
         return [];
       }
       var totalItems = count;
@@ -94,7 +94,7 @@ export function search(req, res, next){
         console.error('>>Count Error: ', err);
         return res.status(500).json(err);
       }
-      if(results.hits.total == 0){
+      if(results.hits.total === 0){
         return res.status(200).send([]);
       }
       console.log(results.hits)
@@ -128,7 +128,7 @@ export function recentPosts(req, res, next){
   console.log(req.query)
   Post.countAsync()
     .then(count => {
-      if (count == 0) {
+      if (count === 0) {
         return [];
       }
       var totalItems = count;

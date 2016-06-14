@@ -5,20 +5,20 @@ angular.module('smartPlugApp')
     return {
       restrict: 'EA',
       link: function postLink(scope, element, attrs) {
-        var hiddenButtons = attrs.mdHiddenButtons ? attrs.mdHiddenButtons.split(","): new Array();
+        var hiddenButtons = attrs.mdHiddenButtons ? attrs.mdHiddenButtons.split(','): [];
         element.markdown({
           language: settings.markdownEditor.language,
           hiddenButtons: hiddenButtons,
           additionalButtons: [
             [{
-              name:"groupCustom",
+              name:'groupCustom',
               data: [{
-                name: "cmdHelp",
+                name: 'cmdHelp',
                 toggle: true,
-                title: "Help",
-                icon: "glyphicon glyphicon-question-sign",
+                title: 'Help',
+                icon: 'glyphicon glyphicon-question-sign',
                 callback: function(e){
-                  $window.open("http://daringfireball.net/projects/markdown/syntax", "_blank");
+                  $window.open('http://daringfireball.net/projects/markdown/syntax', '_blank');
                 }
               }]
 

@@ -1,12 +1,13 @@
 'use strict';
 
 class AdminOrderCtrl {
-  constructor(Auth, AdminOrder, $state, $stateParams, $http, $scope, $location, $window, socket) {
+  constructor(Auth, AdminOrder, Modal, $state, $stateParams, $http, $scope, $location, $window, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.AdminOrder = AdminOrder;
+    this.Modal = Modal;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.$http = $http;
@@ -25,8 +26,8 @@ class AdminOrderCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -55,7 +56,7 @@ class AdminOrderCtrl {
   }
 
   delete(item){
-    return Modal.confirm.delete( item => {
+    return this.Modal.confirm.delete( item => {
       this.submitted = true;
       this.Order.delete({id: item._id}, () => {
         this.products.splice(this.orders.indexOf(item), 1);
@@ -101,7 +102,7 @@ class EditOrderCtrl {
     });
 
     this.state = Modal.confirm.continue( () => {
-      if(!this.order.state) return;
+      if(!this.order.state) {return;}
       AdminOrder.state({_id: this.order._id, state: this.order.state}).$promise
         .then(response => {
           this.order.state = response.state;
@@ -110,7 +111,7 @@ class EditOrderCtrl {
 
     this.AdminOrder.get({id: this.$stateParams.id}).$promise
     .then(response => {
-        console.log(response)
+        //console.log(response)
         this.order = response;
       })
     .catch(err => {
@@ -156,8 +157,8 @@ class StateOrderCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {

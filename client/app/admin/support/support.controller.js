@@ -26,8 +26,8 @@ class AdminSupportCtrl {
     $scope.$on('$locationChangeSuccess', function() {
       var page = +$location.search().page,
         perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; };
-      if(perPage >= 0) { $scope.perPage = perPage; };
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
     });
 
     $scope.urlParams = {
@@ -105,7 +105,7 @@ class AdminNewSupportCtrl {
         url: '/api/admin/supports',
         method: 'POST',
         fields: {support: this.support},
-        file: (this.files != null) ? this.files : null,
+        file: (this.files !== null) ? this.files : null,
         fileFormatDataName: 'file'
       })
         .progress((evt) => {
@@ -182,7 +182,7 @@ class AdminViewSupportCtrl {
       url: '/api/admin/supports/updateSupport',
       method: 'POST',
       fields:{ support: support },
-      file: (support.files != null)? support.files: null,
+      file: (support.files !== null)? support.files: null,
       fileFormatDataName: 'file'
     })
       .progress((evt) => {
@@ -231,8 +231,8 @@ class AdminViewSupportCtrl {
         this.$state.go('admin.supports.view',{_id: this.support._id},{reload: true});
       })
       .catch(err => {
-        this.errors.other = err;
-      })
+        this.errors.other = err.statusText || err.data || err;
+      });
   }
 
   editComment(comment){
@@ -253,14 +253,14 @@ class AdminViewSupportCtrl {
           .then(() => {
             comment.content = e.getContent();
             var el = angular.element($('.md-editor')).parents('.panel');
-            el.css( "background-color", "#ffeeff" );
+            el.css('background-color', '#ffeeff');
             setTimeout(() => {
-              el.css( "background-color", "#ffffff" );
+              el.css( 'background-color', '#ffffff');
             }, 2000);
             e.blur();
           })
           .catch(err => {
-            self.errors.other = err;
+            self.errors.other = err.statusText || err.data || err;
           });
       }
     });

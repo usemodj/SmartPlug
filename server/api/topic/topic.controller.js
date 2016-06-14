@@ -86,7 +86,7 @@ export function index(req, res) {
       q.sticky = false;
       Topic.countAsync(q)
         .then(count => {
-          if (count == 0) {
+          if (count === 0) {
             return [];
           }
           var totalItems = count;
@@ -155,7 +155,7 @@ export function create(req, res) {
     return res.status(401).json('Login is required.'); //unauthorized
   }
 
-  var tags = (!qTopic.tags)? []: (typeof qTopic.tags == 'string')? qTopic.tags.trim().split(/\s*,\s*/): qTopic.tags;
+  var tags = (!qTopic.tags)? []: (typeof qTopic.tags === 'string')? qTopic.tags.trim().split(/\s*,\s*/): qTopic.tags;
   Topic.createAsync({
     name: qTopic.name,
     forum: qTopic.forum_id,
@@ -466,7 +466,7 @@ export function updatePost(req, res) {
         post.save()
           .then(post => {
             if(post.root) {
-              var tags = (!qPost.tags)? []: (typeof qPost.tags == 'string')? qPost.tags.trim().split(/\s*,\s*/): qPost.tags;
+              var tags = (!qPost.tags)? []: (typeof qPost.tags === 'string')? qPost.tags.trim().split(/\s*,\s*/): qPost.tags;
 
               Topic.findByIdAndUpdate(post.topic, {
                 name: post.name,
