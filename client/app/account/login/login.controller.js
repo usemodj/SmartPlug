@@ -22,7 +22,7 @@ class LoginController {
         password: this.user.password
       })
       .then(() => {
-        if(this.$state.previousState) {
+        if(this.$state.previousState && this.$state.previousState.name) {
           this.$state.go(this.$state.previousState.name, this.$state.previousParams);
         }else {
           // Logged in, redirect to home

@@ -12,8 +12,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
-      'client/bower_components/angular/angular.js',
       'client/bower_components/jquery/dist/jquery.js',
+      'client/bower_components/angular/angular.js',
       'client/bower_components/angular-resource/angular-resource.js',
       'client/bower_components/angular-cookies/angular-cookies.js',
       'client/bower_components/angular-sanitize/angular-sanitize.js',
@@ -22,7 +22,6 @@ module.exports = function(config) {
       'client/bower_components/angular-socket-io/socket.js',
       'client/bower_components/angular-ui-router/release/angular-ui-router.js',
       'client/bower_components/angular-validation-match/dist/angular-validation-match.min.js',
-      'client/bower_components/bootstrap-markdown/js/bootstrap-markdown.js',
       'client/bower_components/showdown/dist/showdown.js',
       'client/bower_components/angular-markdown-filter/markdown.js',
       'client/bower_components/ng-file-upload/ng-file-upload.js',
@@ -42,6 +41,7 @@ module.exports = function(config) {
       'client/bower_components/angular-ui-select/dist/select.js',
       'client/bower_components/angular.treeview/angular.treeview.js',
       'client/bower_components/angular-bootstrap-checkbox/angular-bootstrap-checkbox.js',
+      'client/bower_components/bootstrap-markdown/js/bootstrap-markdown.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

@@ -13,8 +13,8 @@ angular.module('smartPlugApp', [
   'validation.match',
   'ngSanitize',
   'ngFileUpload',
-  'hljs', //highlightjs
-  'hc.marked', //markdown
+  'hljs',
+  'hc.marked',
   'bgf.paginateAnything',
   'relativeDate',
   'ui.sortable',

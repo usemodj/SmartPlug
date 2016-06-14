@@ -11,27 +11,32 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
     <!-- build:css(client) app/vendor.css -->
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
-      <link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css" />
-      <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
       <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.css" />
       <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.css" />
       <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.date.css" />
       <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.time.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+      <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
       <!-- endbower -->
-      <link rel="stylesheet" href="bower_components/angular.treeview/css/angular.treeview.css" />
     <!-- endbuild -->
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css" />
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
+    <link rel="stylesheet" href="bower_components/angular.treeview/css/angular.treeview.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
+
     <!-- build:css({.tmp,client}) app/app.css -->
       <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
+
     <script language="javascript" type="text/javascript"
             src="https://api.paygate.net/ajax/common/OpenPayAPI.js"></script>
   </head>
@@ -58,10 +63,15 @@
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
+
+    <!-- build:js({client,node_modules}) app/vendorb.js -->
+    <!-- endbuild -->
+
+
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
-      <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -70,7 +80,6 @@
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/angular-validation-match/dist/angular-validation-match.min.js"></script>
-      <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
       <script src="bower_components/showdown/dist/showdown.js"></script>
       <script src="bower_components/angular-markdown-filter/markdown.js"></script>
       <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
@@ -90,13 +99,14 @@
       <script src="bower_components/angular-ui-select/dist/select.js"></script>
       <script src="bower_components/angular.treeview/angular.treeview.js"></script>
       <script src="bower_components/angular-bootstrap-checkbox/angular-bootstrap-checkbox.js"></script>
+      <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
       <!-- endbower -->
-      <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-      <script src="socket.io-client/socket.io.js"></script>
-      <script src="bower_components/angular-relative-date/dist/angular-relative-date.min.js"></script>
-      <script src="bower_components/jquery-ui/ui/minified/i18n/datepicker-ko.min.js"></script>
-      <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
-      <script src="bower_components/pickadate/lib/translations/ko_KR.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="socket.io-client/socket.io.js"></script>
+    <script src="bower_components/angular-relative-date/dist/angular-relative-date.min.js"></script>
+    <script src="bower_components/jquery-ui/ui/minified/i18n/datepicker-ko.min.js"></script>
+    <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
+    <script src="bower_components/pickadate/lib/translations/ko_KR.js"></script>
     <!-- endbuild -->
 
     <!-- build:js(.tmp) app/app.js -->

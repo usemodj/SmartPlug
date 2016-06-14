@@ -6,7 +6,7 @@ angular.module('smartPlugApp')
       restrict: 'EA',
       link: function postLink(scope, element, attrs) {
         var hiddenButtons = attrs.mdHiddenButtons ? attrs.mdHiddenButtons.split(','): [];
-        element.markdown({
+        $(element).markdown({
           language: settings.markdownEditor.language,
           hiddenButtons: hiddenButtons,
           additionalButtons: [

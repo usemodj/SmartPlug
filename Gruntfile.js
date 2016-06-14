@@ -2,6 +2,7 @@
 'use strict';
 
 module.exports = function (grunt) {
+  var path = require('path');
   var localConfig;
   try {
     localConfig = require('./server/config/local.env');
@@ -379,6 +380,7 @@ module.exports = function (grunt) {
             'bower_components/**/*',
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
+            'assets/upload/',
             'index.html'
           ]
         }, {
@@ -391,6 +393,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
+            'start.sh',
             '<%= yeoman.server %>/**/*'
           ]
         }]
@@ -665,6 +668,14 @@ module.exports = function (grunt) {
     this.async();
   });
 
+  // Make sure upload directory exists
+  grunt.registerTask('mkdir:upload', 'Task that makes sure upload directory exists.', function() {
+    // Get the callback
+    var done = this.async();
+    grunt.file.mkdir(path.normalize('<%= yeoman.dist %>/<%= yeoman.client %>/uploads'));
+    done();
+  });
+
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
@@ -807,6 +818,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'mkdir:upload',
     'babel:server',
     'cdnify',
     'cssmin',
