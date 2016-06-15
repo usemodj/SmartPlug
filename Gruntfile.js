@@ -673,6 +673,7 @@ module.exports = function (grunt) {
     // Get the callback
     var done = this.async();
     grunt.file.mkdir(path.normalize('<%= yeoman.client %>/assets/uploads'));
+
     grunt.file.mkdir(path.normalize('<%= yeoman.dist %>/<%= yeoman.client %>/uploads'));
     done();
   });
