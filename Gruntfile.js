@@ -672,10 +672,10 @@ module.exports = function (grunt) {
   grunt.registerTask('mkdir:upload', 'Task that makes sure upload directory exists.', function() {
     // Get the callback
     var done = this.async();
-    grunt.file.mkdir(path.normalize('<%= yeoman.client %>/assets/uploads'));
-    console.log(path.normalize('<%= yeoman.client %>/assets/uploads'));
-    grunt.file.mkdir(path.normalize('<%= yeoman.dist %>/<%= yeoman.client %>/uploads'));
-    console.log(path.normalize('<%= yeoman.dist %>/<%= yeoman.client %>/uploads'));
+    grunt.file.mkdir(grunt.config.get('yeoman.client') + '/assets/uploads');
+    console.log(grunt.config.get('yeoman.client') + '/assets/uploads');
+    grunt.file.mkdir(path.normalize(grunt.config.get('yeoman.dist') + '/' + grunt.config.get('yeoman.client') + '/uploads'));
+    console.log(path.normalize(grunt.config.get('yeoman.dist') + '/' + grunt.config.get('yeoman.client') + '/uploads'));
     done();
   });
 
