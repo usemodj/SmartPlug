@@ -672,6 +672,7 @@ module.exports = function (grunt) {
   grunt.registerTask('mkdir:upload', 'Task that makes sure upload directory exists.', function() {
     // Get the callback
     var done = this.async();
+    grunt.file.mkdir(path.normalize('<%= yeoman.client %>/assets/uploads'));
     grunt.file.mkdir(path.normalize('<%= yeoman.dist %>/<%= yeoman.client %>/uploads'));
     done();
   });
@@ -702,6 +703,7 @@ module.exports = function (grunt) {
       'injector',
       'wiredep:client',
       'postcss',
+      'mkdir:upload',
       'express:dev',
       'wait',
       'open',
