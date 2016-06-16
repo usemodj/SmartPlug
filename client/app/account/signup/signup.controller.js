@@ -23,8 +23,12 @@ class SignupController {
         password: this.user.password
       })
       .then(() => {
-        // Account created, redirect to home
-        this.$state.go('main');
+          if(this.$state.previousState && this.$state.previousState.name) {
+            this.$state.go(this.$state.previousState.name, this.$state.previousParams);
+          }else {
+            // Logged in, redirect to home
+            this.$state.go('home');
+          }
       })
       .catch(err => {
         err = err.data;
