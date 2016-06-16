@@ -215,7 +215,8 @@ export function create(req, res) {
   //console.log('>> req.body: ', body);
   var product = {
     name: body.name,
-    available_on:body.available_on
+    available_on: body.available_on,
+    sku: body.sku
   };
   if(body.available_on_submit){
     product.available_on = body.available_on_submit;
