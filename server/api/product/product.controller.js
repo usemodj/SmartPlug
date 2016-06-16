@@ -138,7 +138,7 @@ export function index(req, res) {
         ids.push( mongoose.Types.ObjectId(product._id));
       });
 
-      //console.log(ids);
+      console.log(ids);
       return Asset.aggregate([{
         $match:{product:{$in: ids}}
       },{
@@ -153,7 +153,7 @@ export function index(req, res) {
       .then(assets => {
           for(var k=0; k < assets.length; k++) {
             for(var i=0; i < products.length; ++i){
-              if(products[i]._id.toString() === assets[k]._id){
+              if(products[i]._id.toString() === assets[k]._id.toString()){
                 products[i].assets = assets[k];
                 break;
               }
@@ -327,7 +327,7 @@ export function list(req, res){
         ids.push( mongoose.Types.ObjectId(product._id));
       });
 
-      console.log(ids);
+      //console.log(ids);
       return Asset.aggregate([{
         $match:{product:{$in: ids}}
       },{
@@ -338,18 +338,18 @@ export function list(req, res){
           uri: {$first: '$uri'}
         }
       }])
-        .execAsync()
-        .then(assets => {
-          for(var k=0; k < assets.length; k++) {
-            for(var i=0; i < products.length; ++i){
-              if(products[i]._id.toString() === assets[k]._id){
-                products[i].assets = assets[k];
-                break;
-              }
+      .execAsync()
+      .then(assets => {
+        for(var k=0; k < assets.length; k++) {
+          for(var i=0; i < products.length; ++i){
+            if(products[i]._id.toString() === assets[k]._id.toString()){
+              products[i].assets = assets[k];
+              break;
             }
           }
-          return products;
-        });
+        }
+        return products;
+      });
     })
     .then(respondWithResult(res))
     .catch(handleError(res));
