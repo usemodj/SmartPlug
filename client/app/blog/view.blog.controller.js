@@ -1,14 +1,14 @@
 'use strict';
 
 class ViewBlogCtrl {
-  constructor(Auth, Blog, Upload, $modal, $state, $stateParams, $scope, socket) {
+  constructor(Auth, Blog, Upload, $uibModal, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Blog = Blog;
     this.Upload = Upload;
-    this.$modal = $modal;
+    this.$uibModal = $uibModal;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.blog = {};
@@ -28,7 +28,7 @@ class ViewBlogCtrl {
 
   editBlog(blog){
     this.submitted = true;
-    var modalInstance = this.$modal.open({
+    var modalInstance = this.$uibModal.open({
       templateUrl: 'app/blog/blog.edit.html',
       controller: EditBlogCtrl,
       controllerAs: 'vm',
@@ -146,14 +146,14 @@ angular.module('smartPlugApp')
   .controller('ViewBlogCtrl', ViewBlogCtrl);
 
 class EditBlogCtrl {
-  constructor(Auth, Blog, $scope, $state, $modalInstance, blog) {
+  constructor(Auth, Blog, $scope, $state, $uibModalInstance, blog) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
     this.Auth = Auth;
     this.Blog = Blog;
     this.$state = $state;
-    this.$modalInstance = $modalInstance;
+    this.$uibModalInstance = $uibModalInstance;
     this.origin = angular.copy(blog);
     this.blog = blog;
     this.files = [];
@@ -168,7 +168,7 @@ class EditBlogCtrl {
     this.submitted = true;
     if(form.$valid) {
       this.blog.files = this.files;
-      this.$modalInstance.close(this.blog);
+      this.$uibModalInstance.close(this.blog);
     }
   }
 
@@ -179,7 +179,7 @@ class EditBlogCtrl {
     this.blog.content = this.origin.content;
     this.blog.tags = this.origin.tags;
 
-    this.$modalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss('cancel');
   }
 
   removeFile(file){
