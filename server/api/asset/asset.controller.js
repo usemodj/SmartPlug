@@ -196,6 +196,7 @@ export function position(req, res){
   var ids = [];
   if(entry) ids = entry.split(',');
   if(ids.length === 0) return;
+  console.log('>> ids: ', ids);
   var pos = 0;
   async.each(ids, (id, callback) => {
     Asset.findByIdAsync(id)

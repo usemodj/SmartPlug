@@ -9,6 +9,7 @@ var AssetSchema = new mongoose.Schema({
   size: String,
   uri: String,
   alt: String,
+  position: Number,
   product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
   variant: {type: mongoose.Schema.Types.ObjectId, ref: 'Variant'},
   created_at: {type: Date, default: Date.now()},
