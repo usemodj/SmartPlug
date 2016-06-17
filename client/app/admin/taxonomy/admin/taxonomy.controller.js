@@ -57,7 +57,7 @@ class AdminTaxonomyCtrl {
     this.Taxonomy.query().$promise
       .then(response => {
         this.taxonomies = this.$filter('orderBy')(response, 'position', false);
-        //this.socket.syncUpdates('taxonomy', this.taxonomies);
+        this.socket.syncUpdates('taxonomy', this.taxonomies);
       })
       .catch(err => {
         console.log(err);
