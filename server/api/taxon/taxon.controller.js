@@ -77,6 +77,15 @@ export function index(req, res) {
     res.status(200).json(children);
   });
 }
+// Gets a list of Taxons
+export function list(req, res) {
+  Taxon.find()
+    .sort({taxonomy:1, path:1})
+    .execAsync()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+
+}
 
 // Gets a single Taxon from the DB
 export function show(req, res) {
@@ -169,7 +178,7 @@ export function products(req, res){
         .then(assets => {
           for(var k=0; k < assets.length; k++) {
             for(var i=0; i < products.length; ++i){
-              if(products[i]._id.toString() === assets[k]._id){
+              if(products[i]._id.toString() === assets[k]._id.toString()){
                 products[i].assets = assets[k];
                 break;
               }

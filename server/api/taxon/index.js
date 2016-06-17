@@ -12,6 +12,7 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
+router.post('/list', controller.list);
 router.get('/:id/products', controller.products);
 
 module.exports = router;

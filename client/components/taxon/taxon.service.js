@@ -17,6 +17,7 @@ angular.module('smartPlugApp')
         //},
         list: {
           method: 'POST',
+          isArray: true,
           params: {
             controller: 'list'
           }

@@ -34,7 +34,8 @@ angular.module('smartPlugApp')
             return OptionType.query();
           }],
           taxons: ['Taxon', function(Taxon){
-            return Taxon.query();
+            return Taxon.list().$promise
+              .then(taxons => { return taxons;});
           }]
         }
       })

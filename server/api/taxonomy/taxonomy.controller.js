@@ -151,10 +151,13 @@ export function update(req, res) {
 
 // Deletes a Taxonomy from the DB
 export function destroy(req, res) {
-  Taxonomy.findByIdAsync(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+  Taxon.removeAsync({taxonomy: req.params.id})
+  .then(() => {
+      return Taxonomy.findByIdAsync(req.params.id);
+  })
+  .then(handleEntityNotFound(res))
+  .then(removeEntity(res))
+  .catch(handleError(res));
 }
 
 // Updates the positions of the existing Taxonomies in the DB
