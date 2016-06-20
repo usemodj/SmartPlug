@@ -6,6 +6,6 @@ public
 client/bower_components
 dist
 /server/config/local.env.js
-/server/start.sh
+start.sh
 npm-debug.log
 client/assets/upload/**
