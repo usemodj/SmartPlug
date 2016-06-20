@@ -131,7 +131,7 @@ export function show(req, res) {
 
 // Creates a new Asset in the DB
 export function create(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
   var asset = req.body.asset;
   var files = (req.files.file)? req.files.file: [];
 
@@ -184,7 +184,7 @@ export function update(req, res) {
 
 // Deletes a Asset from the DB
 export function destroy(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
   Asset.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
@@ -196,7 +196,6 @@ export function position(req, res){
   var ids = [];
   if(entry) ids = entry.split(',');
   if(ids.length === 0) return;
-  console.log('>> ids: ', ids);
   var pos = 0;
   async.each(ids, (id, callback) => {
     Asset.findByIdAsync(id)

@@ -15,5 +15,6 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 router.get('/token/forgotPassword', controller.getForgotPasswordToken);
 router.put('/token/resetPassword', controller.resetPasswordByToken);
+router.get('/token/mailForgotPasswordToken', controller.mailForgotPasswordToken);
 
 export default router;

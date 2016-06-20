@@ -4,7 +4,7 @@
 // =================================
 module.exports = {
   //Server Mail
-  domain: process.env.domain || undefined,
+  domain: process.env.DOMAIN || undefined,
   postmailer: process.env.POST_MAILER || undefined,
 
   // Server IP
@@ -21,8 +21,8 @@ module.exports = {
   mongo: {
     uri:  process.env.MONGOLAB_URI ||
           process.env.MONGOHQ_URL ||
-          process.env.OPENSHIFT_MONGODB_DB_URL +
-          process.env.OPENSHIFT_APP_NAME ||
+          process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME ||
+          process.env.MONGO_URI ||
           'mongodb://localhost/smartplug'
   }
 };

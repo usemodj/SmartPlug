@@ -5,6 +5,9 @@ import passport from 'passport';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
 import paginate from 'node-paginate-anything';
+import hogan from 'hogan.js';
+import fs from 'fs';
+import path from 'path';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -166,7 +169,7 @@ export function authCallback(req, res, next) {
  */
 export function getForgotPasswordToken(req, res, next){
   var email = req.query.email;
-  console.log(email);
+  //console.log(email);
   User.findOneAsync({email: email})
     .then(user => {
       if (!user) {
@@ -183,6 +186,63 @@ export function getForgotPasswordToken(req, res, next){
     .catch(err => {
       //console.log(err.message);
       res.status(500).json(err.message);
+    });
+}
+/**
+ * Mail forgot password token to user's email address
+ */
+export function mailForgotPasswordToken(req, res, next){
+  var email = req.query.email;
+  //console.log(email);
+  User.findOneAsync({email: email})
+    .then(user => {
+      if (!user) {
+        return res.status(404).json('Your email is not registered.');
+      }
+      if(user.provider !== 'local'){
+        return res.status(404).json(`Your email is connected with social site: ${user.provider}.`);
+      }
+      user.makePasswordToken(user => {
+        user.saveAsync().spread(updated => { return updated;})
+          .then(user => {
+            var filename = path.join(__dirname, './forgotPasswordTokenMail.hogan.html');
+            var transport = req.transport;
+            //console.log(filename)
+            fs.readFile(filename, function (err, contents) {
+              if (err) {
+                log.error(err);
+                return res.status(500).json('Email sending fails.');
+              }
+              //console.log(contents);
+              var template = hogan.compile(contents.toString());
+              //order.subTotal = function(price, qty){ return price * qty};
+              var html = template.render({user: user, siteUrl: config.domain});
+
+              var message = {};
+              message.from = config.postmailer;
+              message.to = user.email;
+              message.subject = 'Password Resetting Process...';
+              message.html = html;
+              console.log(message);
+              transport.sendMail(message, function (err) {
+                if (err) {
+                  console.error(err);
+                  return res.status(500).json('Email sending fails.');
+
+                }
+                //console.log('Confirm Mail sent successfully!');
+                // if you don't want to use this transport object anymore, uncomment following line
+                //transport.close(); // close the connection pool
+                return res.status(200).send();
+
+              });
+            });
+          });
+      });
+    })
+    .catch(err => {
+      //console.log(err);
+      res.status(500).json(err);
     });
 }
 

@@ -196,11 +196,13 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User, Mail
     /**
      * Send Mail for forgot password
      */
-    mailForgotPassword(mail, callback){
-      return Mail.save(mail, function(mail) {
-        return safeCb(callback)(null, mail);
-      }, function(err) {
-        return safeCb(callback)(err);
+    mailForgotPasswordToken(email, callback){
+      return User.mailForgotPasswordToken({
+        email: email
+      }, function(){
+        return safeCb(callback)();
+      }, function(err){
+        return safeCb(callback)(err.data);
       }).$promise;
     },
 
