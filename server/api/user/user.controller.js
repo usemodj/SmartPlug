@@ -216,19 +216,18 @@ export function mailForgotPasswordToken(req, res, next){
               //console.log(contents);
               var template = hogan.compile(contents.toString());
               //order.subTotal = function(price, qty){ return price * qty};
-              var html = template.render({user: user, siteUrl: config.domain});
+              var html = template.render({user: user, domain: config.domain});
 
               var message = {};
               message.from = config.postmailer;
               message.to = user.email;
               message.subject = 'Password Resetting Process...';
               message.html = html;
-              console.log(message);
+              //console.log(message);
               transport.sendMail(message, function (err) {
                 if (err) {
                   console.error(err);
                   return res.status(500).json('Email sending fails.');
-
                 }
                 //console.log('Confirm Mail sent successfully!');
                 // if you don't want to use this transport object anymore, uncomment following line

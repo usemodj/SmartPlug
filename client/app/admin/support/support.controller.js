@@ -208,7 +208,7 @@ class AdminViewSupportCtrl {
   }
 
   close(){
-    this.AdminSupport.close({id: this.$stateParams.id}).$promise
+    this.AdminSupport.close({_id: this.$stateParams.id}).$promise
     .then(() => {
         this.$state.go('admin.supports.list');
       })

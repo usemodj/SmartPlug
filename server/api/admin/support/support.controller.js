@@ -9,6 +9,7 @@
 
 'use strict';
 
+import hogan from 'hogan.js';
 import path from 'path';
 import fs from 'fs';
 import mv from 'mv';
@@ -374,7 +375,33 @@ export function addComment(req, res, next){
         return support.saveAsync();
       })
         .then(support => {
-          return res.status(200).json(support.comments.pop());
+          var comment = support.comments.pop();
+          var filename = path.join(__dirname, './supportCommentMail.hogan.html');
+          var transport = req.transport;
+          //console.log(filename)
+          fs.readFile(filename, function (err, contents) {
+            if (err) {
+              log.error(err);
+            }
+            //console.log(contents);
+            var template = hogan.compile(contents.toString());
+            //order.subTotal = function(price, qty){ return price * qty};
+            var html = template.render({support: support, comment: comment, domain: config.domain});
+
+            var message = {};
+            message.from = comment.author.email;
+            message.to = support.author.email;
+            message.subject = '[Support] ' + support.subject;
+            message.html = html;
+            //console.log(message);
+            transport.sendMail(message, function (err) {
+              if (err) {
+                console.error(err);
+              }
+            });
+          });
+          //return res.status(200).json(support.comments.pop());
+          return res.status(200).send();
         });
 
     })
