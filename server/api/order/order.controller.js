@@ -459,7 +459,7 @@ function getAddressJSON(options, onResult){
   var req = prot.request(options, function(res)
   {
     var output = '';
-    console.log(options.host + ':' + res.statusCode);
+    //console.log(options.host + ':' + res.statusCode);
     res.setEncoding('utf8');
 
     res.on('data', function (chunk) {
@@ -473,6 +473,7 @@ function getAddressJSON(options, onResult){
   });
 
   req.on('error', function(err) {
+    console.error(err);
     onResult(err.message);
   });
 

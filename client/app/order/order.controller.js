@@ -350,10 +350,9 @@ class AddressListCtrl {
   }
 
   search(form){
-    console.log('>> search....q:', this.q);
     this.Order.addressList({q: this.q}).$promise
       .then(response => {
-        console.log(response);
+        //console.log(response);
         this.addressList = angular.isArray(response.NewAddressListResponse.newAddressListAreaCd)?
           response.NewAddressListResponse.newAddressListAreaCd:
           [response.NewAddressListResponse.newAddressListAreaCd];
