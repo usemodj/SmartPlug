@@ -4,6 +4,7 @@ NODE_ENV=production \
 PORT=3800 \
 DOMAIN='http://localhost' \
 POST_MAILER='postmaster@localhost' \
+DATA_SERVICE_KEY='data.go.kr serviceKey' \
 MONGO_URI='mongodb://localhost/smartplug' \
 SESSION_SECRET='smartplug-secret' \
 FACEBOOK_ID='app-id' \

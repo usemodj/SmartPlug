@@ -23,6 +23,9 @@ import StateChange from '../stateChange/stateChange.model';
 import mongoose from 'mongoose';
 import mail from '../mail/mail.service';
 import paginate from 'node-paginate-anything';
+import http from 'http';
+import https from 'https';
+import querystring from 'querystring';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -420,4 +423,59 @@ export function updatePayment(req, res){
     })
     .then(respondWithResult(res))
     .catch(handleError(res));
+}
+
+export function addressList(req, res){
+  var q = req.body.q;
+  q = querystring.escape(q);
+  var serviceKey = config.dataServiceKey;
+
+  var options = {
+    host: 'openapi.epost.go.kr',
+    //port: 443, //ssl
+    path: '/postal/retrieveNewAdressAreaCdService/retrieveNewAdressAreaCdService/getNewAddressListAreaCd?ServiceKey='+ serviceKey + '&searchSe=road&_type=json&srchwrd=' + q +'&numOfRows=999&pageSize=999&pageNo=1&startPage=1',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  getAddressJSON(options, (err, result) => {
+    if(err){
+      console.error(err);
+      res.status(500).json(err);
+    } else {
+      res.status(200).json(result);
+    }
+
+  });
+}
+
+/**
+ * onResult(err, output)
+ */
+function getAddressJSON(options, onResult){
+  var prot = options.port == 443 ? https : http;
+  var req = prot.request(options, function(res)
+  {
+    var output = '';
+    console.log(options.host + ':' + res.statusCode);
+    res.setEncoding('utf8');
+
+    res.on('data', function (chunk) {
+      output += chunk;
+    });
+
+    res.on('end', function() {
+      var obj = JSON.parse(output);
+      onResult(null, obj);
+    });
+  });
+
+  req.on('error', function(err) {
+    onResult(err.message);
+  });
+
+  req.end();
+
 }

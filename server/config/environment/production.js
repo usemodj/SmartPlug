@@ -6,6 +6,7 @@ module.exports = {
   //Server Mail
   domain: process.env.DOMAIN || undefined,
   postmailer: process.env.POST_MAILER || undefined,
+  dataServiceKey: process.env.DATA_SERVICE_KEY || undefined,
 
   // Server IP
   ip:     process.env.OPENSHIFT_NODEJS_IP ||

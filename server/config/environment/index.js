@@ -18,6 +18,7 @@ var all = {
   //site url
   domain: process.env.DOMAIN || 'http://localhost:9000',
   postmailer: process.env.POST_MAILER || 'postmaster@nodesoft.co.kr',
+  dataServiceKey: process.env.DATA_SERVICE_KEY || undefined,
 
   // Root path of server
   root: path.normalize(__dirname + '/../../..'),

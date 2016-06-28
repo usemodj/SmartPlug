@@ -33,6 +33,12 @@ angular.module('smartPlugApp')
             controller: 'address'
           }
         },
+        addressList: {
+          method: 'POST',
+          params: {
+            controller: 'addressList'
+          }
+        },
         shipping: {
           method: 'POST',
           params: {

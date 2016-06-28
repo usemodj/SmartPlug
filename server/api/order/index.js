@@ -19,5 +19,6 @@ router.post('/:id/shipping', auth.hasRole('user'), controller.shipping);
 router.post('/:id/payment', auth.hasRole('user'), controller.payment);
 router.post('/:id/confirm', auth.hasRole('user'), controller.confirm);
 router.post('/updatePayment', auth.hasRole('user'), controller.updatePayment);
+router.post('/addressList', controller.addressList);
 
 module.exports = router;
