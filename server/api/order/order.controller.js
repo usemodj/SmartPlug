@@ -323,7 +323,7 @@ export function payment(req, res){
 }
 
 export function confirm(req, res){
-  console.log(req.body)
+  //console.log(req.body)
   var order = req.body;
 
   Order.findOneAndUpdateAsync({_id: order._id, 'user.email': req.user.email, completed_at:null}, {

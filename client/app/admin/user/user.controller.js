@@ -1,77 +1,62 @@
 'use strict';
 
 class UserCtrl {
-  constructor(Auth, $state, $stateParams, $http, $scope, $location, $window, $uibModal, socket, appConfig) {
+  constructor($state, $stateParams, $scope, $location, $window, $uibModal, socket, appConfig) {
     this.errors = {};
     this.success = '';
     this.submitted = false;
-    this.Auth = Auth;
     this.$state = $state;
     this.$stateParams = $stateParams;
-    this.$http = $http;
-    this.$uibModal = $uibModal;
     this.$scope = $scope;
+    this.$location = $location;
     this.$window = $window;
+    this.$uibModal = $uibModal;
+    this.socket = socket;
     this.appConfig = appConfig;
+    this.clientLimit = 250;
     this.users = [];
     this.conditions = {};
-    this.user = {};
 
-    $scope.perPage = parseInt($location.search().perPage, 10) || 10;
-    $scope.page = parseInt($location.search().page, 10) || 0;
-    $scope.clientLimit = 250;
+    this.$onInit();
+  }
 
-    $scope.$watch('page', function(page) { $location.search('page', page); });
-    $scope.$watch('perPage', function(page) { $location.search('perPage', page); });
-    $scope.$on('$locationChangeSuccess', function() {
-      var page = +$location.search().page,
-        perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; }
-      if(perPage >= 0) { $scope.perPage = perPage; }
+  $onInit(timestamp){
+    var self = this;
+    self.submitted = true;
+    self.q = self.$stateParams.q;
+    self.perPage = parseInt(self.$location.search().perPage, 10) || 10;
+    self.page = parseInt(self.$location.search().page, 10) || 0;
+
+    self.$scope.$watch('page', function(page) { self.$location.search('page', page); });
+    self.$scope.$watch('perPage', function(page) { self.$location.search('perPage', page); });
+    self.$scope.$on('$locationChangeSuccess', function() {
+      var page = +self.$location.search().page,
+        perPage = +self.$location.search().perPage;
+      if(page >= 0) { self.page = page; }
+      if(perPage >= 0) { self.perPage = perPage; }
     });
 
-    $scope.urlParams = {
-      clientLimit: $scope.clientLimit
-    };
+    self.urlParams = self.conditions;
+    self.urlParams.clientLimit = self.clientLimit;
 
-    var tag = $stateParams.tag;
-    this.qsearch = $stateParams.qsearch;
-    if(this.qsearch){
-      $scope.url = `/api/users/search/${this.qsearch}`;
-    } else {
-      $scope.url = '/api/users';
-    }
+    self.url = `/api/users?ts=${timestamp || new Date().getTime()}`;
 
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('user');
+    self.$scope.$on('$destroy', function() {
+      self.socket.unsyncUpdates('user');
     });
 
-    $scope.$on('pagination:loadPage', function (event, status, config) {
+    self.$scope.$on('pagination:loadPage', function (event, status, config) {
       // config contains parameters of the page request
       //console.log(config.url);
       // status is the HTTP status of the result
       //console.log(status);
-      socket.syncUpdates('user', $scope.users);
+      self.socket.syncUpdates('user', self.users);
     });
-  }
-
-  searchUsers(form){
-    this.submitted = true;
-    //this.$window.location.href = '/admin/users';
-    this.$scope.url = '/api/users';
-    this.$scope.urlParams.email = this.conditions.email;
-    this.$scope.urlParams.role = this.conditions.role;
-    this.$scope.urlParams.active = this.conditions.active;
 
   }
 
-  deleteBlog(blog){
-    this.submitted = true;
-    this.Blog.delete( {id: blog._id},() => {
-      //this.$state.go('blog');
-    }, (err) => {
-      this.errors.other = err.message || err;
-    });
+  search(form){
+    this.$onInit(new Date().getTime());
   }
 
   editUser(user){

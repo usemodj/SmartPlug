@@ -193,7 +193,7 @@ class ViewSupportCtrl {
         e.setContent( comment.content);
       },
       onSave: function(editor) {//e: markdown editor
-        console.log(editor);
+        //console.log(editor);
         self.Support.saveComment({
           _id: self.support._id,
           comment_id: comment._id,

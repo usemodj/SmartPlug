@@ -10,7 +10,7 @@
     </div>
     <div class="col-lg-9 col-lg-pull-3 col-md-12">
       <div class="panel-body" >
-        <form name="form" class="form-inline" role="form" ng-submit="vm.searchUsers(form)">
+        <form name="form" class="form-inline" role="form" novalidate>
           <div class="row">
             <div class="form-group col-lg-4 col-md-5">
               <label>Email:</label>
@@ -30,7 +30,7 @@
               </select>
             </div>
             <div class="col-lg-2 col-md-2">
-               <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+               <button type="submit" class="btn" ng-click="vm.search(form)"><span class="glyphicon glyphicon-search"></span> Search</button>
             </div>
           </div>
         </form>
@@ -61,8 +61,8 @@
   </div>
   <div class="row">
     <div class="col-lg-10 col-sm-12 pull-right">
-      <bgf-pagination page="page" per-page="perPage" client-limit="clientLimit"
-                      url="url" url-params="urlParams" collection="vm.users">
+      <bgf-pagination page="vm.page" per-page="vm.perPage" client-limit="vm.clientLimit"
+                      url="vm.url" url-params="vm.urlParams" collection="vm.users">
       </bgf-pagination>
     </div>
   </div>
