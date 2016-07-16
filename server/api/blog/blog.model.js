@@ -46,4 +46,16 @@ BlogSchema.methods = {
 };
 
 BlogSchema.plugin(mongoosastic);
-export default mongoose.model('Blog', BlogSchema);
+var Blog = mongoose.model('Blog', BlogSchema);
+Blog.createMapping({
+  "analysis": {
+    "analyzer": {
+      "kr_analyzer": {
+        "type": "custom",
+        "tokenizer": "kr_tokenizer",
+        "filter": [ "trim", "kr_filter" ]
+      }
+    }
+  }
+});
+export default Blog;
