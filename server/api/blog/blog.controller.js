@@ -148,7 +148,7 @@ export function create(req, res) {
               }else {
                 var meta = {
                   name: file.name,
-                  type: file.type,
+                  ctype: file.type,
                   size: `${file.size}`,
                   uri: uri
                 };
@@ -177,7 +177,7 @@ export function search(req, res, next){
   var clientLimit = req.query.clientLimit;
   var terms = req.params.terms;
   try {
-    Blog.search({query_string: {query: terms}}, {size: 0, hydrate: false}, (err, results) => {
+    Blog.search({query_string: {query: terms}}, {size: 0, hydrate:true}, (err, results) => {
       if (err) {
         console.error(err);
         throw err;
@@ -194,7 +194,14 @@ export function search(req, res, next){
         from: queryParams.skip,
         size: queryParams.limit,
         sort: 'created_at:desc',
-        hydrate: true
+        hydrate: true,
+        highlight: {
+          "pre_tags": ["<em>"],
+          "post_tags": ["</em>"],
+          "fields": {
+            "_all": {}
+          }
+        }
       }, (err, results) => {
         if (err) {
           console.error(err);
@@ -305,7 +312,7 @@ export function updateBlog(req, res, next){
           } else {
             var meta = {
               name: file.name,
-              type: file.type,
+              ctype: file.type,
               size: `${file.size}`,
               uri: uri
             };
@@ -364,7 +371,7 @@ export function tagBlogs(req, res, next){
       var totalItems = count;
       var maxRangeSize = clientLimit;
       var queryParams = paginate(req, res, totalItems, maxRangeSize);
-      console.log(queryParams);
+      //console.log(queryParams);
       return Taggable.where({tag: tag, type: 'Blog'})
         .limit(queryParams.limit).skip(queryParams.skip).sort('-created_at').select('taggable_id').findAsync();
   })
