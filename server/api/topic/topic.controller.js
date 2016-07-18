@@ -196,7 +196,7 @@ export function create(req, res) {
           } else {
             var meta = {
               name: file.name,
-              type: file.type,
+              ctype: file.type,
               size: `${file.size}`,
               uri: uri
             };
@@ -359,7 +359,7 @@ export function addPost(req, res, next){
           }else {
             var meta = {
               name: file.name,
-              type: file.type,
+              ctype: file.type,
               size: `${file.size}`,
               uri: uri
             };
@@ -452,7 +452,7 @@ export function updatePost(req, res) {
           }else {
             var meta = {
               name: file.name,
-              type: file.type,
+              ctype: file.type,
               size: `${file.size}`,
               uri: uri
             };

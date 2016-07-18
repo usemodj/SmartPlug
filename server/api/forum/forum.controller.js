@@ -97,7 +97,7 @@ export function search(req, res, next){
       if(results.hits.total === 0){
         return res.status(200).send([]);
       }
-      console.log(results.hits)
+      //console.log(results.hits)
       var totalItems = results.hits.total;
       var maxRangeSize = clientLimit;
       var queryParams = paginate(req, res, totalItems, maxRangeSize);
