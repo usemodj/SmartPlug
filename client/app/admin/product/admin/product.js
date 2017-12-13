@@ -5,7 +5,6 @@ angular.module('smartPlugApp')
     $stateProvider
       .state('admin.products', {
         abstract: true,
-        parent: 'admin',
         url: '/products',
         templateUrl: 'app/admin/product/admin/layout.html'
       })

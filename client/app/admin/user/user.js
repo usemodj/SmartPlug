@@ -5,7 +5,6 @@ angular.module('smartPlugApp.admin')
     $stateProvider
       .state('admin.users', {
         abstract: true,
-        parent: 'admin',
         authenticate: 'admin',
         url: '/users',
         template: '<div ui-view></div>'

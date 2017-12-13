@@ -1,20 +1,27 @@
 'use strict';
 
-var mongoose = require('bluebird').promisifyAll(require('mongoose'));
-var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
-var tree = require('mongoose-path-tree');
+const mongoose = require('bluebird').promisifyAll(require('mongoose'));
+const mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
+const mongooseTreeAncestors = require('mongoose-tree-ancestors');
+
+// Declare a Model name
+const modelName = 'Taxon';
 
 var TaxonSchema = new mongoose.Schema({
-  name: {type: String, required: true},
+  name: {type: String, required: true, es_type: 'keyword'},
   position: {type: Number, default: 0},
-  permalink: String,
+  permalink: {type: String, es_type: 'keyword'},
   taxonomy: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxonomy'},
   parent: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxon'},
-  icon_filename: String,
-  description: String,
-  meta_title: String,
-  meta_description: String,
-  meta_keywords: String,
+  // Not required, but it's useful to keep awareness of this field
+  ancestors: [{
+      type: mongoose.Schema.Types.ObjectId, ref: 'Taxon'
+  }],
+  icon_filename: {type: String, es_type: 'keyword'},
+  description: {type: String, es_type: 'text'},
+  meta_title: {type: String, es_type: 'text'},
+  meta_description: {type: String, es_type: 'text'},
+  meta_keywords: {type: String, es_type: 'keyword'},
   created_at: {type: Date, default: Date.now()},
   updated_at: {type: Date, default: Date.now()}
 });
@@ -27,7 +34,16 @@ TaxonSchema.methods = {
 
 };
 
-TaxonSchema.plugin(tree);
 TaxonSchema.plugin(mongoosastic);
+// Add the mongooseTreeAncestors Plugin to the schema
+mongooseTreeAncestors(TaxonSchema, {
+    // Set the parent field name and model reference
+    parentFieldName: 'parent',
+    parentFieldRefModel: modelName,
 
-export default mongoose.model('Taxon', TaxonSchema);
+    // Set the ancestors field name and model reference
+    ancestorsFieldName: 'ancestors',
+    ancestorsFieldRefModel: modelName
+});
+
+export default mongoose.model(modelName, TaxonSchema);

@@ -5,14 +5,14 @@ var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var OrderItemSchema = new mongoose.Schema({
   order:{type: mongoose.Schema.Types.ObjectId, ref:'Order'},
-  name: String,
+  name: {type: String, es_type: 'keyword'},
   quantity: {type: Number, default: 0},
-  uri: String,
+  uri: {type: String, es_type: 'keyword'},
   variant: mongoose.Schema.Types.Mixed,
   user: {
     object:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    email: String,
-    name: String
+    email: {type: String, es_type: 'keyword'},
+    name: {type: String, es_type: 'keyword'}
   },
   created_at: {type: Date, default: Date.now()},
   updated_at: {type: Date, default: Date.now()}

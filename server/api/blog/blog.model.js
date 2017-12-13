@@ -1,31 +1,33 @@
 'use strict';
 import Comment from './comment.model';
 import Taggable from './taggable.model';
+//import User from '../user/user.model';
 
+//var UserSchema = User.schema;
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
-var CommentSchema = Comment.schema;
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
+var CommentSchema = Comment.schema;
 
 var BlogSchema = new mongoose.Schema({
-  title: { type: String, required: true,es_indexed:true},
-  photo_url: String,
-  summary: {type:String, es_indexed:true},
-  content: {type:String, es_indexed:true},
-  published: Boolean,
+  title: { type: String, required: true, es_type: 'text', es_indexed:true},
+  photo_url: {type: String, es_type: 'keyword'},
+  summary: {type:String, es_type: 'text', es_indexed:true},
+  content: {type:String, es_type: 'text', es_indexed:true},
+  published: {type: Boolean},
   created_at: {type: Date, default: Date.now, es_indexed: true},
   updated_at: {type: Date, default: Date.now()},
   author: {
-    _id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    name: String,
-    email: String
+    _id: {type: mongoose.Schema.Types.ObjectId, ref: 'User', es_type: 'object'},
+    name: {type: String, es_type: 'keyword'},
+    email: {type: String, es_type: 'keyword'}
   },
   comments: [CommentSchema],
-  tags: {type: [String]},
+  tags: {type: [String], es_type: ['keyword']},
   files: [{
-    name: String,
-    ctype: {type: String},
-    size: String,
-    uri: String
+    name: {type: String, es_type: 'keyword'},
+    ctype: {type: String, es_type: 'keyword'},
+    size: {type: String, es_type: 'keyword'},
+    uri: {type: String, es_type: 'keyword'}
   }]
 });
 
@@ -42,6 +44,7 @@ BlogSchema.methods = {
     Taggable.removeTaggable(type || 'Blog', taggable_id || this._id);
   }
 };
+
 
 BlogSchema.plugin(mongoosastic);
 var Blog = mongoose.model('Blog', BlogSchema);
@@ -69,7 +72,7 @@ Blog.createMapping({
   },
   "mappings": {
     "blog": {
-      "_all": {
+      "title summary content": { // all fields
         "analyzer": "kr_analyzer",
         "search_analyzer": "kr_analyzer"
       }
@@ -84,4 +87,6 @@ Blog.createMapping({
     console.log(mapping);
   }
 });
+
+
 export default Blog;

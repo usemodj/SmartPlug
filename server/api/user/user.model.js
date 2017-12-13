@@ -1,26 +1,32 @@
 'use strict';
 
 import crypto from 'crypto';
-var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 import {Schema} from 'mongoose';
+import Comment from '../blog/comment.model';
 
+var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
+
+
+const CommentSchema = Comment.schema;
 const authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
-  name: String,
+  name: {type: String, es_type: 'text', es_indexed:true},
   email: {
-    type: String,
-    lowercase: true
+    type: String, es_type: 'keyword', lowercase: true
   },
   role: {
-    type: String,
-    default: 'user'
+    type: String, es_type: 'keyword', default: 'user'
   },
-  password: String,
+  password: {type: String, es_type: 'keyword'},
+  comments: {type: Schema.Types.ObjectId, ref: 'Comment',
+    es_schema: CommentSchema, es_type: 'object', es_indexed:true, es_select: 'content'
+  },
   active: {type: Boolean, default: 'true'},
-  provider: String,
-  salt: String,
-  passwordToken: String,
+  provider: {type: String, es_type: 'keyword'},
+  salt: {type: String, es_type: 'keyword'},
+  passwordToken: {type: String, es_type: 'keyword'},
   facebook: {},
   twitter: {},
   google: {},
@@ -246,16 +252,20 @@ UserSchema.methods = {
       return null;
     }
 
-    var defaultIterations = 10000;
+    var defaultIterations = 100000;
     var defaultKeyLength = 64;
     var salt = new Buffer(this.salt, 'hex');
 
     if (!callback) {
-      return crypto.pbkdf2Sync(password, salt, defaultIterations, defaultKeyLength)
+      // Provides a synchronous Password-Based Key Derivation Function 2 (PBKDF2) implementation.
+      // <https://nodejs.org/api/crypto.html#crypto_crypto_pbkdf2sync_password_salt_iterations_keylen_digest>
+      return crypto.pbkdf2Sync(password, salt, defaultIterations, defaultKeyLength, 'sha512')
                    .toString('hex');
     }
 
-    return crypto.pbkdf2(password, salt, defaultIterations, defaultKeyLength, (err, key) => {
+    // Provides an asynchronous Password-Based Key Derivation Function 2 (PBKDF2) implementation.
+    // <https://nodejs.org/api/crypto.html#crypto_crypto_pbkdf2_password_salt_iterations_keylen_digest_callback>
+    return crypto.pbkdf2(password, salt, defaultIterations, defaultKeyLength, 'sha512', (err, key) => {
       if (err) {
         callback(err);
       } else {
@@ -265,4 +275,47 @@ UserSchema.methods = {
   }
 };
 
-export default mongoose.model('User', UserSchema);
+
+UserSchema.plugin(mongoosastic);
+var User = mongoose.model('User', UserSchema);
+User.createMapping({
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "kr_analyzer": {
+          "type": "custom",
+          "tokenizer": "kr_tokenizer",
+          "filter": ["trim", "lowercase","english_stop", "en_snow", "kr_filter"]
+        }
+      },
+      "filter": {
+        "en_snow": {
+          "type": "snowball",
+          "language": "English"
+        },
+        "english_stop": {
+          "type":       "stop",
+          "stopwords":  "_english_"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "user": {
+      "name email": { // all fields
+        "analyzer": "kr_analyzer",
+        "search_analyzer": "kr_analyzer"
+      }
+    }
+  }
+}, (err, mapping) => {
+  if(err){
+    console.log('error creating mapping (you can safely ignore this)');
+    console.log(err);
+  }else {
+    console.log('mapping created!');
+    console.log(mapping);
+  }
+});
+
+export default User;

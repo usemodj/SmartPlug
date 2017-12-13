@@ -4,13 +4,13 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var CartSchema = new mongoose.Schema({
-  name: String,
-  quantity: Number,
-  uri: String,
+  name: {type: String, es_type: 'text'},
+  quantity: {type: Number},
+  uri: {type: String, es_type: 'keyword'},
   user: {
     object: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    email: String,
-    name: String
+    email: {type: String, es_type: 'keyword'},
+    name: {type: String, es_type: 'keyword'}
   },
   variant: {type: mongoose.Schema.Types.ObjectId, ref:'Variant'},
   created_at: {type: Date, default: Date.now()},

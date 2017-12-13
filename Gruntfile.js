@@ -43,7 +43,11 @@ module.exports = function (grunt) {
       dev: {
         options: {
           script: '<%= yeoman.server %>',
-          debug: true
+          // Will turn into: `node OPT1 OPT2 ... OPTN path/to/server.js ARG1 ARG2 ... ARGN`
+          // (e.g. opts: ['node_modules/coffee-script/bin/coffee'] will correctly parse coffee-script)
+          opts: ['--inspect'],
+          args: [ ],
+          debug: false, // Set --debug (true | false | integer from 1024 to 65535, has precedence over breakOnFirstLine)
         }
       },
       prod: {
@@ -200,11 +204,21 @@ module.exports = function (grunt) {
     },
 
     // Use nodemon to run server in debug mode with an initial breakpoint
+    // --inspect[=host:port] :
+    //  * Enable inspector agent
+    //  * Bind to address or hostname host (default: 127.0.0.1)
+    //  * Listen on port port (default: 9229)
+    //
+    // --inspect-brk[=host:port] :
+    //  * Enable inspector agent
+    //  * Bind to address or hostname host (default: 127.0.0.1)
+    //  * Listen on port port (default: 9229)
+    //  * Break before user code starts
     nodemon: {
       debug: {
         script: '<%= yeoman.server %>',
         options: {
-          nodeArgs: ['--debug-brk'],
+          nodeArgs: ['--inspect-brk'],
           env: {
             PORT: process.env.PORT || 9000
           },
@@ -445,7 +459,7 @@ module.exports = function (grunt) {
       debug: {
         tasks: [
           'nodemon',
-          'node-inspector'
+        //  'node-inspector'
         ],
         options: {
           logConcurrentOutput: true
@@ -545,7 +559,7 @@ module.exports = function (grunt) {
       options: {
         sourceMap: true,
         babelrc: true,
-        presets: ['es2015'],
+        presets: ["env"],
         plugins: ["babel-plugin-add-module-exports"]
       },
       client: {

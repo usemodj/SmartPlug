@@ -5,7 +5,7 @@ angular.module('smartPlugApp')
     $stateProvider
       .state('admin.products.taxonomies', {
         abstract: true,
-        parent: 'admin.products',
+        //parent: 'admin.products',
         url: '/taxonomies',
         template: '<ui-view/>'
       })

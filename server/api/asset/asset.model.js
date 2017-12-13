@@ -4,12 +4,12 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var AssetSchema = new mongoose.Schema({
-  name: String,
-  type: {type: String},
-  size: String,
-  uri: String,
-  alt: String,
-  position: Number,
+  name: {type: String, es_type: 'text'},
+  type: {type: String, es_type: 'keyword'},
+  size: {type: String, es_type: 'keyword'},
+  uri: {type: String, es_type: 'keyword'},
+  alt: {type: String, es_type: 'text'},
+  position: {type: Number},
   product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
   variant: {type: mongoose.Schema.Types.ObjectId, ref: 'Variant'},
   created_at: {type: Date, default: Date.now()},
@@ -26,4 +26,6 @@ AssetSchema.methods = {
 };
 
 AssetSchema.plugin(mongoosastic);
-export default mongoose.model('Asset', AssetSchema);
+var Asset = mongoose.model('Asset', AssetSchema);
+
+export default Asset;

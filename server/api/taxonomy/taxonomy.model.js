@@ -5,10 +5,10 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var TaxonomySchema = new mongoose.Schema({
-  name: String,
+  name: {type: String, es_type: 'keyword'},
   position: {type: Number, default: 0},
   //taxon: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxon'},
-  tree: mongoose.Schema.Types.Mixed,
+  tree: {type: mongoose.Schema.Types.Mixed},
   created_at: {type: Date, default: Date.now()},
   updated_at: {type: Date, default: Date.now()}
 });

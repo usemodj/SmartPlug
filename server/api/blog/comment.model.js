@@ -1,15 +1,18 @@
 /**
  * Created by jinny on 16. 2. 2.
  */
+// import User from '../user/user.model';
+//
+// var UserSchema = User.schema;
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var CommentSchema = new mongoose.Schema({
-  content: String,
+  content: {type: String, es_type: 'text'},
   author: {
-    _id: mongoose.Schema.Types.ObjectId,
-    name: String,
-    email: String
+    _id: {type: mongoose.Schema.Types.ObjectId, ref: 'User', es_type: 'object'},
+    name: {type: String, es_type: 'keyword'},
+    email: {type: String, es_type: 'keyword'}
   },
   created_at: {type: Date, default: Date.now },
   updated_at: {type: Date, default: Date.now }
@@ -41,7 +44,7 @@ Comment.createMapping({
   },
   "mappings": {
     "comment": {
-      "_all": {
+      "content": { // all fields
         "analyzer": "kr_analyzer",
         "search_analyzer": "kr_analyzer"
       }

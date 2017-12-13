@@ -8,14 +8,14 @@ var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 //var TaxonSchema = Taxon.schema;
 
 var ProductSchema = new mongoose.Schema({
-  sku: String,
-  name: String,
-  properties: String,
-  description: String,
+  sku: {type: String, es_type: 'keyword'},
+  name: {type: String, es_type: 'text'},
+  properties: {type: String, es_type: 'text'},
+  description: {type: String, es_type: 'text'},
   available_on: {type: Date,index: true},
   deleted_at: {type: Date, index: true},
-  meta_description: String,
-  meta_keywords: String,
+  meta_description: {type: String, es_type: 'text'},
+  meta_keywords: {type: String, es_type: 'keyword'},
   created_at: {type: Date, default: Date.now(), index: true},
   updated_at: {type: Date, default: Date.now()},
   option_types: [{

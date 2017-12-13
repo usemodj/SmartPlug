@@ -7,35 +7,35 @@ var CommentSchema = Comment.schema;
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var SupportSchema = new mongoose.Schema({
-  subject: { type: String, required: true, index: true },
-  content: String,
-  status: {type: String, enum: ['Request', 'Feedback', 'Close']},
+  subject: { type: String, required: true, index: true, es_type: 'text'},
+  content: {type: String, es_type: 'text'},
+  status: {type: String, enum: ['Request', 'Feedback', 'Close'], es_type: 'keyword'},
   created_at: {type: Date, default: Date.now, index: true},
   updated_at: {type: Date, default: Date.now, index: true},
   views: {type: Number, default: 0},
   replies: {type: Number, default: 0},
   last_reply: {
     _id: {type: mongoose.Schema.Types.ObjectId, ref: 'Comment'},
-    subject: String,
-    created_at: Date
+    subject: {type: String, es_type: 'text'},
+    created_at: {type: Date}
   },
   last_replier: {
     _id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    name: String,
-    email: String
+    name: {type: String, es_type: 'keyword'},
+    email: {type: String, es_type: 'keyword'}
   },
   author: {
     _id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    name: String,
-    email: {type: String, index: true}
+    name: {type: String, es_type: 'keyword'},
+    email: {type: String, index: true, es_type: 'keyword'}
   },
   comments: [CommentSchema],
-  tags: {type: [String]},
+  tags: {type: [String], es_type: ['keyword']},
   files: [{
-    name: String,
-    type: {type: String},
-    size: String,
-    uri: String
+    name: {type: String, es_type: 'text'},
+    type: {type: String, es_type: 'keyword'},
+    size: {type: String, es_type: 'keyword'},
+    uri: {type: String, es_type: 'keyword'}
   }]
 });
 SupportSchema.methods = {

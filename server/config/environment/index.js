@@ -43,6 +43,7 @@ var all = {
   // MongoDB connection options
   mongo: {
     options: {
+      useMongoClient: true,
       db: {
         safe: true
       }

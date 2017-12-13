@@ -5,7 +5,7 @@ angular.module('smartPlugApp')
     $stateProvider
       .state('admin.supports', {
         abstract: true,
-        parent: 'admin',
+        //parent: 'admin',
         url: '/supports',
         template: '<div ui-view></div>'
       })

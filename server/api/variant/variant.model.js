@@ -6,19 +6,19 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var VariantSchema = new mongoose.Schema({
-  sku: {type: String},
-  weight: String,
-  height: String,
-  width: String,
-  depth: String,
+  sku: {type: String, es_type: 'keyword'},
+  weight: {type: String, es_type: 'keyword'},
+  height: {type: String, es_type: 'keyword'},
+  width: {type: String, es_type: 'keyword'},
+  depth: {type: String, es_type: 'keyword'},
   is_master: {type: Boolean, default: false},
   active: {type: Boolean, default: true},
   price: {type: Number, default: 0.0},
   cost_price: {type: Number, default: 0.0},
-  cost_currency: String,
+  cost_currency: {type: String, es_type: 'keyword'},
   quantity: {type: Number, default: 0},
   position: {type: Number, default: 0},
-  options: mongoose.Schema.Types.Mixed,
+  options: {type: mongoose.Schema.Types.Mixed},
   product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
   option_values: [{type: mongoose.Schema.Types.ObjectId, ref: 'OptionValue'}]
   //inventory: {type: mongoose.Schema.Types.ObjectId, ref: 'Inventory'}

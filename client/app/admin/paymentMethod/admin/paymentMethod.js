@@ -5,7 +5,7 @@ angular.module('smartPlugApp')
     $stateProvider
       .state('admin.products.paymentMethods', {
         abstract: true,
-        parent: 'admin.products',
+        //parent: 'admin.products',
         url: '/paymentMethods',
         template: '<ui-view/>'
       })

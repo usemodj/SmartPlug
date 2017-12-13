@@ -4,8 +4,8 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var OptionTypeSchema = new mongoose.Schema({
-  name: String,
-  presentation: String,
+  name: {type: String, es_type: 'keyword'},
+  presentation: {type: String, es_type: 'text'},
   position: {type: Number, default: 0},
   option_values: [{
     type: mongoose.Schema.Types.ObjectId, ref: 'OptionValue'

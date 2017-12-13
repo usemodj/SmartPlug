@@ -5,13 +5,13 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var OrderSchema = new mongoose.Schema({
-  number: {type: String, index: true},
-  state: String,
-  last_ip_address: String,
+  number: {type: String, index: true, es_type: 'keyword'},
+  state: {type: String, es_type: 'keyword'},
+  last_ip_address: {type: String, es_type: 'keyword'},
   user: {
     object:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    email: String,
-    name: String
+    email: {type: String, es_type: 'keyword'},
+    name: {type: String, es_type: 'keyword'}
   },
 
   order_items:[{type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem'}],
@@ -20,13 +20,13 @@ var OrderSchema = new mongoose.Schema({
   total: {type:Number, default: 0.0},
   payment_total: {type:Number, default: 0.0},
   shipment_total: {type:Number, default: 0.0},
-  shipment_state: String,
-  payment_state: String,
-  ship_info: String,
-  special_instructions: String,
-  currency: String,
-  confirmation_delivered: Boolean,
-  considered_risky: Boolean,
+  shipment_state: {type: String, es_type: 'keyword'},
+  payment_state: {type: String, es_type: 'keyword'},
+  ship_info: {type: String, es_type: 'text'},
+  special_instructions: {type: String, es_type: 'text'},
+  currency: {type: String, es_type: 'keyword'},
+  confirmation_delivered: {type: Boolean},
+  considered_risky: {type: Boolean},
 
   bill_address:{type: mongoose.Schema.Types.ObjectId, ref: 'Address'},
   ship_address:{type: mongoose.Schema.Types.ObjectId, ref: 'Address'},
@@ -37,11 +37,11 @@ var OrderSchema = new mongoose.Schema({
 
   approver: {
     object:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    email: String,
-    name: String
+    email: {type: String, es_type: 'keyword'},
+    name: {type: String, es_type: 'keyword'}
   },
-  approved_at: Date,
-  completed_at: Date,
+  approved_at: {type: Date},
+  completed_at: {type: Date},
   created_at: {type: Date, default: Date.now},
   updated_at: {type: Date, default: Date.now}
 });

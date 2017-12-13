@@ -8,11 +8,11 @@ var ShipmentSchema = new mongoose.Schema({
   order:{type: mongoose.Schema.Types.ObjectId, ref:'Order'},
   shipping_method:{type:mongoose.Schema.Types.ObjectId, ref: 'ShippingMethod'},
   address:{type:mongoose.Schema.Types.ObjectId, ref: 'Address'},
-  tracking: String,
+  tracking: {type: String, es_type: 'keyword'},
   number: {type: String, index: true},
   cost: {type: Number, default: 0.0},
-  shipped_at: Date,
-  state: String,
+  shipped_at: {type: Date},
+  state: {type: String, es_type: 'keyword'},
   created_at: {type: Date, default: Date.now},
   updated_at: {type: Date, default: Date.now}
 });

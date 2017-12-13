@@ -1,8 +1,8 @@
-$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
-@import '../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
-@import '../bower_components/bootstrap-social/bootstrap-social.scss';
+$icon-font-path: "../bower_components/bootstrap-sass/assets/fonts/bootstrap/";
+@import '../bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
+@import '../bower_components/bootstrap-social/bootstrap-social';
 $fa-font-path: "../bower_components/font-awesome/fonts/";
-@import '../bower_components/font-awesome/scss/font-awesome.scss';
+@import '../bower_components/font-awesome/scss/font-awesome';
 
 /**
  * App-wide Styles
@@ -185,4 +185,3 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 @import '../components/oauth-buttons/oauth-buttons.scss';
 @import '../components/pickadate/pickadate.scss';
 // endinjector
-

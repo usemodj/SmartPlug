@@ -6,9 +6,9 @@
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 
 var TaggableSchema = new mongoose.Schema({
-  tag: String,
-  type: {type: String},
-  taggable_id: mongoose.Schema.Types.ObjectId,
+  tag: {type: String, es_type: 'keyword'},
+  type: {type: String, es_type: 'keyword'},
+  taggable_id: {type: mongoose.Schema.Types.ObjectId},
   created_at: {type: Date, default: Date.now }
 });
 TaggableSchema.index({ tag: 1, type: 1});

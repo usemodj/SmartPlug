@@ -1,32 +1,38 @@
 'use strict';
 
 import Taggable from '../blog/taggable.model';
+//import Forum from '../forum/forum.model';
+//import User from '../user/user.model';
 import Post from './post.model';
+
+var PostSchema = Post.schema;
+//var ForumSchema = Forum.schema;
+//var UserSchema = User.schema;
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
-var PostSchema = Post.schema;
 
 var TopicSchema = new mongoose.Schema({
-  name: {type: String, required: true},
+  name: {type: String, es_type:'text', required: true},
   //content: String,
   sticky: {type: Boolean, default: false},
   active: {type: Boolean, default: true},
   locked: {type: Boolean, default: false},
   views: {type: Number, default: 0},
   replies: {type: Number, default: 0},
-  forum: {type: mongoose.Schema.Types.ObjectId, ref: 'Forum', index: true},
-  tags: {type: [String]},
+  forum: {type: mongoose.Schema.Types.ObjectId, ref: 'Forum', es_type: 'object'},
+  tags: {type: [String], es_type: 'nested'},
   last_post: {
-    object: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
-    name: String
+    object: {type: mongoose.Schema.Types.ObjectId, ref: 'Post', es_type: 'object'},
+    name: {type: String, es_type:'text'}
   },
   last_poster: {
-    object: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    name: String,
-    email: String
+    object: {type: mongoose.Schema.Types.ObjectId, ref: 'User', es_type: 'object'},
+    name: {type: String, es_type:'keyword'},
+    email: {type: String, es_type:'keyword'}
   },
   posts: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Post'
+    type: mongoose.Schema.Types.ObjectId, ref: 'Post', es_schema: PostSchema,
+    es_type: 'object', es_indexed:true, es_select: 'name content'
   }],
   created_at: {type: Date, default: Date.now(), index: true},
   updated_at: {type: Date, default: Date.now()}
@@ -70,7 +76,7 @@ Topic.createMapping({
   },
   "mappings": {
     "topic": {
-      "_all": {
+      "name tags": {
         "analyzer": "kr_analyzer",
         "search_analyzer": "kr_analyzer"
       }

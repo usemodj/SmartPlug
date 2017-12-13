@@ -5,7 +5,6 @@ angular.module('smartPlugApp')
     $stateProvider
       .state('admin.forums', {
         abstract: true,
-        parent: 'admin',
         url: '/forums',
         templateUrl: 'app/admin/forum/admin/layout.html'
       })
@@ -29,7 +28,7 @@ angular.module('smartPlugApp')
       })
       .state('admin.forums.topics', {
         abstract: true,
-        parent: 'admin.forums',
+        //parent: 'admin.forums',
         url: '/:forum_id/topics',
         template: '<div ui-view></div>'
       })
@@ -50,8 +49,7 @@ angular.module('smartPlugApp')
     $stateProvider
       .state('admin.topics', {
         abstract: true,
-        parent: 'admin.forums',
-        url: '/topics',
+        url: '/forums/topics',
         template: '<div ui-view></div>'
       })
       .state('admin.topics.tag', {

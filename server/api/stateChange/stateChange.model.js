@@ -4,9 +4,9 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
 
 var StateChangeSchema = new mongoose.Schema({
-  name: String,
-  previous_state: String,
-  next_state: String,
+  name: {type: String, es_type: 'keyword'},
+  previous_state: {type: String, es_type: 'keyword'},
+  next_state: {type: String, es_type: 'keyword'},
   order:{ type: mongoose.Schema.Types.ObjectId, ref:'Order'},
   user:{ type: mongoose.Schema.Types.ObjectId, ref:'User'},
 
