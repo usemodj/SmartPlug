@@ -7,14 +7,12 @@ angular.module('smartPlugApp.admin')
         abstract: true,
         authenticate: 'admin',
         url: '/users',
-        template: '<div ui-view></div>'
+        template: '<ui-view/>'
       })
       .state('admin.users.list', {
-        authenticate: 'admin',
         url: '',
         templateUrl: 'app/admin/user/user.html',
         controller: 'UserCtrl',
         controllerAs: 'vm'
       });
-
   });

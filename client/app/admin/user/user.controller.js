@@ -1,6 +1,29 @@
 'use strict';
 
-class UserCtrl {
+var EditUserCtrl = class EditUserCtrl {
+  constructor($uibModalInstance, appConfig, user){
+    this.$uibModalInstance = $uibModalInstance;
+    this.appConfig = appConfig;
+    this.user = user;
+    this.oldUser = angular.copy(user);
+  }
+
+  saveUser(form){
+    this.submitted = true;
+    if(form.$valid) {
+      this.$uibModalInstance.close(this.user);
+    }
+  }
+
+  cancelEdit(){
+    this.user.role = this.oldUser.role;
+    this.user.active = this.oldUser.active;
+    this.$uibModalInstance.dismiss('cancel');
+  }
+};
+
+
+var UserCtrl = class UserCtrl {
   constructor($state, $stateParams, $scope, $location, $window, $uibModal, socket, appConfig) {
     this.errors = {};
     this.success = '';
@@ -86,31 +109,10 @@ class UserCtrl {
       });
   }
 
-}
+};
 
 angular.module('smartPlugApp.admin')
   .controller('UserCtrl', UserCtrl);
 
-class EditUserCtrl {
-  constructor($uibModalInstance, appConfig, user){
-    this.$uibModalInstance = $uibModalInstance;
-    this.appConfig = appConfig;
-    this.user = user;
-    this.oldUser = angular.copy(user);
-  }
-
-  saveUser(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.$uibModalInstance.close(this.user);
-    }
-  }
-
-  cancelEdit(){
-    this.user.role = this.oldUser.role;
-    this.user.active = this.oldUser.active;
-    this.$uibModalInstance.dismiss('cancel');
-  }
-}
 angular.module('smartPlugApp.admin')
   .controller('EditUserCtrl', EditUserCtrl);

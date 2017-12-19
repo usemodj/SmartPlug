@@ -83,6 +83,68 @@ class AdminForumTopicCtrl {
 angular.module('smartPlugApp.admin')
   .controller('AdminForumTopicCtrl', AdminForumTopicCtrl);
 
+
+  class AdminEditForumTopicCtrl {
+    constructor(Auth, $scope, $http, $state, $stateParams, $uibModalInstance, post) {
+      this.errors = {};
+      this.success = '';
+      this.submitted = false;
+      this.Auth = Auth;
+      this.$http = $http;
+      this.$state = $state;
+      this.$stateParams = $stateParams;
+      this.$uibModalInstance = $uibModalInstance;
+      this.origin = angular.copy(post);
+      this.post = post;
+      this.files = [];
+
+      $scope.$on('fileSelected', (event, args) => {
+        //console.log(args.file);
+        $scope.$apply(() => this.files.push(args.file));
+      });
+    }
+
+    savePost(form){
+      this.submitted = true;
+      if(form.$valid) {
+        this.post.files = this.files;
+        this.$uibModalInstance.close(this.post);
+      }
+    }
+
+    cancelEdit(){
+      this.post.name = this.origin.name;
+      this.post.content = this.origin.content;
+      this.post.active = this.origin.active;
+      this.post.sticky = this.origin.sticky;
+      this.post.locked = this.origin.locked;
+
+      this.$uibModalInstance.dismiss('cancel');
+    }
+
+    removeFile(file){
+      var files = this.post.files;
+      if(files){
+        this.$http.post(`/api/admin/topics/${this.post.topic}/posts/${this.post._id}/removeFile`,{_id: this.post._id, uri: file.uri})
+          .then(() => {
+            files.splice(files.indexOf(file), 1);
+          })
+          .catch(err => {
+            this.errors.other = err.message || err;
+          });
+      }
+    }
+
+    back(){
+      this.$state.go('admin.forums.topics.list', {forum_id: this.$stateParams.forum_id});
+    }
+
+  }
+
+  angular.module('smartPlugApp')
+    .controller('AdminEditForumTopicCtrl', AdminEditForumTopicCtrl);
+
+
 class AdminViewForumTopicCtrl {
   constructor(Auth, Upload, $uibModal, $http, $state, $stateParams, $scope, socket) {
     this.errors = {};
@@ -123,7 +185,7 @@ class AdminViewForumTopicCtrl {
     post.tags = this.topic.tags;
     var modalInstance = this.$uibModal.open({
       templateUrl: 'app/admin/forum/admin/topic.edit.html',
-      controller: AdminEditTopicCtrl,
+      controller: AdminEditForumTopicCtrl,
       controllerAs: 'vm',
       resolve: {
         post: function () {
@@ -231,63 +293,3 @@ class AdminViewForumTopicCtrl {
 
 angular.module('smartPlugApp')
   .controller('AdminViewForumTopicCtrl', AdminViewForumTopicCtrl);
-
-class AdminEditForumTopicCtrl {
-  constructor(Auth, $scope, $http, $state, $stateParams, $uibModalInstance, post) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.$http = $http;
-    this.$state = $state;
-    this.$stateParams = $stateParams;
-    this.$uibModalInstance = $uibModalInstance;
-    this.origin = angular.copy(post);
-    this.post = post;
-    this.files = [];
-
-    $scope.$on('fileSelected', (event, args) => {
-      //console.log(args.file);
-      $scope.$apply(() => this.files.push(args.file));
-    });
-  }
-
-  savePost(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.post.files = this.files;
-      this.$uibModalInstance.close(this.post);
-    }
-  }
-
-  cancelEdit(){
-    this.post.name = this.origin.name;
-    this.post.content = this.origin.content;
-    this.post.active = this.origin.active;
-    this.post.sticky = this.origin.sticky;
-    this.post.locked = this.origin.locked;
-
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  removeFile(file){
-    var files = this.post.files;
-    if(files){
-      this.$http.post(`/api/admin/topics/${this.post.topic}/posts/${this.post._id}/removeFile`,{_id: this.post._id, uri: file.uri})
-        .then(() => {
-          files.splice(files.indexOf(file), 1);
-        })
-        .catch(err => {
-          this.errors.other = err.message || err;
-        });
-    }
-  }
-
-  back(){
-    this.$state.go('admin.forums.topics.list', {forum_id: this.$stateParams.forum_id});
-  }
-
-}
-
-angular.module('smartPlugApp')
-  .controller('AdminEditForumTopicCtrl', AdminEditForumTopicCtrl);

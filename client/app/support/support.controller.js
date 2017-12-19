@@ -78,6 +78,64 @@ class SupportCtrl {
 angular.module('smartPlugApp')
   .controller('SupportCtrl', SupportCtrl);
 
+  class EditSupportCtrl {
+    constructor(Auth, Support, $scope, $state, $uibModalInstance, support) {
+      this.errors = {};
+      this.success = '';
+      this.submitted = false;
+      this.Auth = Auth;
+      this.Support = Support;
+      this.$state = $state;
+      this.$uibModalInstance = $uibModalInstance;
+      this.origin = angular.copy(support);
+      this.support = support;
+      this.files = [];
+
+      $scope.$on('fileSelected', (event, args) => {
+        //console.log(args.file);
+        $scope.$apply(() => this.files.push(args.file));
+      });
+    }
+
+    saveSupport(form){
+      this.submitted = true;
+      if(form.$valid) {
+        this.support.files = this.files;
+        this.$uibModalInstance.close(this.support);
+      }
+    }
+
+    cancelSupport(){
+      this.support.subject = this.origin.subject;
+      this.support.content = this.origin.content;
+      this.support.tags = this.origin.tags;
+
+      this.$uibModalInstance.dismiss('cancel');
+    }
+
+    removeFile(file){
+      var files = this.support.files;
+      if(files){
+        this.Support.removeFile({_id: this.support._id, uri: file.uri}).$promise
+          .then( () => {
+            files.splice(files.indexOf(file), 1);
+          })
+          .catch(err => {
+            this.errors.other = err.message || err;
+          });
+      }
+    }
+
+    back(){
+      this.$state.go('supports.list');
+    }
+
+  }
+
+  angular.module('smartPlugApp')
+    .controller('EditSupportCtrl', EditSupportCtrl);
+
+
 class ViewSupportCtrl {
   constructor(Auth, Support, AdminSupport, Upload, $uibModal, $state, $stateParams, $scope, socket) {
     this.errors = {};
@@ -234,60 +292,3 @@ class ViewSupportCtrl {
 
 angular.module('smartPlugApp')
   .controller('ViewSupportCtrl', ViewSupportCtrl);
-
-class EditSupportCtrl {
-  constructor(Auth, Support, $scope, $state, $uibModalInstance, support) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.Support = Support;
-    this.$state = $state;
-    this.$uibModalInstance = $uibModalInstance;
-    this.origin = angular.copy(support);
-    this.support = support;
-    this.files = [];
-
-    $scope.$on('fileSelected', (event, args) => {
-      //console.log(args.file);
-      $scope.$apply(() => this.files.push(args.file));
-    });
-  }
-
-  saveSupport(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.support.files = this.files;
-      this.$uibModalInstance.close(this.support);
-    }
-  }
-
-  cancelSupport(){
-    this.support.subject = this.origin.subject;
-    this.support.content = this.origin.content;
-    this.support.tags = this.origin.tags;
-
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  removeFile(file){
-    var files = this.support.files;
-    if(files){
-      this.Support.removeFile({_id: this.support._id, uri: file.uri}).$promise
-        .then( () => {
-          files.splice(files.indexOf(file), 1);
-        })
-        .catch(err => {
-          this.errors.other = err.message || err;
-        });
-    }
-  }
-
-  back(){
-    this.$state.go('supports.list');
-  }
-
-}
-
-angular.module('smartPlugApp')
-  .controller('EditSupportCtrl', EditSupportCtrl);

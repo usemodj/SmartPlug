@@ -20,16 +20,18 @@ import passport from 'passport';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import mongoose from 'mongoose';
-var mongoStore = connectMongo(session);
+var MongoStore = connectMongo(session);
 
-export default function(app) {
+exports = module.exports = function(app) {
   var env = app.get('env');
 
   app.set('views', config.root + '/server/views');
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(compression());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
@@ -45,7 +47,7 @@ export default function(app) {
     secret: config.secrets.session,
     saveUninitialized: true,
     resave: false,
-    store: new mongoStore({
+    store: new MongoStore({
       mongooseConnection: mongoose.connection,
       db: 'smart-plug'
     })
@@ -75,7 +77,7 @@ export default function(app) {
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
     app.use(express.static(app.get('appPath')));
-    app.use(morgan('dev'));
+    // app.use(morgan('dev'));
   }
 
   if ('development' === env) {
@@ -85,7 +87,7 @@ export default function(app) {
   if ('development' === env || 'test' === env) {
     app.use(express.static(path.join(config.root, '.tmp')));
     app.use(express.static(app.get('appPath')));
-    app.use(morgan('dev'));
+    // app.use(morgan('dev'));
     app.use(errorHandler()); // Error handler - has to be last
   }
 }

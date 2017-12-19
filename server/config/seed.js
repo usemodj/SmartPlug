@@ -7,7 +7,7 @@
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
 
-Thing.find({}).removeAsync()
+Thing.find({}).remove().exec()
   .then(() => {
     Thing.create({
       name: 'Development Tools',
@@ -37,9 +37,10 @@ Thing.find({}).removeAsync()
       info: 'Easily deploy your app to Heroku or Openshift with the heroku ' +
              'and openshift subgenerators'
     });
+    return null;
   });
 
-User.find({}).removeAsync()
+User.find({}).remove().exec()
   .then(() => {
     User.createAsync({
       provider: 'local',
@@ -55,5 +56,8 @@ User.find({}).removeAsync()
     })
     .then(() => {
       console.log('finished populating users');
+      return null;
     });
+
+    return null;
   });

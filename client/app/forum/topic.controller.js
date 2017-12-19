@@ -1,6 +1,6 @@
 'use strict';
 
-class TopicCtrl {
+var TopicCtrl = class TopicCtrl {
   constructor(Auth, $state, $stateParams, $http, $scope, $location, $window, socket) {
     this.errors = {};
     this.success = '';
@@ -63,7 +63,6 @@ class TopicCtrl {
     });
   }
 
-
   search(form){
     this.submitted = true;
     this.$window.location.href = `/forums/search/${this.q}`;
@@ -78,12 +77,9 @@ class TopicCtrl {
     });
   }
 
-}
+};
 
-angular.module('smartPlugApp')
-  .controller('TopicCtrl', TopicCtrl);
-
-class NewTopicCtrl {
+var NewTopicCtrl = class NewTopicCtrl {
   constructor(Auth, Upload, $scope, $state, $stateParams) {
     this.errors = {};
     this.success = '';
@@ -134,12 +130,64 @@ class NewTopicCtrl {
     this.$state.go('topics.list', {forum_id: this.$stateParams.forum_id});
   }
 
-}
+};
 
-angular.module('smartPlugApp')
-  .controller('NewTopicCtrl', NewTopicCtrl);
+var EditTopicCtrl = class EditTopicCtrl {
+  constructor(Auth, $scope, $http, $state, $uibModalInstance, post) {
+    this.errors = {};
+    this.success = '';
+    this.submitted = false;
+    this.Auth = Auth;
+    this.$http = $http;
+    this.$state = $state;
+    this.$uibModalInstance = $uibModalInstance;
+    this.origin = angular.copy(post);
+    this.post = post;
+    this.files = [];
 
-class ViewTopicCtrl {
+    $scope.$on('fileSelected', (event, args) => {
+      //console.log(args.file);
+      $scope.$apply(() => this.files.push(args.file));
+    });
+  }
+
+  savePost(form){
+    this.submitted = true;
+    if(form.$valid) {
+      this.post.files = this.files;
+      this.$uibModalInstance.close(this.post);
+    }
+  }
+
+  cancelEdit(){
+    this.post.name = this.origin.name;
+    this.post.content = this.origin.content;
+    this.post.sticky = this.origin.sticky;
+    this.post.locked = this.origin.locked;
+
+    this.$uibModalInstance.dismiss('cancel');
+  }
+
+  removeFile(file){
+    var files = this.post.files;
+    if(files){
+      this.$http.post(`/api/topics/${this.post.topic}/posts/${this.post._id}/removeFile`,{_id: this.post._id, uri: file.uri})
+        .then(() => {
+          files.splice(files.indexOf(file), 1);
+        })
+        .catch(err => {
+          this.errors.other = err.message || err;
+        });
+    }
+  }
+
+  back(){
+    this.$state.go('topics.list');
+  }
+
+};
+
+var ViewTopicCtrl = class ViewTopicCtrl {
   constructor(Auth, Upload, $uibModal, $http, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
@@ -323,65 +371,17 @@ class ViewTopicCtrl {
     this.$state.go('topics.list');
   }
 
-}
+};
+
 
 angular.module('smartPlugApp')
   .controller('ViewTopicCtrl', ViewTopicCtrl);
 
-class EditTopicCtrl {
-  constructor(Auth, $scope, $http, $state, $uibModalInstance, post) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.$http = $http;
-    this.$state = $state;
-    this.$uibModalInstance = $uibModalInstance;
-    this.origin = angular.copy(post);
-    this.post = post;
-    this.files = [];
+angular.module('smartPlugApp')
+  .controller('NewTopicCtrl', NewTopicCtrl);
 
-    $scope.$on('fileSelected', (event, args) => {
-      //console.log(args.file);
-      $scope.$apply(() => this.files.push(args.file));
-    });
-  }
-
-  savePost(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.post.files = this.files;
-      this.$uibModalInstance.close(this.post);
-    }
-  }
-
-  cancelEdit(){
-    this.post.name = this.origin.name;
-    this.post.content = this.origin.content;
-    this.post.sticky = this.origin.sticky;
-    this.post.locked = this.origin.locked;
-
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  removeFile(file){
-    var files = this.post.files;
-    if(files){
-      this.$http.post(`/api/topics/${this.post.topic}/posts/${this.post._id}/removeFile`,{_id: this.post._id, uri: file.uri})
-        .then(() => {
-          files.splice(files.indexOf(file), 1);
-        })
-        .catch(err => {
-          this.errors.other = err.message || err;
-        });
-    }
-  }
-
-  back(){
-    this.$state.go('topics.list');
-  }
-
-}
+angular.module('smartPlugApp')
+  .controller('TopicCtrl', TopicCtrl);
 
 angular.module('smartPlugApp')
   .controller('EditTopicCtrl', EditTopicCtrl);

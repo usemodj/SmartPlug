@@ -2,18 +2,20 @@
 
 import User from '../api/user/user.model';
 
-User.countAsync({role: 'admin'})
+User.count({role: 'admin'}).exec()
   .then(count => {
     if(count > 0) return;
-    User.createAsync({
+    User.create({
       provider: 'local',
       role: 'admin',
       name: 'Admin',
       email: 'admin@example.com',
       password: 'admin'
-    })
-      .then(() => {
-        console.log('finished populating admin user');
-      });
+    }).exec()
+    .then(() => {
+      console.log('finished populating admin user');
+      return null;
+    });
 
-  });
+    return null;
+});

@@ -62,7 +62,7 @@ class AdminAssetCtrl {
 
   list(){
     this.submitted = true;
-    this.Asset.list({product_id: this.$stateParams.product_id}).$promise
+    this.Asset.list({productId: this.$stateParams.productId}).$promise
       .then(response => {
         console.log(response);
         this.variants = this.$filter('orderBy')(response.variants, 'position', false);
@@ -76,7 +76,7 @@ class AdminAssetCtrl {
         if(this.variants){
           this.product = this.variants[0].product;
           for(var k = 0; k < this.variants.length; ++k){
-            if(this.variants[k].is_master) {
+            if(this.variants[k].isMaster) {
               this.masterVariant = this.variants[k];
               this.variants.splice(this.variants.indexOf(this.masterVariant), 1);
               break;
@@ -95,7 +95,7 @@ class AdminAssetCtrl {
     this.submitted = true;
     this.progress = 0;
     if(form.$valid) {
-      this.asset.product = this.$stateParams.product_id;
+      this.asset.product = this.$stateParams.productId;
       if(!this.asset.variant) {
         this.asset.variant = this.masterVariant._id;
       }
@@ -111,7 +111,7 @@ class AdminAssetCtrl {
         this.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
       })
       .success((data, status, headers, config) => {
-        this.$state.go('admin.products.assets.list',{product_id: this.$stateParams.product_id}, {reload:true});
+        this.$state.go('admin.products.assets.list',{productId: this.$stateParams.productId}, {reload:true});
       })
       .error((data, status, headers, config) => {
         this.errors.other = data;

@@ -1,42 +1,51 @@
-<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarController as nav">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main" aria-expanded="false" aria-controls="navbar-main" ng-click="nav.isCollapsed = !nav.isCollapsed">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="/"><img src="/assets/images/logo.png"></a>
-    </div>
-    <div collapse="nav.isCollapsed" class="navbar-collapse collapse" id="navbar-main">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="item in nav.menu" ui-sref-active="active">
-            <a ui-sref="{{item.state}}">{{item.title}}</a>
+  <nav class="navbar navbar-expand-sm navbar-light bg-teal" ng-controller="NavbarController as nav">
+    <a class="navbar-brand" href="#">
+      <!-- <img src="/assets/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt=""> -->
+      SmartPlug
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation"
+      data-target="#navbar-main" aria-controls="navbar-main" ng-click="nav.isCollapsed = !nav.isCollapsed">{{nav.isCollapsed}}
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar-main">
+      <ul class="navbar-nav list-group mr-auto">
+        <li class="nav-item list-group-item" ng-repeat="item in nav.menu" ui-sref-active="active">
+          <a class="nav-link" ui-sref="{{item.state}}">{{item.title}}</a>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li ng-hide="nav.isLoggedIn()" ui-sref-active="active"><a ui-sref="signup">Sign up</a></li>
-        <li ng-hide="nav.isLoggedIn()" ui-sref-active="active"><a ui-sref="login">Login</a></li>
-        <li ng-show="nav.isLoggedIn()"><p class="navbar-text">Hello {{ nav.getCurrentUser().name }}</p> </li>
-        <li ng-show="nav.isLoggedIn()" ui-sref-active="active"><a ui-sref="orders.list">My Order</a></li>
-        <li ng-show="nav.isLoggedIn()" ui-sref-active="active" class="dropdown pointer">
-          <a class="dropdown-toggle" data-toggle="dropdown">
-              <span class="glyphicon glyphicon-flag"></span>
-              <span class="hidden-tablet">Admin</span>
-              <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-            <li ng-class="{active:$state.includes('admin.orders')}" ng-show="nav.isAdmin()"><a role="menuitem" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Orders</a> </li>
-            <li ng-class="{active:$state.includes('admin.products')}" ng-show="nav.isAdmin()"><a role="menuitem" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Products</a> </li>
-            <li ng-class="{active:$state.includes('admin.forums')}" ng-show="nav.isAdmin()"><a ui-sref="admin.forums.list"><span class="fa fa-commenting"></span> Forums</a></li>
-            <li ng-class="{active:$state.includes('admin.supports')}" ng-show="nav.isAdmin()"><a ui-sref="admin.supports.list"><span class="fa fa-user"></span> Supports</a></li>
-            <li active-menu="settings"><a ui-sref="settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-            <li ng-class="{active:$state.includes('admin.users')}" ng-show="nav.isAdmin()"><a ui-sref="admin.users.list"><span class="fa fa-user-plus"></span> Users</a></li>
-          </ul>
-        </li>
-        <li ng-show="nav.isLoggedIn()"><a ui-sref="logout">Logout</a></li>
-      </ul>
     </div>
-  </div>
-</div>
+  </nav>
+<!--
+  <nav class="navbar navbar-expand-sm navbar-light bg-teal" ng-controller="NavbarController as nav">
+      <ul class="navbar-nav list-group ml-auto mt-2 mt-lg-0">
+        <li class="nav-item list-group-item" ng-hide="nav.isLoggedIn()" ui-sref-active="active"><a ui-sref="signup">Sign up</a></li>
+        <li class="nav-item list-group-item" ng-hide="nav.isLoggedIn()" ui-sref-active="active"><a ui-sref="login">Login</a></li>
+        <li class="nav-item list-group-item" ng-show="nav.isLoggedIn()">
+          <p class="navbar-text">Hello {{ nav.getCurrentUser().name }}</p>
+        </li>
+        <li class="nav-item list-group-item" ng-show="nav.isLoggedIn()" ui-sref-active="active"><a ui-sref="orders.list">My Order</a></li>
+        <li class="nav-item list-group-item" ng-show="nav.isLoggedIn()" ui-sref-active="active">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-flag"></span> Admin
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" ng-class="{active:$state.includes('admin.orders')}" ng-show="nav.isAdmin()" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Orders</a>
+              <a class="dropdown-item" ng-class="{active:$state.includes('admin.products')}" ng-show="nav.isAdmin()" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Products</a>
+              <a class="dropdown-item" ng-class="{active:$state.includes('admin.forums')}" ng-show="nav.isAdmin()" ui-sref="admin.forums.list"><span class="fa fa-commenting"></span> Forums</a>
+              <a class="dropdown-item" ng-class="{active:$state.includes('admin.supports')}" ng-show="nav.isAdmin()" ui-sref="admin.supports.list"><span class="fa fa-user"></span> Supports</a>
+              <a class="dropdown-item" active-menu="settings" ui-sref="settings"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+              <a class="dropdown-item" ng-class="{active:$state.includes('admin.users')}" ng-show="nav.isAdmin()"><a ui-sref="admin.users.list"><span class="fa fa-user-plus"></span> Users</a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item list-group-item" ng-show="nav.isLoggedIn()"><a ui-sref="logout">Logout</a></li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </nav>
+  -->

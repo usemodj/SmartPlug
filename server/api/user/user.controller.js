@@ -12,21 +12,21 @@ import path from 'path';
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
   return function(err) {
-    res.status(statusCode).json(err);
-  }
+    return res.status(statusCode).json(err);
+  };
 }
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
-    res.status(statusCode).send(err);
+    return res.status(statusCode).send(err);
   };
 }
 
 function respondWith(res, statusCode) {
   statusCode = statusCode || 200;
   return function() {
-    res.status(statusCode).end();
+    return res.status(statusCode).end();
   };
 }
 
@@ -44,7 +44,7 @@ export function index(req, res) {
   if(role) where.role = role;
   if(active || active === false) where.active = active;
 
-  User.countAsync(where)
+  User.count(where).execAsync()
   .then(count => {
       if(count === 0){
         return [];
@@ -53,9 +53,13 @@ export function index(req, res) {
       var maxRangeSize = clientLimit;
       var queryParams = paginate(req, res, totalItems, maxRangeSize);
 
-      return User.where(where).limit(queryParams.limit).skip(queryParams.skip).sort('-created_at').findAsync('-salt -password');
+      return User.find().where(where).limit(queryParams.limit)
+      .skip(queryParams.skip).sort('-created_at')
+      .select('-salt -password')
+      .execAsync();
   }).then(users => {
-    res.status(200).json(users);
+    console.log(users);
+    return  res.status(200).json(users);
   })
   .catch(handleError(res));
 }
@@ -72,7 +76,7 @@ export function create(req, res, next) {
       var token = jwt.sign({ _id: user._id }, config.secrets.session, {
         expiresIn: 60 * 60 * 5
       });
-      res.json({ token });
+      return res.json({ token });
     })
     .catch(validationError(res));
 }
@@ -88,7 +92,7 @@ export function show(req, res, next) {
       if (!user) {
         return res.status(404).end();
       }
-      res.json(user.profile);
+      return res.json(user.profile);
     })
     .catch(err => next(err));
 }
@@ -100,7 +104,7 @@ export function show(req, res, next) {
 export function destroy(req, res) {
   User.findByIdAndRemoveAsync(req.params.id)
     .then(function() {
-      res.status(204).end();
+      return res.status(204).end();
     })
     .catch(handleError(res));
 }
@@ -119,7 +123,7 @@ export function changePassword(req, res, next) {
         user.password = newPass;
         return user.saveAsync()
           .then(() => {
-            res.status(204).end();
+            return res.status(204).end();
           })
           .catch(validationError(res));
       } else {
@@ -135,10 +139,10 @@ export function updateUser(req, res, next){
     active: user.active
   }, {new: true})
   .then(user => {
-    res.status(200).json(user);
+    return res.status(200).json(user);
   })
   .catch(err => {
-    res.status(500).json(err.message || err);
+    return res.status(500).json(err.message || err);
   });
 }
 /**
@@ -147,12 +151,13 @@ export function updateUser(req, res, next){
 export function me(req, res, next) {
   var userId = req.user._id;
 
-  User.findOneAsync({ _id: userId }, '-salt -password')
+  User.findOne({ _id: userId })
+    .select('-salt -password').execAsync()
     .then(user => { // don't ever give out the password or salt
       if (!user) {
         return res.status(401).end();
       }
-      res.json(user);
+      return res.json(user);
     })
     .catch(err => next(err));
 }
@@ -161,7 +166,7 @@ export function me(req, res, next) {
  * Authentication callback
  */
 export function authCallback(req, res, next) {
-  res.redirect('/');
+  return res.redirect('/');
 }
 
 /**
@@ -179,13 +184,13 @@ export function getForgotPasswordToken(req, res, next){
         return res.status(404).json(`Your email is connected with social site: ${user.provider}.`);
       }
       user.makePasswordToken(user => {
-        user.saveAsync();
-        res.json( user);
+        user.save();
+        return res.json( user);
       });
     })
     .catch(err => {
       //console.log(err.message);
-      res.status(500).json(err.message);
+      return res.status(500).json(err.message);
     });
 }
 /**
@@ -210,7 +215,7 @@ export function mailForgotPasswordToken(req, res, next){
             //console.log(filename)
             fs.readFile(filename, function (err, contents) {
               if (err) {
-                log.error(err);
+                console.error(err);
                 return res.status(500).json('Email sending fails.');
               }
               //console.log(contents);
@@ -233,7 +238,6 @@ export function mailForgotPasswordToken(req, res, next){
                 // if you don't want to use this transport object anymore, uncomment following line
                 //transport.close(); // close the connection pool
                 return res.status(200).send();
-
               });
             });
           });
@@ -241,7 +245,7 @@ export function mailForgotPasswordToken(req, res, next){
     })
     .catch(err => {
       //console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     });
 }
 
@@ -261,13 +265,12 @@ export function resetPasswordByToken(req, res, next){
     }
     user.password = password;
     user.passwordToken = undefined;
-    return user.saveAsync();
+    return user.saveSync();
   })
   .then(user => {
-    res.status(200).send();
+    return res.status(200).send();
   })
   .catch(err => {
-    res.status(500).json(err.message);
-
+    return res.status(500).json(err.message);
   });
 }

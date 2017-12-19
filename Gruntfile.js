@@ -30,12 +30,14 @@ module.exports = function (grunt) {
 
     // Project settings
     pkg: grunt.file.readJSON('package.json'),
+
     yeoman: {
       // configurable paths
       client: require('./bower.json').appPath || 'client',
       server: 'server',
       dist: 'dist'
     },
+
     express: {
       options: {
         port: process.env.PORT || 9000
@@ -45,7 +47,7 @@ module.exports = function (grunt) {
           script: '<%= yeoman.server %>',
           // Will turn into: `node OPT1 OPT2 ... OPTN path/to/server.js ARG1 ARG2 ... ARGN`
           // (e.g. opts: ['node_modules/coffee-script/bin/coffee'] will correctly parse coffee-script)
-          opts: ['--inspect'],
+          opts: ['--inspect', '--trace-warnings'],
           args: [ ],
           debug: false, // Set --debug (true | false | integer from 1024 to 65535, has precedence over breakOnFirstLine)
         }
@@ -56,16 +58,19 @@ module.exports = function (grunt) {
         }
       }
     },
+
     open: {
       server: {
         url: 'http://localhost:<%= express.options.port %>'
       }
     },
+
     watch: {
-      babel: {
-        files: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
-        tasks: ['newer:babel:client']
-      },
+      // browserify: {
+      //   files: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
+      //   tasks: ['newer:browserify:client']
+      // },
+
       ngconstant: {
         files: ['<%= yeoman.server %>/config/environment/shared.js'],
         tasks: ['ngconstant']
@@ -122,9 +127,97 @@ module.exports = function (grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       }
-    },
+    }, // End of `watch`
+
 
     // Make sure code styles are up to par and there are no obvious mistakes
+    //
+    // Compiles ES6 to JavaScript using Babel
+    // <https://github.com/babel/grunt-babel>
+    // options: <https://babeljs.io/docs/usage/api/#options>
+    // babel: {
+    //   options: {
+    //     sourceMap: true,
+    //     // babelrc: true,
+    //     // extends:	'.',	// A path to an `.babelrc` file to extend
+    //     // sourceType:	'module', // Indicate the mode the code should be parsed in. Can be either `'script'` or `'module'`.
+    //     presets: ["env"],
+    //     plugins: ["angularjs-annotate"], // ["babel-plugin-add-module-exports"]
+    //   },
+    //   client: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.client %>',
+    //       src: ['{app,components}/**/!(*.spec).js'],
+    //       dest: '.tmp'
+    //     }]
+    //   },
+    //   server: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.server %>',
+    //       src: ['**/*.{js,json}'],
+    //       dest: '<%= yeoman.dist %>/<%= yeoman.server %>'
+    //     }]
+    //   }
+    // },
+    // `browserify` use a node-style `require()` to organize your browser code and load modules installed by `npm`.
+    // <https://github.com/browserify/browserify>
+    browserify: {
+      // tmp: {
+      //     // files: {
+      //     //     // destination for transpiled js : source js
+      //     //     'dist/myproject.js': 'src/index.es6'
+      //     // },
+      //     files: [{
+      //       expand: true,
+      //       cwd: '.tmp/concat',
+      //       src: '**/*.js',
+      //       dest: '.tmp/concat',
+      //     }],
+      //     options: {
+      //         transform: [['babelify', { presets: "env" }]],
+      //         browserifyOptions: {
+      //             debug: true
+      //         }
+      //     }
+      // },
+
+      options: {
+          // transform: [['babelify', { presets: ["babel-preset-env"], plugins: ["angularjs-annotate"] }]],
+          transform: [['babelify', { presets: ["env"] }]],
+          browserifyOptions: {
+              // plugin: ['babel-plugin-angularjs-annotate'],
+              debug: true
+          }
+      },
+      client: {
+        files: [
+          {
+          expand: true,
+          cwd: '<%= yeoman.client %>',
+          src: ['{app,components}/**/!(*.spec).js'],
+          dest: '.tmp'
+        },
+        {
+          expand: true,
+          cwd: '.tmp/concat',
+          src: '**/*.js',
+          dest: '.tmp/concat',
+        }
+      ]
+      },
+
+      // server: {
+      //   files: [{
+      //     expand: true,
+      //     cwd: '<%= yeoman.server %>',
+      //     src: ['**/*.{js,json}'],
+      //     dest: '<%= yeoman.dist %>/<%= yeoman.server %>'
+      //   }]
+      // }
+  },
+
     jshint: {
       options: {
         jshintrc: '<%= yeoman.client %>/.jshintrc',
@@ -181,7 +274,8 @@ module.exports = function (grunt) {
       options: {
         map: true,
         processors: [
-          require('autoprefixer')({browsers: ['last 2 version']})
+          require('autoprefixer')({browsers: ['last 2 version']}),
+          require('postcss-flexbugs-fixes')
         ]
       },
       dist: {
@@ -247,8 +341,6 @@ module.exports = function (grunt) {
           '/es5-shim/',
           /font-awesome\.css/,
           /bootstrap\.css/,
-          /bootstrap-sass-official/,
-          /bootstrap-social\.css/
         ]
       },
       client: {
@@ -309,19 +401,6 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.client %>/assets/images',
           src: '{,*/}*.{png,jpg,jpeg,gif,svg}',
           dest: '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images'
-        }]
-      }
-    },
-
-    // Allow the use of non-minsafe AngularJS files. Automatically makes it
-    // minsafe compatible so Uglify does not destroy the ng references
-    ngAnnotate: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/concat',
-          src: '**/*.js',
-          dest: '.tmp/concat'
         }]
       }
     },
@@ -449,11 +528,11 @@ module.exports = function (grunt) {
         'ngconstant'
       ],
       server: [
-        'newer:babel:client',
+        'newer:browserify:client',
         'sass',
       ],
       test: [
-        'newer:babel:client',
+        'newer:browserify:client',
         'sass',
       ],
       debug: {
@@ -466,7 +545,7 @@ module.exports = function (grunt) {
         }
       },
       dist: [
-        'newer:babel:client',
+        'newer:browserify:client',
         'sass',
         'imagemin'
       ]
@@ -552,32 +631,6 @@ module.exports = function (grunt) {
         NODE_ENV: 'production'
       },
       all: localConfig
-    },
-
-    // Compiles ES6 to JavaScript using Babel
-    babel: {
-      options: {
-        sourceMap: true,
-        babelrc: true,
-        presets: ["env"],
-        plugins: ["babel-plugin-add-module-exports"]
-      },
-      client: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.client %>',
-          src: ['{app,components}/**/!(*.spec).js'],
-          dest: '.tmp'
-        }]
-      },
-      server: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.server %>',
-          src: ['**/*.{js,json}'],
-          dest: '<%= yeoman.dist %>/<%= yeoman.server %>'
-        }]
-      }
     },
 
     // Compiles Sass to CSS
@@ -833,11 +886,12 @@ module.exports = function (grunt) {
     'useminPrepare',
     'postcss',
     'ngtemplates',
+    'browserify:client',
     'concat',
-    'ngAnnotate',
+    // 'browserify:client',
     'copy:dist',
     'mkdir:upload',
-    'babel:server',
+    // 'ngAnnotate:server',
     'cdnify',
     'cssmin',
     'uglify',

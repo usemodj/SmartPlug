@@ -3,10 +3,12 @@
 import crypto from 'crypto';
 import {Schema} from 'mongoose';
 import Comment from '../blog/comment.model';
+import {Promise} from 'bluebird';
 
-var mongoose = require('bluebird').promisifyAll(require('mongoose'));
-var mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
-
+var mongoose = Promise.promisifyAll(require('mongoose'));
+var mongoosastic = Promise.promisifyAll(require('mongoosastic'));
+// Use `bluebird` as default Promise Library
+mongoose.Promise = Promise;
 
 const CommentSchema = Comment.schema;
 const authTypes = ['github', 'twitter', 'facebook', 'google'];
@@ -68,7 +70,7 @@ UserSchema
     if (authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
-    return email.length;
+    return email.length > 0;
   }, 'Email cannot be blank');
 
 // Validate empty password
@@ -78,23 +80,23 @@ UserSchema
     if (authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
-    return password.length;
+    return password.length > 0;
   }, 'Password cannot be blank');
 
 // Validate email is not taken
 UserSchema
   .path('email')
-  .validate(function(value, respond) {
+  .validate(function(value) {
     var self = this;
     return this.constructor.findOneAsync({ email: value })
       .then(function(user) {
         if (user) {
           if (self.id === user.id) {
-            return respond(true);
+            return true;
           }
-          return respond(false);
+          return false;
         }
-        return respond(true);
+        return true;
       })
       .catch(function(err) {
         throw err;
@@ -102,7 +104,7 @@ UserSchema
   }, 'The specified email address is already in use.');
 
 var validatePresenceOf = function(value) {
-  return value && value.length;
+  return value && value.length > 0;
 };
 
 /**
@@ -116,23 +118,25 @@ UserSchema
     }
 
     if (!validatePresenceOf(this.password) && authTypes.indexOf(this.provider) === -1) {
-      next(new Error('Invalid password'));
+      return next(new Error('Invalid password'));
     }
 
     // Make salt with a callback
     this.makeSalt((saltErr, salt) => {
       if (saltErr) {
-        next(saltErr);
+        return next(saltErr);
       }
       this.salt = salt;
       this.encryptPassword(this.password, (encryptErr, hashedPassword) => {
         if (encryptErr) {
-          next(encryptErr);
+          return next(encryptErr);
         }
         this.password = hashedPassword;
-        next();
+        return next();
       });
     });
+
+    return null;
   });
 
 /**
@@ -165,11 +169,12 @@ UserSchema.methods = {
       }
 
       if (this.password === pwdGen) {
-        callback(null, true);
+        return callback(null, true);
       } else {
-        callback(null, false);
+        return callback(null, false);
       }
     });
+    return null;
   },
 
   /**
@@ -200,9 +205,9 @@ UserSchema.methods = {
 
     return crypto.randomBytes(byteSize, (err, salt) => {
       if (err) {
-        callback(err);
+        return callback(err);
       } else {
-        callback(null, salt.toString('hex'));
+        return callback(null, salt.toString('hex'));
       }
     });
   },
@@ -234,9 +239,11 @@ UserSchema.methods = {
           return callback(encryptErr);
         }
         this.passwordToken = hashedPassword;
-        callback(this);
+        return callback(this);
       });
     });
+
+    return null;
   },
 
   /**
@@ -267,12 +274,13 @@ UserSchema.methods = {
     // <https://nodejs.org/api/crypto.html#crypto_crypto_pbkdf2_password_salt_iterations_keylen_digest_callback>
     return crypto.pbkdf2(password, salt, defaultIterations, defaultKeyLength, 'sha512', (err, key) => {
       if (err) {
-        callback(err);
+        return callback(err);
       } else {
-        callback(null, key.toString('hex'));
+        return callback(null, key.toString('hex'));
       }
     });
   }
+
 };
 
 
@@ -316,6 +324,7 @@ User.createMapping({
     console.log('mapping created!');
     console.log(mapping);
   }
+  return null;
 });
 
 export default User;

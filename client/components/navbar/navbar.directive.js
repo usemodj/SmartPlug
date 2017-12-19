@@ -3,7 +3,7 @@
 angular.module('smartPlugApp')
   .directive('navbar', () => ({
     templateUrl: 'components/navbar/navbar.html',
-    restrict: 'E',
+    restrict: 'EA',
     controller: 'NavbarController',
     controllerAs: 'nav'
   }));

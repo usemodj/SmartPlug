@@ -381,7 +381,7 @@ export function addComment(req, res, next){
           //console.log(filename)
           fs.readFile(filename, function (err, contents) {
             if (err) {
-              log.error(err);
+              console.error(err);
             }
             //console.log(contents);
             var template = hogan.compile(contents.toString());

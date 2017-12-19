@@ -26,7 +26,7 @@ class ForgotPasswordCtrl {
           err = err.data;
           this.errors = {'email': err};
           this.success = {};
-          form['email'].$setValidity('mongoose', false);
+          form.email.$setValidity('mongoose', false);
 
          });
     }
@@ -48,7 +48,7 @@ class ForgotPasswordCtrl {
         console.log(err);
         err = err.data;
         this.errors = {email: err};
-        form['email'].$setValidity('mongoose', false);
+        form.email.$setValidity('mongoose', false);
       });
     }
   }

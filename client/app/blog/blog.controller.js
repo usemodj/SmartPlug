@@ -1,6 +1,6 @@
 'use strict';
 
-class BlogCtrl {
+var BlogCtrl = class BlogCtrl {
   constructor(Auth, Blog, $state, $stateParams, $http, $scope, $location, $window, socket) {
     this.errors = {};
     this.success = '';
@@ -78,7 +78,7 @@ class BlogCtrl {
       this.errors.other = err.message || err;
     });
   }
-}
+};
 
 angular.module('smartPlugApp')
   .controller('BlogCtrl', BlogCtrl);

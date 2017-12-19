@@ -1,6 +1,6 @@
 'use strict';
 
-class AdminSupportCtrl {
+var AdminSupportCtrl = class AdminSupportCtrl {
   constructor(Auth, AdminSupport, $state, $stateParams, $http, $scope, $location, $window, socket) {
     this.errors = {};
     this.success = '';
@@ -75,12 +75,9 @@ class AdminSupportCtrl {
     });
   }
 
-}
+};
 
-angular.module('smartPlugApp.admin')
-  .controller('AdminSupportCtrl', AdminSupportCtrl);
-
-class AdminNewSupportCtrl {
+var AdminNewSupportCtrl = class AdminNewSupportCtrl {
   constructor(Auth, Upload, $scope, $state) {
     this.errors = {};
     this.success = '';
@@ -123,12 +120,64 @@ class AdminNewSupportCtrl {
   back(){
     this.$state.go('admin.supports.list');
   }
-}
+};
 
-angular.module('smartPlugApp.admin')
-  .controller('AdminNewSupportCtrl', AdminNewSupportCtrl);
+var AdminEditSupportCtrl = class AdminEditSupportCtrl {
+  constructor(Auth, AdminSupport, $scope, $state, $uibModalInstance, support) {
+    this.errors = {};
+    this.success = '';
+    this.submitted = false;
+    this.Auth = Auth;
+    this.AdminSupport = AdminSupport;
+    this.$state = $state;
+    this.$uibModalInstance = $uibModalInstance;
+    this.origin = angular.copy(support);
+    this.support = support;
+    this.files = [];
 
-class AdminViewSupportCtrl {
+    $scope.$on('fileSelected', (event, args) => {
+      //console.log(args.file);
+      $scope.$apply(() => this.files.push(args.file));
+    });
+  }
+
+  saveSupport(form){
+    this.submitted = true;
+    if(form.$valid) {
+      this.support.files = this.files;
+      this.$uibModalInstance.close(this.support);
+    }
+  }
+
+  cancelSupport(){
+    this.support.subject = this.origin.subject;
+    this.support.content = this.origin.content;
+    this.support.tags = this.origin.tags;
+
+    this.$uibModalInstance.dismiss('cancel');
+  }
+
+  removeFile(file){
+    var files = this.support.files;
+    if(files){
+      this.AdminSupport.removeFile({_id: this.support._id, uri: file.uri}).$promise
+        .then( () => {
+          files.splice(files.indexOf(file), 1);
+        })
+        .catch(err => {
+          this.errors.other = err.message || err;
+        });
+    }
+  }
+
+  back(){
+    this.$state.go('admin.supports.list');
+  }
+
+};
+
+
+var AdminViewSupportCtrl = class AdminViewSupportCtrl {
   constructor(Auth, AdminSupport, Upload, $uibModal, $state, $stateParams, $scope, socket) {
     this.errors = {};
     this.success = '';
@@ -280,64 +329,16 @@ class AdminViewSupportCtrl {
     this.$state.go('admin.supports.list');
   }
 
-}
+};
+
+angular.module('smartPlugApp.admin')
+  .controller('AdminNewSupportCtrl', AdminNewSupportCtrl);
 
 angular.module('smartPlugApp.admin')
   .controller('AdminViewSupportCtrl', AdminViewSupportCtrl);
 
-class AdminEditSupportCtrl {
-  constructor(Auth, AdminSupport, $scope, $state, $uibModalInstance, support) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.AdminSupport = AdminSupport;
-    this.$state = $state;
-    this.$uibModalInstance = $uibModalInstance;
-    this.origin = angular.copy(support);
-    this.support = support;
-    this.files = [];
-
-    $scope.$on('fileSelected', (event, args) => {
-      //console.log(args.file);
-      $scope.$apply(() => this.files.push(args.file));
-    });
-  }
-
-  saveSupport(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.support.files = this.files;
-      this.$uibModalInstance.close(this.support);
-    }
-  }
-
-  cancelSupport(){
-    this.support.subject = this.origin.subject;
-    this.support.content = this.origin.content;
-    this.support.tags = this.origin.tags;
-
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  removeFile(file){
-    var files = this.support.files;
-    if(files){
-      this.AdminSupport.removeFile({_id: this.support._id, uri: file.uri}).$promise
-        .then( () => {
-          files.splice(files.indexOf(file), 1);
-        })
-        .catch(err => {
-          this.errors.other = err.message || err;
-        });
-    }
-  }
-
-  back(){
-    this.$state.go('admin.supports.list');
-  }
-
-}
+angular.module('smartPlugApp.admin')
+  .controller('AdminSupportCtrl', AdminSupportCtrl);
 
 angular.module('smartPlugApp.admin')
   .controller('AdminEditSupportCtrl', AdminEditSupportCtrl);

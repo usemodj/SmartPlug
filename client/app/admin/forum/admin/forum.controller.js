@@ -1,6 +1,123 @@
 'use strict';
 
-class AdminForumCtrl {
+var AdminNewForumCtrl = class AdminNewForumCtrl {
+  constructor(Auth, $scope, $state, $uibModalInstance) {
+    this.errors = {};
+    this.success = '';
+    this.submitted = false;
+    this.Auth = Auth;
+    this.$state = $state;
+    this.$uibModalInstance = $uibModalInstance;
+    this.forum = { active: true};
+  }
+
+  saveForum(form){
+    this.submitted = true;
+    if(form.$valid) {
+      this.$uibModalInstance.close(this.forum);
+    }
+  }
+
+  cancelEdit(){
+    this.$uibModalInstance.dismiss('cancel');
+  }
+
+  back(){
+    this.$state.go('admin.forums.list');
+  }
+
+};
+
+var AdminEditForumCtrl = class AdminEditForumCtrl {
+  constructor(Auth, $scope, $state, $uibModalInstance, forum) {
+    this.errors = {};
+    this.success = '';
+    this.submitted = false;
+    this.Auth = Auth;
+    this.$state = $state;
+    this.$uibModalInstance = $uibModalInstance;
+    this.origin = angular.copy(forum);
+    this.forum = forum;
+  }
+
+  saveForum(form){
+    this.submitted = true;
+    if(form.$valid) {
+      this.$uibModalInstance.close(this.forum);
+    }
+  }
+
+  cancelEdit(){
+    this.forum.name = this.origin.name;
+    this.forum.info = this.origin.info;
+    this.forum.active = this.origin.active;
+    this.forum.locked = this.origin.locked;
+
+    this.$uibModalInstance.dismiss('cancel');
+  }
+
+  back(){
+    this.$state.go('admin.forums.list');
+  }
+
+};
+
+var AdminSearchForumCtrl = class AdminSearchForumCtrl{
+  constructor($scope, $location, $window, $stateParams){
+    this.$scope = $scope;
+    this.$location = $location;
+    this.$window = $window;
+    this.$stateParams = $stateParams;
+    this.submitted = false;
+    this.posts = [];
+
+    $scope.perPage = parseInt($location.search().perPage, 10) || 10;
+    $scope.page = parseInt($location.search().page, 10) || 0;
+    $scope.clientLimit = 250;
+
+    $scope.$watch('page', function(page) { $location.search('page', page); });
+    $scope.$watch('perPage', function(page) { $location.search('perPage', page); });
+    $scope.$on('$locationChangeSuccess', function() {
+      var page = +$location.search().page,
+        perPage = +$location.search().perPage;
+      if(page >= 0) { $scope.page = page; }
+      if(perPage >= 0) { $scope.perPage = perPage; }
+    });
+
+    $scope.urlParams = {
+      clientLimit: $scope.clientLimit
+    };
+
+    this.q = $stateParams.q;
+    if(this.q){
+      $scope.url = `/api/forums/search/${this.q}`;
+    } else {
+      $scope.url = '/api/forums/posts/recent';
+    }
+
+    $scope.$on('$destroy', function() {
+      //socket.unsyncUpdates('forum');
+    });
+
+    $scope.$on('pagination:loadPage', function (event, status, config) {
+      // config contains parameters of the page request
+      //console.log(config.url);
+      // status is the HTTP status of the result
+      //console.log(status);
+      //socket.syncUpdates('forum', $scope.forums);
+    });
+
+  }
+
+  search(form){
+    this.submitted = true;
+    this.$window.location.href = `/admin/forums/search/${this.q}`;
+  }
+
+};
+
+
+var AdminForumCtrl = class AdminForumCtrl {
   constructor(Auth, $uibModal, $state, $stateParams, $scope, $http,  $location, $window, $filter, socket, Modal) {
     this.errors = {};
     this.success = '';
@@ -158,130 +275,17 @@ class AdminForumCtrl {
       });
   }
 
-}
-angular.module('smartPlugApp.admin')
-  .controller('AdminForumCtrl', AdminForumCtrl);
+};
 
-class AdminNewForumCtrl {
-  constructor(Auth, $scope, $state, $uibModalInstance) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.$state = $state;
-    this.$uibModalInstance = $uibModalInstance;
-    this.forum = { active: true};
-  }
-
-  saveForum(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.$uibModalInstance.close(this.forum);
-    }
-  }
-
-  cancelEdit(){
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  back(){
-    this.$state.go('admin.forums.list');
-  }
-
-}
-
-angular.module('smartPlugApp.admin')
-  .controller('AdminNewForumCtrl', AdminNewForumCtrl);
-
-class AdminEditForumCtrl {
-  constructor(Auth, $scope, $state, $uibModalInstance, forum) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.$state = $state;
-    this.$uibModalInstance = $uibModalInstance;
-    this.origin = angular.copy(forum);
-    this.forum = forum;
-  }
-
-  saveForum(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.$uibModalInstance.close(this.forum);
-    }
-  }
-
-  cancelEdit(){
-    this.forum.name = this.origin.name;
-    this.forum.info = this.origin.info;
-    this.forum.active = this.origin.active;
-    this.forum.locked = this.origin.locked;
-
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  back(){
-    this.$state.go('admin.forums.list');
-  }
-
-}
 
 angular.module('smartPlugApp.admin')
   .controller('AdminEditForumCtrl', AdminEditForumCtrl);
 
-class AdminSearchForumCtrl{
-  constructor($scope, $location, $window, $stateParams){
-    this.$scope = $scope;
-    this.$location = $location;
-    this.$window = $window;
-    this.$stateParams = $stateParams;
-    this.submitted = false;
-    this.posts = [];
+angular.module('smartPlugApp.admin')
+  .controller('AdminNewForumCtrl', AdminNewForumCtrl);
 
-    $scope.perPage = parseInt($location.search().perPage, 10) || 10;
-    $scope.page = parseInt($location.search().page, 10) || 0;
-    $scope.clientLimit = 250;
-
-    $scope.$watch('page', function(page) { $location.search('page', page); });
-    $scope.$watch('perPage', function(page) { $location.search('perPage', page); });
-    $scope.$on('$locationChangeSuccess', function() {
-      var page = +$location.search().page,
-        perPage = +$location.search().perPage;
-      if(page >= 0) { $scope.page = page; }
-      if(perPage >= 0) { $scope.perPage = perPage; }
-    });
-
-    $scope.urlParams = {
-      clientLimit: $scope.clientLimit
-    };
-
-    this.q = $stateParams.q;
-    if(this.q){
-      $scope.url = `/api/forums/search/${this.q}`;
-    } else {
-      $scope.url = '/api/forums/posts/recent';
-    }
-
-    $scope.$on('$destroy', function() {
-      //socket.unsyncUpdates('forum');
-    });
-
-    $scope.$on('pagination:loadPage', function (event, status, config) {
-      // config contains parameters of the page request
-      //console.log(config.url);
-      // status is the HTTP status of the result
-      //console.log(status);
-      //socket.syncUpdates('forum', $scope.forums);
-    });
-
-  }
-
-  search(form){
-    this.submitted = true;
-    this.$window.location.href = `/admin/forums/search/${this.q}`;
-  }
-
-}
 angular.module('smartPlugApp.admin')
   .controller('AdminSearchForumCtrl', AdminSearchForumCtrl);
+
+angular.module('smartPlugApp.admin')
+    .controller('AdminForumCtrl', AdminForumCtrl);

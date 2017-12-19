@@ -25,13 +25,14 @@ class NavbarController {
       'state': 'supports.list'
     }];
 
-    this.isCollapsed = true;
+    // this.isCollapsed = true;
 
     this.isLoggedIn = Auth.isLoggedIn;
     this.isAdmin = Auth.isAdmin;
     this.getCurrentUser = Auth.getCurrentUser;
 
     $scope.$watch('nav.isCollapsed', (newValue, oldValue) => {
+      console.log('>>nav.isCollapsed: ', newValue);
       if(!newValue){
         $('#navbar-main *').click(() => {
           this.isCollapsed = true;

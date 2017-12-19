@@ -1,5 +1,7 @@
 'use strict';
 
+import settings from '../../app/common/settings';
+
 angular.module('smartPlugApp')
   .directive('markdownEditor', ['$window', function ($window) {
     return {

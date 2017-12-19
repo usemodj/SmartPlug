@@ -5,6 +5,7 @@ public
 .idea
 client/bower_components
 dist
+log
 /server/config/local.env.js
 start.sh
 npm-debug.log

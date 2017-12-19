@@ -16,19 +16,19 @@ export function register(socket) {
     var listener = createListener('paymentMethod:' + event, socket);
 
     PaymentMethodEvents.on(event, listener);
-    socket.on('disconnect', removeListener(event, listener));
+    return socket.on('disconnect', removeListener(event, listener));
   }
 }
 
 
 function createListener(event, socket) {
   return function(doc) {
-    socket.emit(event, doc);
+    return socket.emit(event, doc);
   };
 }
 
 function removeListener(event, listener) {
   return function() {
-    PaymentMethodEvents.removeListener(event, listener);
+    return PaymentMethodEvents.removeListener(event, listener);
   };
 }

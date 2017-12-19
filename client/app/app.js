@@ -13,7 +13,6 @@ angular.module('smartPlugApp', [
   'validation.match',
   'ngSanitize',
   'ngFileUpload',
-  'hljs',
   'hc.marked',
   'bgf.paginateAnything',
   'relativeDate',
@@ -35,8 +34,26 @@ angular.module('smartPlugApp', [
       tables: true,
       highlight: function (code, lang) {
         if (lang) {
+          //
+          //  Core highlighting function. Accepts a language name, or an alias, and a
+          //  string with the code to highlight. Returns an object with the following
+          //  properties:
+          //  - relevance (int)
+          //  - value (an HTML string with highlighting markup)
+          //
+          //  function highlight(name, value, ignore_illegals, continuation)
           return hljs.highlight(lang, code, true).value;
         } else {
+          //
+          //   Highlighting with language detection. Accepts a string with the code to
+          //   highlight. Returns an object with the following properties:
+          //   - language (detected language)
+          //   - relevance (int)
+          //   - value (an HTML string with highlighting markup)
+          //   - second_best (object with the same structure for second-best heuristically
+          //     detected language, may be absent)
+          //
+          //   function highlightAuto(text, languageSubset)
           return hljs.highlightAuto(code).value;
         }
       }
@@ -103,4 +120,3 @@ angular.module('smartPlugApp', [
       }
     });
   }]);
-

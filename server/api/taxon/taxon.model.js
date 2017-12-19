@@ -2,7 +2,7 @@
 
 const mongoose = require('bluebird').promisifyAll(require('mongoose'));
 const mongoosastic = require('bluebird').promisifyAll(require('mongoosastic'));
-const mongooseTreeAncestors = require('mongoose-tree-ancestors');
+const mongooseTree = require('mongoose-data-tree');
 
 // Declare a Model name
 const modelName = 'Taxon';
@@ -11,11 +11,11 @@ var TaxonSchema = new mongoose.Schema({
   name: {type: String, required: true, es_type: 'keyword'},
   position: {type: Number, default: 0},
   permalink: {type: String, es_type: 'keyword'},
-  taxonomy: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxonomy'},
-  parent: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxon'},
+  taxonomy: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxonomy', es_type: 'object'},
+  parent: {type: mongoose.Schema.Types.ObjectId, ref: 'Taxon', es_type: 'object'},
   // Not required, but it's useful to keep awareness of this field
   ancestors: [{
-      type: mongoose.Schema.Types.ObjectId, ref: 'Taxon'
+      type: mongoose.Schema.Types.ObjectId, ref: 'Taxon', es_type: 'object'
   }],
   icon_filename: {type: String, es_type: 'keyword'},
   description: {type: String, es_type: 'text'},
@@ -34,16 +34,9 @@ TaxonSchema.methods = {
 
 };
 
-TaxonSchema.plugin(mongoosastic);
-// Add the mongooseTreeAncestors Plugin to the schema
-mongooseTreeAncestors(TaxonSchema, {
-    // Set the parent field name and model reference
-    parentFieldName: 'parent',
-    parentFieldRefModel: modelName,
 
-    // Set the ancestors field name and model reference
-    ancestorsFieldName: 'ancestors',
-    ancestorsFieldRefModel: modelName
-});
+// Add the Plugins to the schema
+TaxonSchema.plugin(mongooseTree);
+TaxonSchema.plugin(mongoosastic);
 
 export default mongoose.model(modelName, TaxonSchema);

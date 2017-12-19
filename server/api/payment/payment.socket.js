@@ -18,6 +18,7 @@ export function register(socket) {
     PaymentEvents.on(event, listener);
     socket.on('disconnect', removeListener(event, listener));
   }
+  return null;
 }
 
 

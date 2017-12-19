@@ -76,5 +76,6 @@ export default function(socketio) {
     // Call onConnect.
     onConnect(socket);
     socket.log('CONNECTED');
+    return null;
   });
 }

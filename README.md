@@ -1,6 +1,15 @@
 # smart-plug
 
+MEAN(MongoDB database,ExpressJS webserver, AngularJS web-framework, NodeJS javascript-engine)
+based **Web Store** and Customer Support Applications.
+
 This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 3.2.0.
+
+
+[usemodj/angularjs-express-mysql](https://github.com/usemodj/angularjs-express-mysql) project is the version of MySQL database.
+
+These demo sites and other applications are here: <http://nodesoft.co.kr> or, <http://usemodj.com>
+
 
 ## Getting Started
 

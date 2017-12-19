@@ -81,6 +81,65 @@ class AdminTopicCtrl {
 angular.module('smartPlugApp.admin')
   .controller('AdminTopicCtrl', AdminTopicCtrl);
 
+  class AdminEditTopicCtrl {
+    constructor(Auth, $scope, $http, $state, $uibModalInstance, post) {
+      this.errors = {};
+      this.success = '';
+      this.submitted = false;
+      this.Auth = Auth;
+      this.$http = $http;
+      this.$state = $state;
+      this.$uibModalInstance = $uibModalInstance;
+      this.origin = angular.copy(post);
+      this.post = post;
+      this.files = [];
+
+      $scope.$on('fileSelected', (event, args) => {
+        $scope.$apply(() => this.files.push(args.file));
+      });
+    }
+
+    savePost(form){
+      this.submitted = true;
+      if(form.$valid) {
+        this.post.files = this.files;
+        this.$uibModalInstance.close(this.post);
+      }
+    }
+
+    cancelEdit(){
+      this.post.name = this.origin.name;
+      this.post.content = this.origin.content;
+      this.post.active = this.origin.active;
+      this.post.sticky = this.origin.sticky;
+      this.post.locked = this.origin.locked;
+
+      this.$uibModalInstance.dismiss('cancel');
+    }
+
+    removeFile(file){
+      var files = this.post.files;
+      if(files){
+        this.$http.post(`/api/admin/topics/${this.post.topic}/posts/${this.post._id}/removeFile`,{_id: this.post._id, uri: file.uri})
+          .then(() => {
+            files.splice(files.indexOf(file), 1);
+          })
+          .catch(err => {
+            this.errors.other = err.message || err;
+          });
+      }
+    }
+
+    back(){
+      this.$state.go('admin.topics.list');
+    }
+
+  }
+
+  angular.module('smartPlugApp')
+    .controller('AdminEditTopicCtrl', AdminEditTopicCtrl);
+
+
 class AdminViewTopicCtrl {
   constructor(Auth, Upload, $uibModal, $http, $state, $stateParams, $scope, socket) {
     this.errors = {};
@@ -227,61 +286,3 @@ class AdminViewTopicCtrl {
 
 angular.module('smartPlugApp')
   .controller('AdminViewTopicCtrl', AdminViewTopicCtrl);
-
-class AdminEditTopicCtrl {
-  constructor(Auth, $scope, $http, $state, $uibModalInstance, post) {
-    this.errors = {};
-    this.success = '';
-    this.submitted = false;
-    this.Auth = Auth;
-    this.$http = $http;
-    this.$state = $state;
-    this.$uibModalInstance = $uibModalInstance;
-    this.origin = angular.copy(post);
-    this.post = post;
-    this.files = [];
-
-    $scope.$on('fileSelected', (event, args) => {
-      $scope.$apply(() => this.files.push(args.file));
-    });
-  }
-
-  savePost(form){
-    this.submitted = true;
-    if(form.$valid) {
-      this.post.files = this.files;
-      this.$uibModalInstance.close(this.post);
-    }
-  }
-
-  cancelEdit(){
-    this.post.name = this.origin.name;
-    this.post.content = this.origin.content;
-    this.post.active = this.origin.active;
-    this.post.sticky = this.origin.sticky;
-    this.post.locked = this.origin.locked;
-
-    this.$uibModalInstance.dismiss('cancel');
-  }
-
-  removeFile(file){
-    var files = this.post.files;
-    if(files){
-      this.$http.post(`/api/admin/topics/${this.post.topic}/posts/${this.post._id}/removeFile`,{_id: this.post._id, uri: file.uri})
-        .then(() => {
-          files.splice(files.indexOf(file), 1);
-        })
-        .catch(err => {
-          this.errors.other = err.message || err;
-        });
-    }
-  }
-
-  back(){
-    this.$state.go('admin.topics.list');
-  }
-
-}
-
-angular.module('smartPlugApp')
-  .controller('AdminEditTopicCtrl', AdminEditTopicCtrl);

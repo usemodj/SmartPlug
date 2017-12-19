@@ -455,7 +455,7 @@ export function addressList(req, res){
  * onResult(err, output)
  */
 function getAddressJSON(options, onResult){
-  var prot = options.port == 443 ? https : http;
+  var prot = options.port === 443 ? https : http;
   var req = prot.request(options, function(res)
   {
     var output = '';
